@@ -11,7 +11,7 @@ It allows you:
 Thus, no refactoring of your application is required. You can start writing UI with React immediately replacing your Backbone Views one-by-one, while keeping your existing models.
 
 This extension works with raw Backbone. However, in order to take full advantage of React/Backbone
-architecture you are encouraged to upgrade to Backbone.NestedTypes. It will give you following 
+architecture you are encouraged to upgrade to `Backbone.NestedTypes`. It will give you following 
 features to help managing complex application state:
 
 - Proper nested models and collections implementation with deep changes detection. React components will
@@ -25,12 +25,12 @@ and
 https://github.com/Volicon/backbone.nestedTypes
 
 # Usage
-It's packed as single UMD, thus grab the module which is appropriate for you. So far, there are two of them, one for raw backbone, and one for backbone.nestedTypes.
+It's packed as single UMD, thus grab the module which is appropriate for you. So far, there are two of them, one for raw backbone, and one for `backbone.nestedTypes`.
 
 First one depends on `react` and `backbone`, so if you're using Chaplin or Marionette you will
 probably need to pass appropriate module instead of `backbone`. Don't hesitate to replace module name in the beginning of the file, or use raw factory function from `src/glue.js`.
 
-If you're using NestedTypes, you need NestedTypes to require appropriate framework. Report a bug if something goes wrong, we like when someone share our passion for technology and quite fast in response.
+If you're using `NestedTypes`, you need `NestedTypes` to require appropriate framework. Report a bug if something goes wrong, we like when someone share our passion for technology and quite fast in response.
 
 # Features
 ## Use React components as Backbone View
@@ -110,7 +110,7 @@ var MyComponent = React.createClass({
 - New Model definition will be created, using `attributes` as Model.defaults.
 - If Model property is specified, it will be used as base model and extended.
 - `attributes` property from mixins will be properly merged.
-- if you're using Backbone.NestedTypes models, it's far superior to react state in every aspect. It handles updates much faster, it detects nested elements changes, and it has type specs for state elements in a way like react's propTypes.
+- if you're using `Backbone.NestedTypes` models, it's far superior to react state in every aspect. It handles updates much faster, it detects nested elements changes, and it has type specs for state elements in a way like react's `propTypes`.
 
 ## Passing Backbone objects as React components props
 ```javscript
