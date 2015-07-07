@@ -1,14 +1,45 @@
+/**
+ * React-Backbone.Glue 0.1.0 <https://github.com/Volicon/react-backbone.glue>
+ * (c) 2015 Vlad Balin & Volicon
+ * Released under MIT @license
+ */
 (function( root, factory ){
     if( typeof exports === 'object' ){
-        module.exports = factory( require( 'nestedtypes' ), require( 'react' ) );
+        module.exports = factory( require( 'backbone' ), require( 'react' ) );
     }
     else if( typeof define === 'function' && define.amd ){
-        define( [ 'nestedtypes', 'react' ], factory );
+        define( [ 'backbone', 'react' ], factory );
     }
     else{
-        root.React = factory( root.Nested, root.React );
+        root.React = factory( root.Backbone, root.React );
     }
-}( this, function( Nested, React ){
+}( this, function reactBackboneGlue( Backbone, React ){
+    // Object.assign polyfill
+
+    Object.assign || ( Object.assign = function( target, firstSource ){
+        if( target == null ){
+            throw new TypeError( 'Cannot convert first argument to object' );
+        }
+
+        var to = Object( target );
+        for( var i = 1; i < arguments.length; i++ ){
+            var nextSource = arguments[ i ];
+            if( nextSource == null ){
+                continue;
+            }
+
+            var keysArray = Object.keys( Object( nextSource ) );
+            for( var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++ ){
+                var nextKey = keysArray[ nextIndex ];
+                var desc = Object.getOwnPropertyDescriptor( nextSource, nextKey );
+                if( desc !== void 0 && desc.enumerable ){
+                    to[ nextKey ] = nextSource[ nextKey ];
+                }
+            }
+        }
+        return to;
+    });
+
     // Wrapper for forceUpdate to be used in backbone events handlers
     function forceUpdate(){
         this.forceUpdate();
@@ -84,8 +115,8 @@
 
         var attributes = getModelAttributes( spec );
         if( attributes ){
-            var BaseModel = spec.Model || Nested.Model;
-            spec.Model = BaseModel.defaults( spec.model );
+            var BaseModel = spec.Model || Backbone.Model;
+            spec.Model = BaseModel.extend({ defaults : attributes });
         }
 
         if( spec.Model ){
@@ -97,7 +128,7 @@
         }
 
         if( spec.Model || spec.listenToProps ){
-            spec.mixins.push( Nested.Events );
+            spec.mixins.push( Backbone.Events );
         }
 
         var component = createClass.call( React, spec );
@@ -128,7 +159,7 @@
         return new ReactView( arguments );
     };
 
-    var ReactView = Nested.View.extend({
+    var ReactView = Backbone.View.extend({
         initialize : function( args ){
             // memorise arguments to pass to React
             this._args = args;
@@ -149,7 +180,7 @@
                 this.component = null;
             }
 
-            return Nested.View.prototype.setElement.apply( this, arguments );
+            return Backbone.View.prototype.setElement.apply( this, arguments );
         },
 
         // cached instance of react component...

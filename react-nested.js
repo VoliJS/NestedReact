@@ -1,4 +1,19 @@
-function reactBackboneGlue( Backbone, React ){
+/**
+ * React-Backbone.Glue 0.1.0 <https://github.com/Volicon/react-backbone.glue>
+ * (c) 2015 Vlad Balin & Volicon
+ * Released under MIT @license
+ */
+(function( root, factory ){
+    if( typeof exports === 'object' ){
+        module.exports = factory( require( 'nestedtypes' ), require( 'react' ) );
+    }
+    else if( typeof define === 'function' && define.amd ){
+        define( [ 'nestedtypes', 'react' ], factory );
+    }
+    else{
+        root.React = factory( root.Nested, root.React );
+    }
+}( this, function reactBackboneGlue( Backbone, React ){
     // Object.assign polyfill
 
     Object.assign || ( Object.assign = function( target, firstSource ){
@@ -222,4 +237,4 @@ function reactBackboneGlue( Backbone, React ){
     });
 
     return React;
-}
+} ));
