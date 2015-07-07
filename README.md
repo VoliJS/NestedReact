@@ -10,7 +10,7 @@ It allows you:
 
 Thus, no refactoring of your application is required. You can start writing UI with React immediately.
 
-This extension works with raw Backbone. In order to take full advantage of React/Backbone
+This extension works with raw Backbone. However, in order to take full advantage of React/Backbone
 architecture you are encouraged to upgrade to Backbone.NestedTypes. It will give you following 
 features to help managing complex application state:
 
