@@ -25,11 +25,13 @@ and
 https://github.com/Volicon/backbone.nestedTypes
 
 # Usage
-It's packed as single UMD, thus grab the module which is appropriate for you.
+It's packed as single UMD, thus grab the module which is appropriate for you. So far, there are two of them, one for raw backbone, and one for backbone.nestedTypes.
 
-It depends on `react` and `backbone`, if you're using Chaplin or Marionette you will
+First one depends on `react` and `backbone`, so if you're using Chaplin or Marionette you will
 probably need to pass appropriate module instead of `backbone`. Don't hesitate to
 replace module name in the beginning of the file.
+
+If you're using NestedTypes, you need NestedTypes to require appropriate framework. Report a bug if something goes wrong, we like when someone share our passion for technology and quite fast in response.
 
 # Features
 ## Use React components as Backbone View
