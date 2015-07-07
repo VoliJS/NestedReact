@@ -109,6 +109,7 @@ var MyComponent = React.createClass({
 - New Model definition will be created, using `attributes` as Model.defaults.
 - If Model property is specified, it will be used as base model and extended.
 - `attributes` property from mixins will be properly merged.
+- if you're using Backbone.NestedTypes models, it's far superior to react state in every aspect. It handles updates much faster, it detects nested elements changes, and it has type specs for state elements in a way like react's propTypes.
 
 ## Passing Backbone objects as React components props
 ```javscript
@@ -133,4 +134,4 @@ var MyComponent = React.createClass({
 
 You can update react component on backbone events from component props.
 
-Event subscription is managed automatically.
+Event subscription is managed automatically. No props passed - no problems.
