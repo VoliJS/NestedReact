@@ -1,0 +1,57 @@
+{
+  "name": "react-backbone.glue",
+  "main": "react-backbone.js",
+  "description": "Essential tool for migration to React in large Backbone application",
+  "homepage": "https://github.com/Volicon/react-backbone.glue",
+  "keywords": [
+    "backbone",
+    "react"
+  ],
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Volicon/react-backbone.glue.git"
+  },
+
+  "author": "Vlad Balin <https://github.com/gaperton>",
+  "contributors": "",
+
+  "dependencies": {
+    "backbone": ">=1.1.2",
+    "react" : ">=0.13.0"
+  },
+
+  "devDependencies": {
+    "uglify-js": "*"
+  },
+
+  "files": [
+    "react-backbone.js",
+    "react-chaplin.js",
+    "react-marionette.js",
+    "react-nested.js",
+    "react-backbone.min.js",
+    "react-chaplin.min.js",
+    "react-marionette.min.js",
+    "react-nested.min.js"
+  ],
+
+  "license": "MIT",
+  "version": "0.1.0",
+
+  "scripts": {
+    "make:backbone:win" : "type .\\umd\\copyright.js .\\umd\\backbone-head.js .\\src\\glue.js .\\umd\\tail.js > .\\react-backbone.js",
+    "make:chaplin:win" : "type .\\umd\\copyright.js .\\umd\\chaplin-head.js .\\src\\glue.js .\\umd\\tail.js > .\\react-chaplin.js",
+    "make:nested:win" : "type .\\umd\\copyright.js .\\umd\\nested-head.js .\\src\\glue.js .\\umd\\tail.js > .\\react-nested.js",
+    "make:marionette:win" : "type .\\umd\\copyright.js .\\umd\\marionette-head.js .\\src\\glue.js .\\umd\\tail.js > .\\react-marionette.js",
+    "make:win": "npm run make:backbone:win & npm run make:chaplin:win & npm run make:nested:win & npm run make:marionette:win",
+
+    "minify:win": ".\\node_modules\\.bin\\uglifyjs nestedtypes.js --comments --compress --mangle --screw-ie8 > nestedtypes.min.js & .\\node_modules\\.bin\\uglifyjs .\\chaplinjs\\nestedtypes.js --comments --compress --mangle --screw-ie8 > .\\chaplinjs\\nestedtypes.min.js",
+
+    "build:win": "npm run make:win && npm run minify:win",
+
+    "minify": "node_modules/.bin/uglifyjs nestedtypes.js --comments --compress --mangle --screw-ie8 > nestedtypes.min.js & node_modules/.bin/uglifyjs ./chaplinjs/nestedtypes.js --comments --compress --mangle --screw-ie8 > ./chaplinjs/nestedtypes.min.js",
+    "make": "node_modules/.bin/browserify -x underscore -x backbone -r ./src/main:nestedtypes > ./umd/_bundle.js && cat ./umd/copyright.js ./umd/head.js ./umd/_bundle.js ./umd/tail.js > ./nestedtypes.js && ./umd/copyright.js cat ./umd/head-chaplin.js ./umd/_bundle.js ./umd/tail.js > ./chaplinjs/nestedtypes.js && rm ./umd/_bundle.js",
+    "build": "npm run make && npm run minify"
+  }
+}
