@@ -16,7 +16,7 @@ features to help managing complex application state:
 
 - Proper nested models and collections implementation with deep changes detection. React components will
 update UI on nested attribute changes.
-- Dramatic improvement in model update performance. Up to 40x faster in Chrome.
+- Dramatic improvement in model update performance compared to Backbone. Up to 40x faster in Chrome. Imprortant for mobile devices.
 - Type safety. Attributes are guaranteed to hold values of declared types all the time.
 
 For more information, visit
