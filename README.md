@@ -8,7 +8,7 @@ It allows you:
 - To use your existing Backbone Models as React component state.
 - Update React components on Backbone events.
 
-Thus, no refactoring of your application is required. You can start writing UI with React immediately.
+Thus, no refactoring of your application is required. You can start writing UI with React immediately replacing your Backbone Views one-by-one, while keeping your existing models.
 
 This extension works with raw Backbone. However, in order to take full advantage of React/Backbone
 architecture you are encouraged to upgrade to Backbone.NestedTypes. It will give you following 
