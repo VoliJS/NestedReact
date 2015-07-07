@@ -10,21 +10,26 @@ It allows you:
 
 Thus, no refactoring of your application is required. You can start writing UI with React immediately.
 
-This extension works with raw Backbone, but you are strictly encouraged to upgrade to Backbone.NestedTypes
-to take full advantage of React/Backbone architecture. It will give you following features helping managing
-complex application state:
+This extension works with raw Backbone. In order to take full advantage of React/Backbone
+architecture you are encouraged to upgrade to Backbone.NestedTypes. It will give you following 
+features to help managing complex application state:
 
 - Proper nested models and collections implementation with deep changes detection. React components will
 update UI on nested attribute changes.
 - Dramatic improvement in model update performance. Up to 40x faster in Chrome.
-- Type safety. Attributes are guaranteed to hold valid values of declared types all the time.
+- Type safety. Attributes are guaranteed to hold values of declared types all the time.
 
+For more information, visit
+http://volicon.github.io/backbone.nestedTypes/
+and
 https://github.com/Volicon/backbone.nestedTypes
 
 # Usage
 It's packed as single UMD, thus grab the module which is appropriate for you.
 
-Internally, it imports React and Backbone, modify React, and return reference to React.
+It depends on `react` and `backbone`, if you're using Chaplin or Marionette you will
+probably need to pass appropriate module instead of `backbone`. Don't hesitate to
+replace module name in the beginning of the file.
 
 # Features
 ## Use React components as Backbone View
@@ -74,8 +79,8 @@ var MyComponent = React.createClass({
 If Model is specified for the component,
 - `this.state` is backbone model. Usage of `setState` is not allowed.
 - React component will update itself whenever model emit `change` event.
-	- You can customize UI update events supplying `listenToModel` property. For example, `listenToModel : 'change:attr sync'`.
-	- You can disable UI updates on state change, supplying `listenToModel : false` option.
+	- You can customize UI update events supplying `listenToState` property. For example, `listenToState : 'change:attr sync'`.
+	- You can disable UI updates on state change, supplying `listenToState : false` option.
 
 ## Managing state with ad-hoc Backbone model
 
