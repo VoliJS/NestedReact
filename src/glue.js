@@ -157,12 +157,7 @@ function reactBackboneGlue( Backbone, React ){
             // new element instance needs to be created on next render...
             if( this.element ){
                 this.element = null;
-
-                if( this.component && this.component.trigger ){
-                    this.stopListening( this.component );
-                }
-
-                this.component = null;
+                this.unmountComponent();
             }
 
             return Backbone.View.prototype.setElement.apply( this, arguments );
@@ -170,6 +165,17 @@ function reactBackboneGlue( Backbone, React ){
 
         // cached instance of react component...
         component : null,
+
+        unmountComponent : function(){
+            if( this.component ){
+                if( this.component.trigger ){
+                    this.stopListening( this.component );
+                }
+
+                React.unmountComponentAtNode( this.el );
+                this.component = null;
+            }
+        },
 
         render : function(){
             if( !this.element ){
@@ -184,6 +190,11 @@ function reactBackboneGlue( Backbone, React ){
                     this.trigger.apply( this, arguments );
                 });
             }
+        },
+
+        dispose : function(){
+            this.unmountComponent();
+            Backbone.View.prototype.dispose.apply( this, arguments );
         }
     });
 

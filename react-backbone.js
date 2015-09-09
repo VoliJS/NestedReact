@@ -1,5 +1,5 @@
 /**
- * React-Backbone.Glue 0.1.0 <https://github.com/Volicon/react-backbone.glue>
+ * React-Backbone.Glue 0.1.1 <https://github.com/Volicon/react-backbone.glue>
  * (c) 2015 Vlad Balin & Volicon
  * Released under MIT @license
  */
@@ -172,12 +172,7 @@
             // new element instance needs to be created on next render...
             if( this.element ){
                 this.element = null;
-
-                if( this.component && this.component.trigger ){
-                    this.stopListening( this.component );
-                }
-
-                this.component = null;
+                this.unmountComponent();
             }
 
             return Backbone.View.prototype.setElement.apply( this, arguments );
@@ -185,6 +180,17 @@
 
         // cached instance of react component...
         component : null,
+
+        unmountComponent : function(){
+            if( this.component ){
+                if( this.component.trigger ){
+                    this.stopListening( this.component );
+                }
+
+                React.unmountComponentAtNode( this.el );
+                this.component = null;
+            }
+        },
 
         render : function(){
             if( !this.element ){
@@ -199,6 +205,11 @@
                     this.trigger.apply( this, arguments );
                 });
             }
+        },
+
+        dispose : function(){
+            this.unmountComponent();
+            Backbone.View.prototype.dispose.apply( this, arguments );
         }
     });
 

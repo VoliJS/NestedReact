@@ -33,7 +33,7 @@
   ],
 
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.1.1",
 
   "scripts": {
     "make:backbone:win" : "type .\\umd\\copyright.js .\\umd\\backbone-head.js .\\src\\glue.js .\\umd\\tail.js > .\\react-backbone.js",
