@@ -75,6 +75,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        $el : { get : function(){ return $( this.el ); } },
 	        $ : { value : function( sel ){ return this.$el.find( sel ); } }
 	    });
+	
+	    NestedReact.use = function(){};
 	}
 
 
