@@ -24,6 +24,11 @@ http://volicon.github.io/backbone.nestedTypes/
 and
 https://github.com/Volicon/backbone.nestedTypes
 
+# Breaking changes introduced in 0.2
+- `component.createView( props )` doesn't work any more, use `new component.View( props )` instead.
+- Library must be initialized with `.use` after load.
+- module and npm package name is now `react-bone`
+
 # Usage
 It's packed as single UMD, thus grab the module or use `npm` to install.
 	`npm install --save react-bone`
