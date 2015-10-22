@@ -333,4 +333,4 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-//# sourceMappingURL=reactbone.js.map
+//# sourceMappingURL=react-bone.js.map

@@ -2,7 +2,7 @@ module.exports = {
      entry: "./src/main",
 
      output : {
-       filename : './reactbone.js',
+       filename : './react-bone.js',
        library : "React",
        libraryTarget : 'umd'
      },

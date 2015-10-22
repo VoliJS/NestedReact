@@ -1,6 +1,6 @@
 {
-  "name": "react-backbone.glue",
-  "main": "react-backbone.js",
+  "name": "react-bone",
+  "main": "react-bone.js",
   "description": "Essential tool for migration to React in large Backbone application",
   "homepage": "https://github.com/Volicon/react-backbone.glue",
   "keywords": [
@@ -13,18 +13,17 @@
   },
   "author": "Vlad Balin <https://github.com/gaperton>",
   "contributors": "",
+
   "dependencies": {
-    "backbone": ">=1.1.2",
     "react": "^0.14.0",
     "react-dom": "^0.14.0"
   },
+
   "devDependencies": {
-    "uglify-js": "*",
     "webpack": "^1.12.2"
   },
-  "files": [
-    "reactbone.js"
-  ],
+
+  "files": [ "react-bone.js" ],
   "license": "MIT",
   "version": "0.2.0",
 
