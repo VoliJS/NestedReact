@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <script src="node_modules/jquery/dist/jquery.js"></script>
+        <script src="node_modules/underscore/underscore.js"></script>
+        <script src="node_modules/backbone/backbone.js"></script>
+        <script src="node_modules/react/dist/react.js"></script>
+        <script src="node_modules/react-dom/dist/react-dom.js"></script>
+        <script src="react-bone.js"></script>
+
+    </head>
+    <body></body>
+    <script>
+        React.use( Backbone );
+
+        var State = Backbone.Model.extend({
+            defaults : {
+                who : 'me'
+            }
+        });
+
+        var Hello = React.createClass({
+            Model : State,
+
+            attributes : {
+                what : 'hi'
+            },
+
+            render : function(){
+                return React.createElement( 'div', { onClick : this.click }, this.model.get( 'what' ) + this.state.get( 'who' ) );
+            },
+
+            click : function(){
+                this.$el.html( 'Whoaa!' );
+            }
+        });
+
+        var c = ReactDOM.render( React.createElement( Hello ), document.body );
+        c.state.set( 'who', 'he' );
+
+    </script>
+</html>

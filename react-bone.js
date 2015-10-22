@@ -7,7 +7,7 @@
 		exports["React"] = factory(require("react"), require("react-dom"));
 	else
 		root["React"] = factory(root["React"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -54,46 +54,35 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {var React = __webpack_require__( 2 ),
-	    ReactDOM = __webpack_require__( 3 );
+	var React = __webpack_require__( 1 ),
+	    ReactDOM = __webpack_require__( 2 );
 	
-	var NestedReact = module.export = Object.create( React );
+	var NestedReact = module.exports = Object.create( React );
 	
 	NestedReact.use = function( Backbone ){
 	    // listenToProps, listenToState, model, attributes, Model
-	    NestedReact.createClass = __webpack_require__( 4 ).use( Backbone );
+	    NestedReact.createClass = __webpack_require__( 3 ).use( Backbone );
 	
 	    // React component for attaching views
-	    NestedReact.subview = __webpack_require__( 6 ).use( Backbone );
+	    NestedReact.subview = __webpack_require__( 5 );
 	
 	    // Extend react components to have jquery accessors
-	    var BaseComponent = React.createClass({ render : function(){} }).type,
+	    var BaseComponent = Object.getPrototypeOf( React.createClass({ render : function(){} }).prototype ),
 	        $ = Backbone.$;
 	
-	    Object.defineProperties( BaseComponent.prototype, {
+	    Object.defineProperties( BaseComponent, {
 	        el : { get : function(){ return ReactDOM.findDOMNode( this ); } },
 	        $el : { get : function(){ return $( this.el ); } },
 	        $ : { value : function( sel ){ return this.$el.find( sel ); } }
 	    });
 	}
-	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module)))
+
 
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
 
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
+	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
 /***/ },
 /* 2 */
@@ -103,23 +92,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
-
-/***/ },
-/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__( 2 ),
-	    ReactDOM = __webpack_require__( 3 );
+	var React = __webpack_require__( 1 ),
+	    ReactDOM = __webpack_require__( 2 );
 	
 	function assign( dest, source ){
 	    for( var i in source ) dest[ i ] = source[ i ];
 	}
 	
 	exports.use = function( Backbone ){
-	    var ComponentView = __webpack_require__( 5 ).use( Backbone );
+	    var ComponentView = __webpack_require__( 4 ).use( Backbone );
 	
 	    function forceUpdate(){
 	        this.forceUpdate();
@@ -210,11 +193,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__( 2 ),
-	    ReactDOM = __webpack_require__( 3 );
+	var React = __webpack_require__( 1 ),
+	    ReactDOM = __webpack_require__( 2 );
 	
 	module.exports.use = function( Backbone ){
 	  var View = Backbone.View,
@@ -285,11 +268,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__( 2 ),
-	    ReactDOM = __webpack_require__( 3 );
+	var React = __webpack_require__( 1 ),
+	    ReactDOM = __webpack_require__( 2 );
 	
 	module.exports = React.createClass({
 	    displayName : 'BackboneView',

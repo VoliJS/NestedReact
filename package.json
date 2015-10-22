@@ -13,21 +13,24 @@
   },
   "author": "Vlad Balin <https://github.com/gaperton>",
   "contributors": "",
-
   "dependencies": {
     "react": "^0.14.0",
     "react-dom": "^0.14.0"
   },
-
   "devDependencies": {
+    "backbone": "*",
+    "jquery": "^2.1.4",
+    "underscore": "^1.8.3",
     "webpack": "^1.12.2"
   },
-
-  "files": [ "react-bone.js" ],
+  "files": [
+    "react-bone.js",
+    "react-bone.js.map"
+  ],
   "license": "MIT",
   "version": "0.2.0",
-
   "scripts": {
-    "build": "./node_modules/.bin/webpack"
+    "build": "./node_modules/.bin/webpack",
+    "watch": "./node_modules/.bin/webpack --watch"
   }
 }
