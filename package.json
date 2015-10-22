@@ -7,47 +7,28 @@
     "backbone",
     "react"
   ],
-
   "repository": {
     "type": "git",
     "url": "https://github.com/Volicon/react-backbone.glue.git"
   },
-
   "author": "Vlad Balin <https://github.com/gaperton>",
   "contributors": "",
-
   "dependencies": {
     "backbone": ">=1.1.2",
-    "react" : ">=0.13.0"
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0"
   },
-
   "devDependencies": {
-    "uglify-js": "*"
+    "uglify-js": "*",
+    "webpack": "^1.12.2"
   },
-
   "files": [
-    "react-backbone.js",
-    "react-nested.js",
-    "react-backbone.min.js",
-    "react-nested.min.js"
+    "reactbone.js"
   ],
-
   "license": "MIT",
-  "version": "0.1.1",
+  "version": "0.2.0",
 
   "scripts": {
-    "make:backbone:win" : "type .\\umd\\copyright.js .\\umd\\backbone-head.js .\\src\\glue.js .\\umd\\tail.js > .\\react-backbone.js",
-    "make:nested:win" : "type .\\umd\\copyright.js .\\umd\\nested-head.js .\\src\\glue.js .\\umd\\tail.js > .\\react-nested.js",
-    "make:win": "npm run make:backbone:win & npm run make:nested:win",
-
-    "minify:win": ".\\node_modules\\.bin\\uglifyjs react-nested.js --comments --compress --mangle --screw-ie8 > react-nested.min.js & .\\node_modules\\.bin\\uglifyjs .\\react-backbone.js --comments --compress --mangle --screw-ie8 > .\\react-backbone.min.js",
-    "build:win": "npm run make:win && npm run minify:win",
-
-    "make:backbone" : "cat ./umd/copyright.js ./umd/backbone-head.js ./src/glue.js ./umd/tail.js > ./react-backbone.js",
-    "make:nested" : "cat ./umd/copyright.js ./umd/nested-head.js ./src/glue.js ./umd/tail.js > ./react-nested.js",
-    "make": "npm run make:backbone & npm run make:nested",
-
-    "minify": "./node_modules/.bin/uglifyjs react-nested.js --comments --compress --mangle --screw-ie8 > react-nested.min.js & ./node_modules/.bin/uglifyjs ./react-backbone.js --comments --compress --mangle --screw-ie8 > ./react-backbone.min.js",
-    "build": "npm run make && npm run minify"
+    "build": "./node_modules/.bin/webpack"
   }
 }
