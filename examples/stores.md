@@ -18,7 +18,7 @@ var Top = React.createClass({
     }),
 
     attributes : {
-        role : Role.from( 'roles' ) // render on instance replace
+        role : Role.from( 'store.roles' ) // render on instance replace
     },
 
     render(){
