@@ -1,24 +1,32 @@
-var React = require( 'react' ),
-    ReactDOM = require( 'react-dom' );
+var React    = require( 'react' ),
+    ReactDOM = require( 'react-dom' ),
+    Nested   = require( 'nestedtypes' ),
+    $        = Nested.$;
 
+// extend React namespace
 var NestedReact = module.exports = Object.create( React );
 
-NestedReact.use = function( Backbone ){
-    // listenToProps, listenToState, model, attributes, Model
-    NestedReact.createClass = require( './createClass' ).use( Backbone );
+// listenToProps, listenToState, model, attributes, Model
+NestedReact.createClass = require( './createClass' );
 
-    // React component for attaching views
-    NestedReact.subview = require( './view-element' );
+var ComponentView = require( './component-view' );
 
-    // Extend react components to have jquery accessors
-    var BaseComponent = Object.getPrototypeOf( React.createClass({ render : function(){} }).prototype ),
-        $ = Backbone.$;
+// export hook to override base View class used...
+NestedReact.useView = function( View ){
+    NestedReact._BaseView = ComponentView.use( View );
+};
 
-    Object.defineProperties( BaseComponent, {
-        el : { get : function(){ return ReactDOM.findDOMNode( this ); } },
-        $el : { get : function(){ return $( this.el ); } },
-        $ : { value : function( sel ){ return this.$el.find( sel ); } }
-    });
+NestedReact.useView( Nested.View );
 
-    NestedReact.use = function(){};
-}
+// React component for attaching views
+NestedReact.subview = require( './view-element' );
+
+// Extend react components to have backbone-style jquery accessors
+var Component     = React.createClass( { render : function(){} } ),
+    BaseComponent = Object.getPrototypeOf( Component.prototype );
+
+Object.defineProperties( BaseComponent, {
+    el  : { get : function(){ return ReactDOM.findDOMNode( this ); } },
+    $el : { get : function(){ return $( this.el ); } },
+    $   : { value : function( sel ){ return this.$el.find( sel ); } }
+} );

@@ -17,23 +17,33 @@ module.exports = React.createClass({
     },
 
     componentDidMount : function(){
+        this._mountView();
+    },
+    componentDidUpdate : function(){
+        this._dispose();
+        this._mountView();
+    },
+    componentWillUnmount : function(){
+        this._dispose();
+    },
+
+    _mountView: function () {
         var el = this.refs.subview,
             p = this.props;
 
         var view = this.view = p.options ? new p.View( p.options ) : new p.View();
 
-        if( el.getDOMNode ) el = el.getDOMNode();
-
         el.appendChild( view.el );
         view.render();
     },
 
-    componentDidUpdate : function(){
-        this.view.render();
-    },
-
-    componentWillUnmount : function(){
+    _dispose : function(){
         var view = this.view;
-        if( view.dispose ) view.dispose();
+        if( view ){
+            view.stopListening();
+            if( view.dispose ) view.dispose();
+            this.refs.subview.innerHTML = "";
+            this.view = null;
+        }
     }
 });

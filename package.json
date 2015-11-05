@@ -1,10 +1,11 @@
 {
-  "name": "react-bone",
-  "main": "react-bone.js",
+  "name": "nestedreact",
+  "main": "nestedreact.js",
   "description": "Essential tool for migration to React in large Backbone application",
   "homepage": "https://github.com/Volicon/react-backbone.glue",
   "keywords": [
     "backbone",
+    "nestedtypes",
     "react"
   ],
   "repository": {
@@ -15,20 +16,20 @@
   "contributors": "",
   "dependencies": {
     "react": "^0.14.0",
-    "react-dom": "^0.14.0"
+    "react-dom": "^0.14.0",
+    "nestedtypes" : "^1.1.5"
   },
   "devDependencies": {
-    "backbone": "*",
     "jquery": "^2.1.4",
     "underscore": "^1.8.3",
     "webpack": "^1.12.2"
   },
   "files": [
-    "react-bone.js",
-    "react-bone.js.map"
+    "nestedreact.js",
+    "nestedreact.js.map"
   ],
   "license": "MIT",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack --watch"
