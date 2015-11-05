@@ -111,7 +111,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var React    = __webpack_require__( 1 ),
-	    ReactDOM = __webpack_require__( 2 ),
 	    Nested   = __webpack_require__( 3 );
 	
 	function forceUpdate(){ this.forceUpdate(); }
@@ -285,8 +284,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__( 1 ),
-	    ReactDOM = __webpack_require__( 2 );
+	var React = __webpack_require__( 1 );
 	
 	module.exports = React.createClass({
 	    displayName : 'BackboneView',
@@ -297,7 +295,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	
 	    render : function(){
-	        return ReactDOM.div({
+	        return React.DOM.div({
 	            ref : 'subview',
 	            className : this.props.className
 	        });

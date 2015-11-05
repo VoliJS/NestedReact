@@ -1,5 +1,4 @@
-var React = require( 'react' ),
-    ReactDOM = require( 'react-dom' );
+var React = require( 'react' );
 
 module.exports = React.createClass({
     displayName : 'BackboneView',
@@ -10,7 +9,7 @@ module.exports = React.createClass({
     },
 
     render : function(){
-        return ReactDOM.div({
+        return React.DOM.div({
             ref : 'subview',
             className : this.props.className
         });
