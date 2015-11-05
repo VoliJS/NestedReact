@@ -17,38 +17,45 @@ module.exports.use = function( View ){
         },
 
         setElement : function(){
-            var $content = this.$el.children().detach(),
-                res      = setElement.apply( this, arguments );
-
-            this.$el.append( $content );
-            return res;
+            this.unmountComponent();
+            return setElement.apply( this, arguments );
         },
 
         // cached instance of react component...
         component : null,
+        prevState : null,
 
         render : function(){
             var component = ReactDOM.render( this.element, this.el );
+            this.component || this.mountComponent( component );
+        },
 
-            if( !this.component ){
-                if( component && component.trigger ){
-                    // bubble up backbone events, if any
-                    this.listenTo( component, 'all', function(){
-                        this.trigger.apply( this, arguments );
-                    } );
-                }
+        mountComponent : function( component ){
+            this.component = component;
 
-                this.component = component;
+            if( this.prevState ){
+                component.model.set( this.prevState );
+                this.prevState = null;
             }
+
+            component.trigger && this.listenTo( component, 'all', function(){
+                this.trigger.apply( this, arguments );
+            });
         },
 
         unmountComponent : function(){
-            if( this.component && this.component.trigger ){
-                this.stopListening( this.component );
-            }
+            var component = this.component;
 
-            ReactDOM.unmountComponentAtNode( this.el );
-            this.component = null;
+            if( component ){
+                this.prevState = component.model && component.model.attributes;
+
+                if( component.trigger ){
+                    this.stopListening( component );
+                }
+
+                ReactDOM.unmountComponentAtNode( this.el );
+                this.component = null;
+            }
         },
 
         dispose : function(){

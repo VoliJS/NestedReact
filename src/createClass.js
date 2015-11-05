@@ -61,7 +61,7 @@ function createClass( spec ){
 
     Object.defineProperty( component, 'View', {
         get : function(){
-            return this._View || ( this._View = NestedReact._BaseView.extend( { component : component } ) );
+            return this._View || ( this._View = NestedReact._BaseView.extend( { reactClass : component } ) );
         }
     });
 
