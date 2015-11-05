@@ -10,11 +10,11 @@
 ```javascript
 var Top = React.createClass({
     // members fetched on first access, no updates on changes
-    useStore : LazyStore.defaults({
+    Store : LazyStore.defaults({
         users : User.Collection,
         roles : Role.Collection,
         channelSets : ChannelSet.Collection
-        _api : MasterStore.take( api ).merge() // create proxy native props accessors
+        _api : MasterStore.take( api ).has.proxy() // create proxy native props accessors
     }),
 
     attributes : {
@@ -38,13 +38,24 @@ var Roles = React.createClass({
     // render only if prop values change
     isolated : true, // same as mixins : [ PureRenderMixin ],
 
+    propTypes : {
+        collection : React.PropTypes.instanceof( Role.Collection ).isRequired,
+        selected   : React.PropTypes.func
+    },
+
+    mixins : [ PureRenderMixin ],
+    listenToProps : 'collection', // listen to triggerWhenChanged if string
+
     attributes : {
-        roles : Collection.take( 'props.collection' ), // -> this._owner.props.collection
-        selected : Role.from( 'roles' ).onChange( 'props.selected' ) // ->
-        /* install hook .set( function( value ){
-                            this._owner.props.selected( value );
+        selected : Role.from( '^props.roles' ).has.watcher( '^props.selected' ) // ->
+        /*  ^ resolved as (this.collection || this._owner).props.roles
+            install hook .set( function( value ){
+                            ref.call( this )( value );
                             return value;
-                        }) */
+                        })
+
+            this.listenTo( this, 'change:selected', function( model, attr ){ handler( attr ) } )
+        */
     },
 
     render(){
