@@ -138,7 +138,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    model         : null,
 	
 	    getInitialState : function(){
-	        return this.model = new this.Model();
+	        this.model = new this.Model();
+	        // enable owner references in the model to access component props
+	        this.model._owner = this;
+	
+	        return this.model;
+	    },
+	
+	    // reference global store to fix model's store locator
+	    getStore : function(){
+	        this.model._defaultStore;
 	    },
 	
 	    componentDidMount : function(){
@@ -147,6 +156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	
 	    componentWillUnmount : function(){
+	        this.model._owner = null;
 	        this.model.stopListening();
 	    }
 	};
