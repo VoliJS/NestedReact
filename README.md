@@ -189,8 +189,6 @@ It adds following helpers:
 
 All links supports following additional methods:
 - `link.set( x )` working the same as `link.requestChanges( x )`
-
-Boolean links adds following methods:
 - `link.toggle()` works the same as `link.requestChanges( !link.value )`
 
 Link received through component props can be linked with state member using
