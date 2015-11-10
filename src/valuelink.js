@@ -4,7 +4,8 @@ var Value = exports.Value = Object.extend( {
     value          : void 0,
     requestChange : function( val ){ throw new ReferenceError(); },
 
-    set  : function( val ){ this.requestChange( val ); }
+    set  : function( val ){ this.requestChange( val ); },
+    toggle : function(){ this.requestChange( !this.value ); }
 } );
 
 exports.Attr = Value.extend( {
@@ -15,21 +16,18 @@ exports.Attr = Value.extend( {
         }
     },
 
-    // for array links
+    // create boolean link for value in array
     lhas : function( value ){
         return new ArrayHas( this, value );
     },
 
+    // create boolean link for value equality
     leql : function( value ){
         return new ValueEql( this, value );
     }
 } );
 
-var Bool = exports.Bool = Value.extend( {
-    toggle : function(){ this.requestChange( !this.value ); }
-} );
-
-var ValueEql = exports.ValueEql = Bool.extend( {
+var ValueEql = exports.ValueEql = Value.extend( {
     constructor : function( link, asTrue ){
         this.value          = link.value === asTrue;
         this.requestChange = function( val ){
@@ -38,7 +36,7 @@ var ValueEql = exports.ValueEql = Bool.extend( {
     }
 } );
 
-var ArrayHas = exports.ArrayHas = Bool.extend( {
+var ArrayHas = exports.ArrayHas = Value.extend( {
     constructor : function( link, element ){
         var value  = Boolean( contains( link.value, element ) );
         this.value = value;
@@ -52,7 +50,7 @@ var ArrayHas = exports.ArrayHas = Bool.extend( {
     }
 } );
 
-exports.CollectionHas = Bool.extend( {
+exports.CollectionHas = Value.extend( {
     constructor : function( collection, model ){
         this.value          = Boolean( collection.get( model ) );
         this.requestChange = function( val ){ collection.toggle( model, val ); }

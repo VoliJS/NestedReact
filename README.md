@@ -189,15 +189,9 @@ It adds following helpers:
 
 All links supports following additional methods:
 - `link.set( x )` working the same as `link.requestChanges( x )`
-- `link.fset( x )`, returning the function which invokes `link.set( x )` (to be used in click handlers)
 
 Boolean links adds following methods:
 - `link.toggle()` works the same as `link.requestChanges( !link.value )`
-- `link.ftoggle()` return the function which invokes `link.toggle()`
-
-There are direct methods in `Model` and `Collection` to create click handlers:
-- `model.fset( ... )` creates function which will invoke `model.set( ... )`
-- `collection.ftoggle( model )` creates function invoking `toggle`.
 
 Link received through component props can be linked with state member using
 the following declaration:

@@ -94,21 +94,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    LinkAttr   = Link.Attr;
 	
 	ModelProto.lget = function( name ){ return new LinkAttr( this, name ); };
-	ModelProto.fset = function( a, b, c ){
-	    var self = this;
-	    return function(){ self.set( a, b, c ); }
-	};
 	
 	var CollectionProto = Nested.Collection.prototype,
 	    LinkHas         = Link.CollectionHas;
 	
 	CollectionProto.lhas = function( model ){
 	    return new LinkHas( this, model );
-	};
-	
-	CollectionProto.ftoggle = function( model, next ){
-	    var self = this;
-	    return function(){ self.toggle( model, next ); }
 	};
 
 
@@ -386,10 +377,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    requestChange : function( val ){ throw new ReferenceError(); },
 	
 	    set  : function( val ){ this.requestChange( val ); },
-	    fset : function( val ){
-	        var link = this;
-	        return function(){ link.requestChange( val ); }
-	    }
+	    toggle : function(){ this.requestChange( !this.value ); }
 	} );
 	
 	exports.Attr = Value.extend( {
@@ -400,26 +388,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },
 	
-	    // for array links
+	    // create boolean link for value in array
 	    lhas : function( value ){
 	        return new ArrayHas( this, value );
 	    },
 	
+	    // create boolean link for value equality
 	    leql : function( value ){
 	        return new ValueEql( this, value );
 	    }
 	} );
 	
-	var Bool = exports.Bool = Value.extend( {
-	    toggle : function(){ this.requestChange( !this.value ); },
-	
-	    ftoggle : function(){
-	        var link = this;
-	        return function(){ link.requestChange( !link.value ) };
-	    }
-	} );
-	
-	var ValueEql = exports.ValueEql = Bool.extend( {
+	var ValueEql = exports.ValueEql = Value.extend( {
 	    constructor : function( link, asTrue ){
 	        this.value          = link.value === asTrue;
 	        this.requestChange = function( val ){
@@ -428,7 +408,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	} );
 	
-	var ArrayHas = exports.ArrayHas = Bool.extend( {
+	var ArrayHas = exports.ArrayHas = Value.extend( {
 	    constructor : function( link, element ){
 	        var value  = Boolean( contains( link.value, element ) );
 	        this.value = value;
@@ -442,7 +422,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	} );
 	
-	exports.CollectionHas = Bool.extend( {
+	exports.CollectionHas = Value.extend( {
 	    constructor : function( collection, model ){
 	        this.value          = Boolean( collection.get( model ) );
 	        this.requestChange = function( val ){ collection.toggle( model, val ); }
