@@ -17,7 +17,7 @@
   "dependencies": {
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
-    "nestedtypes" : "^1.1.5"
+    "nestedtypes": "^1.1.5"
   },
   "devDependencies": {
     "jquery": "^2.1.4",
@@ -29,7 +29,7 @@
     "nestedreact.js.map"
   ],
   "license": "MIT",
-  "version": "0.3.0",
+  "version": "0.3.0-0",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack --watch"
