@@ -4,11 +4,7 @@ var Value = exports.Value = Object.extend( {
     value          : void 0,
     requestChange : function( val ){ throw new ReferenceError(); },
 
-    set  : function( val ){ this.requestChange( val ); },
-    fset : function( val ){
-        var link = this;
-        return function(){ link.requestChange( val ); }
-    }
+    set  : function( val ){ this.requestChange( val ); }
 } );
 
 exports.Attr = Value.extend( {
@@ -30,12 +26,7 @@ exports.Attr = Value.extend( {
 } );
 
 var Bool = exports.Bool = Value.extend( {
-    toggle : function(){ this.requestChange( !this.value ); },
-
-    ftoggle : function(){
-        var link = this;
-        return function(){ link.requestChange( !link.value ) };
-    }
+    toggle : function(){ this.requestChange( !this.value ); }
 } );
 
 var ValueEql = exports.ValueEql = Bool.extend( {
