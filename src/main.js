@@ -30,3 +30,27 @@ Object.defineProperties( BaseComponent, {
     $el : { get : function(){ return $( this.el ); } },
     $   : { value : function( sel ){ return this.$el.find( sel ); } }
 } );
+
+var Link = NestedReact.Link = require( './valuelink' );
+Nested.valueLink = Link.valueLink;
+
+var ModelProto = Nested.Model.prototype,
+    LinkAttr   = Link.Attr;
+
+ModelProto.lget = function( name ){ return new LinkAttr( this, name ); };
+ModelProto.fset = function( a, b, c ){
+    var self = this;
+    return function(){ self.set( a, b, c ); }
+};
+
+var CollectionProto = Nested.Collection.prototype,
+    LinkHas         = Link.CollectionHas;
+
+CollectionProto.lhas = function( model ){
+    return new LinkHas( this, model );
+};
+
+CollectionProto.ftoggle = function( model, next ){
+    var self = this;
+    return function(){ self.toggle( model, next ); }
+};
