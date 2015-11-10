@@ -7,6 +7,7 @@ It allows you:
 - To use your existing Backbone Views from React components.
 - To use your existing Backbone Models as React component state.
 - Update React components on Backbone events.
+- Data-binding for models and collections
 
 Thus, no refactoring of your application is required. You can start writing UI with React immediately replacing your Backbone Views one-by-one, while keeping your existing models.
 
@@ -174,3 +175,37 @@ var MyComponent = React.createClass({
 
 You can update react component on backbone events from component props.
 Event subscription is managed automatically. No props passed - no problems.
+
+## Data binding
+
+`nestedreact` supports data binding based on standard React `valueLink`.
+It adds following helpers:
+
+- `var link = model.lget( 'attr' )` creates link for model attribute. That link can
+    be further transformed to valueLink for boolean property:
+    - `link.leql( x )` creates boolean link which is true whenever link value is equal to x.
+    - `link.lhas( x )` creates boolean link which is true whenever x is contained in an array in link value.
+- `var link = collection.lhas( model )` creates link for boolean property, toggling model in collection.
+
+All links supports following additional methods:
+- `link.set( x )` working the same as `link.requestChanges( x )`
+- `link.fset( x )`, returning the function which invokes `link.set( x )` (to be used in click handlers)
+
+Boolean links adds following methods:
+- `link.toggle()` works the same as `link.requestChanges( !link.value )`
+- `link.ftoggle()` return the function which invokes `link.toggle()`
+
+There are direct methods in `Model` and `Collection` to create click handlers:
+- `model.fset( ... )` creates function which will invoke `model.set( ... )`
+- `collection.ftoggle( model )` creates function invoking `toggle`.
+
+Link received through component props can be linked with state member using
+the following declaration:
+```javascript
+attributes : {
+   selected : Nested.valueLink( '^props.selectedLink' )
+}   
+```
+
+It can be accessed as a part of state, however, `link.requestChanges` will be call on assignment
+instead of state modification. Its value will be updated automatically when component will receive new props.
