@@ -2,19 +2,19 @@ var Nested = require( 'nestedtypes' );
 
 var Value = exports.Value = Object.extend( {
     value          : void 0,
-    requestChanges : function( val ){ throw new ReferenceError(); },
+    requestChange : function( val ){ throw new ReferenceError(); },
 
-    set  : function( val ){ this.requestChanges( val ); },
+    set  : function( val ){ this.requestChange( val ); },
     fset : function( val ){
         var link = this;
-        return function(){ link.requestChanges( val ); }
+        return function(){ link.requestChange( val ); }
     }
 } );
 
 exports.Attr = Value.extend( {
     constructor : function( model, attr ){
         this.value          = model[ attr ];
-        this.requestChanges = function( val ){
+        this.requestChange = function( val ){
             model[ attr ] = val;
         }
     },
@@ -30,19 +30,19 @@ exports.Attr = Value.extend( {
 } );
 
 var Bool = exports.Bool = Value.extend( {
-    toggle : function(){ this.requestChanges( !this.value ); },
+    toggle : function(){ this.requestChange( !this.value ); },
 
     ftoggle : function(){
         var link = this;
-        return function(){ link.requestChanges( !link.value ) };
+        return function(){ link.requestChange( !link.value ) };
     }
 } );
 
 var ValueEql = exports.ValueEql = Bool.extend( {
     constructor : function( link, asTrue ){
         this.value          = link.value === asTrue;
-        this.requestChanges = function( val ){
-            link.requestChanges( val ? asTrue : null );
+        this.requestChange = function( val ){
+            link.requestChange( val ? asTrue : null );
         }
     }
 } );
@@ -52,10 +52,10 @@ var ArrayHas = exports.ArrayHas = Bool.extend( {
         var value  = Boolean( contains( link.value, element ) );
         this.value = value;
 
-        this.requestChanges = function( next ){
+        this.requestChange = function( next ){
             if( value !== Boolean( next ) ){
                 var prev = link.value;
-                link.requestChanges( next ? prev.concat( element ) : without( prev, element ) );
+                link.requestChange( next ? prev.concat( element ) : without( prev, element ) );
             }
         };
     }
@@ -64,7 +64,7 @@ var ArrayHas = exports.ArrayHas = Bool.extend( {
 exports.CollectionHas = Bool.extend( {
     constructor : function( collection, model ){
         this.value          = Boolean( collection.get( model ) );
-        this.requestChanges = function( val ){ collection.toggle( model, val ); }
+        this.requestChange = function( val ){ collection.toggle( model, val ); }
     }
 } );
 
@@ -73,7 +73,7 @@ exports.valueLink = function( reference ){
 
     function setLink( value ){
         var link = getMaster.call( this );
-        link && link.requestChanges( value );
+        link && link.requestChange( value );
     }
 
     function getLink(){
