@@ -512,7 +512,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            if( arguments.length ){
 	                if( prev !== x ){
-	                    clone( arr );
+	                    arr = clone( arr );
 	                    arr[ key ] = x;
 	                    link.val( arr );
 	                    return x;

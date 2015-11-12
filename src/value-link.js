@@ -63,7 +63,7 @@ var Link = exports.Link = Object.extend( {
 
             if( arguments.length ){
                 if( prev !== x ){
-                    clone( arr );
+                    arr = clone( arr );
                     arr[ key ] = x;
                     link.val( arr );
                     return x;
