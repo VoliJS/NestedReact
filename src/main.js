@@ -31,17 +31,17 @@ Object.defineProperties( BaseComponent, {
     $   : { value : function( sel ){ return this.$el.find( sel ); } }
 } );
 
-var Link = NestedReact.Link = require( './valuelink' );
-Nested.valueLink = Link.valueLink;
+var Link = NestedReact.Link = require( './value-link' );
+Nested.link = Link.link;
 
 var ModelProto = Nested.Model.prototype,
     LinkAttr   = Link.Attr;
 
-ModelProto.lget = function( name ){ return new LinkAttr( this, name ); };
+ModelProto.getLink = function( attr ){ return new LinkAttr( this, attr ); };
 
 var CollectionProto = Nested.Collection.prototype,
     LinkHas         = Link.CollectionHas;
 
-CollectionProto.lhas = function( model ){
+CollectionProto.getLink = function( model ){
     return new LinkHas( this, model );
 };
