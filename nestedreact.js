@@ -449,6 +449,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Nested = __webpack_require__( 3 );
 	
+	function clone( objOrArray ){
+	    return objOrArray instanceof Array ? objOrArray.slice() : Object.assign( {}, objOrArray );
+	}
+	
 	var Link = exports.Link = Object.extend( {
 	    constructor : function( val ){
 	        this.val = val;
@@ -456,7 +460,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    val : function( x ){ return x; },
 	
-	    properties :{
+	    properties : {
 	        value : {
 	            get : function(){ return this.val(); },
 	            set : function( x ){ this.val( x ); }
@@ -464,15 +468,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	
 	    requestChange : function( x ){ this.val( x ); },
-	    get  : function(){ return this.val(); },
-	    set  : function( x ){ this.val( x ); },
-	    toggle : function(){ this.val( !this.val() ); },
+	    get           : function(){ return this.val(); },
+	    set           : function( x ){ this.val( x ); },
+	    toggle        : function(){ this.val( !this.val() ); },
 	
 	    contains : function( element ){
 	        var link = this;
 	
 	        return new Link( function( x ){
-	            var arr = link.val(),
+	            var arr  = link.val(),
 	                prev = contains( arr, element );
 	
 	            if( arguments.length ){
@@ -495,9 +499,61 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if( arguments.length ) link.val( x ? asTrue : null );
 	
 	            return link.val() === asTrue;
-	        });
+	        } );
+	    },
+	
+	    // link to enclosed object or array member
+	    at : function( key ){
+	        var link = this;
+	
+	        return new Link( function( x ){
+	            var arr  = link.val(),
+	                prev = arr[ key ];
+	
+	            if( arguments.length ){
+	                if( prev !== x ){
+	                    clone( arr );
+	                    arr[ key ] = x;
+	                    link.val( arr );
+	                    return x;
+	                }
+	            }
+	
+	            return prev;
+	        } );
+	    },
+	
+	    // iterates through enclosed object or array, generating set of links
+	    map : function( fun ){
+	        var i, y, res = [], arr = this.val();
+	        if( arr ){
+	            if( arr instanceof Array ){
+	                for( i = 0; i < arr.length; i++ ){
+	                    y = fun( this.at( i ), i );
+	                    y === void 0 || ( res.push( y ) );
+	                }
+	            }
+	            else{
+	                for( i in arr ){
+	                    if( arr.hasOwnProperty( i ) ){
+	                        y = fun( this.at( i ), i );
+	                        y === void 0 || ( res.push( y ) );
+	                    }
+	                }
+	            }
+	        }
+	
+	        return res;
+	    },
+	
+	    // create function which updates the link
+	    update : function( transform ){
+	        var val = this.val;
+	        return function(){
+	            val( transform( val() ) )
+	        }
 	    }
-	} );
+	});
 	
 	exports.link = function( reference ){
 	    var getMaster = Nested.parseReference( reference );
