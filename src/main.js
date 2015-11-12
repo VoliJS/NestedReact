@@ -31,17 +31,40 @@ Object.defineProperties( BaseComponent, {
     $   : { value : function( sel ){ return this.$el.find( sel ); } }
 } );
 
-var Link = NestedReact.Link = require( './value-link' );
-Nested.link = Link.link;
+var ValueLink = require( './value-link' );
+var Link = Nested.Link = ValueLink.Link;
+Nested.link = ValueLink.link;
 
-var ModelProto = Nested.Model.prototype,
-    LinkAttr   = Link.Attr;
+var ModelProto = Nested.Model.prototype;
 
-ModelProto.getLink = function( attr ){ return new LinkAttr( this, attr ); };
+ModelProto.getLink = function( attr ){
+    var model = this;
 
-var CollectionProto = Nested.Collection.prototype,
-    LinkHas         = Link.CollectionHas;
+    return new Link( function( x ){
+        if( arguments.length ){
+            model[ attr ] = x;
+        }
+
+        return model[ attr ];
+    });
+};
+
+var CollectionProto = Nested.Collection.prototype;
 
 CollectionProto.getLink = function( model ){
-    return new LinkHas( this, model );
+    var collection = this;
+
+    return new Link( function( x ){
+        var prev = Boolean( collection.get( model ) );
+
+        if( arguments.length ){
+            var next = Boolean( x );
+            if( prev !== next ){
+                collection.toggle( model, x );
+                return next;
+            }
+        }
+
+        return prev;
+    });
 };

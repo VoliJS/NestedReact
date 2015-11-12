@@ -1,7 +1,11 @@
 var Nested = require( 'nestedtypes' );
 
-var Value = exports.Value = Object.extend( {
-    val : function( x ){},
+var Link = exports.Link = Object.extend( {
+    constructor : function( val ){
+        this.val = val;
+    },
+
+    val : function( x ){ return x; },
 
     properties :{
         value : {
@@ -13,44 +17,12 @@ var Value = exports.Value = Object.extend( {
     requestChange : function( x ){ this.val( x ); },
     get  : function(){ return this.val(); },
     set  : function( x ){ this.val( x ); },
-    toggle : function(){ this.val( !this.val() ); }
-} );
+    toggle : function(){ this.val( !this.val() ); },
 
-exports.Attr = Value.extend( {
-    constructor : function( model, attr ){
-        this.val = function( x ){
-            if( arguments.length ){
-                model[ attr ] = x;
-            }
+    contains : function( element ){
+        var link = this;
 
-            return model[ attr ];
-        };
-    },
-
-    // create boolean link for value in array
-    contains : function( value ){
-        return new ArrayHas( this, value );
-    },
-
-    // create boolean link for value equality
-    equals : function( value ){
-        return new ValueEql( this, value );
-    }
-} );
-
-var ValueEql = exports.ValueEql = Value.extend( {
-    constructor : function( link, asTrue ){
-        this.val = function( x ){
-            if( arguments.length ) link.val( x ? asTrue : null );
-
-            return link.val() === asTrue;
-        };
-    }
-} );
-
-var ArrayHas = exports.ArrayHas = Value.extend( {
-    constructor : function( link, element ){
-        this.val = function( x ){
+        return new Link( function( x ){
             var arr = link.val(),
                 prev = contains( arr, element );
 
@@ -63,25 +35,18 @@ var ArrayHas = exports.ArrayHas = Value.extend( {
             }
 
             return prev;
-        };
-    }
-} );
+        } );
+    },
 
-exports.CollectionHas = Value.extend( {
-    constructor : function( collection, model ){
-        this.val = function( x ){
-            var prev = Boolean( collection.get( model ) );
+    // create boolean link for value equality
+    equals : function( asTrue ){
+        var link = this;
 
-            if( arguments.length ){
-                var next = Boolean( x );
-                if( prev !== next ){
-                    collection.toggle( model, x );
-                    return next;
-                }
-            }
+        return new Link( function( x ){
+            if( arguments.length ) link.val( x ? asTrue : null );
 
-            return prev;
-        };
+            return link.val() === asTrue;
+        });
     }
 } );
 

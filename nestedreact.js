@@ -87,19 +87,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $   : { value : function( sel ){ return this.$el.find( sel ); } }
 	} );
 	
-	var Link = NestedReact.Link = __webpack_require__( 7 );
-	Nested.link = Link.link;
+	var ValueLink = __webpack_require__( 7 );
+	var Link = Nested.Link = ValueLink.Link;
+	Nested.link = ValueLink.link;
 	
-	var ModelProto = Nested.Model.prototype,
-	    LinkAttr   = Link.Attr;
+	var ModelProto = Nested.Model.prototype;
 	
-	ModelProto.getLink = function( attr ){ return new LinkAttr( this, attr ); };
+	ModelProto.getLink = function( attr ){
+	    var model = this;
 	
-	var CollectionProto = Nested.Collection.prototype,
-	    LinkHas         = Link.CollectionHas;
+	    return new Link( function( x ){
+	        if( arguments.length ){
+	            model[ attr ] = x;
+	        }
+	
+	        return model[ attr ];
+	    });
+	};
+	
+	var CollectionProto = Nested.Collection.prototype;
 	
 	CollectionProto.getLink = function( model ){
-	    return new LinkHas( this, model );
+	    var collection = this;
+	
+	    return new Link( function( x ){
+	        var prev = Boolean( collection.get( model ) );
+	
+	        if( arguments.length ){
+	            var next = Boolean( x );
+	            if( prev !== next ){
+	                collection.toggle( model, x );
+	                return next;
+	            }
+	        }
+	
+	        return prev;
+	    });
 	};
 
 
@@ -405,8 +428,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Nested = __webpack_require__( 3 );
 	
-	var Value = exports.Value = Object.extend( {
-	    val : function( x ){},
+	var Link = exports.Link = Object.extend( {
+	    constructor : function( val ){
+	        this.val = val;
+	    },
+	
+	    val : function( x ){ return x; },
 	
 	    properties :{
 	        value : {
@@ -418,44 +445,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    requestChange : function( x ){ this.val( x ); },
 	    get  : function(){ return this.val(); },
 	    set  : function( x ){ this.val( x ); },
-	    toggle : function(){ this.val( !this.val() ); }
-	} );
+	    toggle : function(){ this.val( !this.val() ); },
 	
-	exports.Attr = Value.extend( {
-	    constructor : function( model, attr ){
-	        this.val = function( x ){
-	            if( arguments.length ){
-	                model[ attr ] = x;
-	            }
+	    contains : function( element ){
+	        var link = this;
 	
-	            return model[ attr ];
-	        };
-	    },
-	
-	    // create boolean link for value in array
-	    contains : function( value ){
-	        return new ArrayHas( this, value );
-	    },
-	
-	    // create boolean link for value equality
-	    equals : function( value ){
-	        return new ValueEql( this, value );
-	    }
-	} );
-	
-	var ValueEql = exports.ValueEql = Value.extend( {
-	    constructor : function( link, asTrue ){
-	        this.val = function( x ){
-	            if( arguments.length ) link.val( x ? asTrue : null );
-	
-	            return link.val() === asTrue;
-	        };
-	    }
-	} );
-	
-	var ArrayHas = exports.ArrayHas = Value.extend( {
-	    constructor : function( link, element ){
-	        this.val = function( x ){
+	        return new Link( function( x ){
 	            var arr = link.val(),
 	                prev = contains( arr, element );
 	
@@ -468,25 +463,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            return prev;
-	        };
-	    }
-	} );
+	        } );
+	    },
 	
-	exports.CollectionHas = Value.extend( {
-	    constructor : function( collection, model ){
-	        this.val = function( x ){
-	            var prev = Boolean( collection.get( model ) );
+	    // create boolean link for value equality
+	    equals : function( asTrue ){
+	        var link = this;
 	
-	            if( arguments.length ){
-	                var next = Boolean( x );
-	                if( prev !== next ){
-	                    collection.toggle( model, x );
-	                    return next;
-	                }
-	            }
+	        return new Link( function( x ){
+	            if( arguments.length ) link.val( x ? asTrue : null );
 	
-	            return prev;
-	        };
+	            return link.val() === asTrue;
+	        });
 	    }
 	} );
 	
