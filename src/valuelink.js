@@ -1,19 +1,24 @@
 var Nested = require( 'nestedtypes' );
 
 var Value = exports.Value = Object.extend( {
-    value          : void 0,
-    requestChange : function( val ){ throw new ReferenceError(); },
+    properties :{
+        value : {
+            get : function(){ return this.get(); },
+            set : function( val ){ this.set( val ); }
+        }
+    },
 
-    set  : function( val ){ this.requestChange( val ); },
-    toggle : function(){ this.requestChange( !this.value ); }
+    requestChange : function( val ){ this.set( val ); },
+    toggle : function(){ this.set( !this.get() ); },
+
+    get  : function(){ throw new ReferenceError( 'Not implemented' ); },
+    set  : function(){ throw new ReferenceError( 'Not implemented' ); }
 } );
 
 exports.Attr = Value.extend( {
     constructor : function( model, attr ){
-        this.value          = model[ attr ];
-        this.requestChange = function( val ){
-            model[ attr ] = val;
-        }
+        this.get = function(){ return model[ attr ]; };
+        this.set = function( val ){ model[ attr ] = val; };
     },
 
     // create boolean link for value in array
@@ -29,22 +34,19 @@ exports.Attr = Value.extend( {
 
 var ValueEql = exports.ValueEql = Value.extend( {
     constructor : function( link, asTrue ){
-        this.value          = link.value === asTrue;
-        this.requestChange = function( val ){
-            link.requestChange( val ? asTrue : null );
-        }
+        this.get = function(){ return link.get() === asTrue; };
+        this.set = function( val ){ link.set( val ? asTrue : null ); };
     }
 } );
 
 var ArrayHas = exports.ArrayHas = Value.extend( {
     constructor : function( link, element ){
-        var value  = Boolean( contains( link.value, element ) );
-        this.value = value;
+        this.get = function(){ return contains( link.get(), element ); };
 
-        this.requestChange = function( next ){
-            if( value !== Boolean( next ) ){
-                var prev = link.value;
-                link.requestChange( next ? prev.concat( element ) : without( prev, element ) );
+        this.set = function( next ){
+            var arr = link.get();
+            if( contains( arr, element ) !== Boolean( next ) ){
+                link.set( next ? arr.concat( element ) : without( arr, element ) );
             }
         };
     }
@@ -52,8 +54,8 @@ var ArrayHas = exports.ArrayHas = Value.extend( {
 
 exports.CollectionHas = Value.extend( {
     constructor : function( collection, model ){
-        this.value          = Boolean( collection.get( model ) );
-        this.requestChange = function( val ){ collection.toggle( model, val ); }
+        this.get = function(){ return Boolean( collection.get( model ) ); };
+        this.set = function( val ){ collection.toggle( model, val ); };
     }
 } );
 
@@ -62,12 +64,12 @@ exports.valueLink = function( reference ){
 
     function setLink( value ){
         var link = getMaster.call( this );
-        link && link.requestChange( value );
+        link && link.set( value );
     }
 
     function getLink(){
         var link = getMaster.call( this );
-        return link && link.value;
+        return link && link.get();
     }
 
     var LinkAttribute = Nested.attribute.Type.extend( {
