@@ -77,6 +77,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	// React component for attaching views
 	NestedReact.subview = __webpack_require__( 6 );
 	
+	NestedReact.tools = __webpack_require__( 7 );
+	
 	// Extend react components to have backbone-style jquery accessors
 	var Component     = React.createClass( { render : function(){} } ),
 	    BaseComponent = Object.getPrototypeOf( Component.prototype );
@@ -87,7 +89,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $   : { value : function( sel ){ return this.$el.find( sel ); } }
 	} );
 	
-	var ValueLink = __webpack_require__( 7 );
+	var ValueLink = __webpack_require__( 8 );
 	var Link = Nested.Link = ValueLink.Link;
 	Nested.link = ValueLink.link;
 	
@@ -360,35 +362,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__( 1 );
-	
-	function shallowEqual(objA, objB) {
-	    if (objA === objB) {
-	        return true;
-	    }
-	
-	    if (typeof objA !== 'object' || objA === null ||
-	        typeof objB !== 'object' || objB === null) {
-	        return false;
-	    }
-	
-	    var keysA = Object.keys(objA);
-	    var keysB = Object.keys(objB);
-	
-	    if (keysA.length !== keysB.length) {
-	        return false;
-	    }
-	
-	    // Test for A's keys different from B.
-	    var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
-	    for (var i = 0; i < keysA.length; i++) {
-	        if (!bHasOwnProperty(keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
-	            return false;
-	        }
-	    }
-	
-	    return true;
-	}
+	var React = __webpack_require__( 1 ),
+	    jsonNotEqual = __webpack_require__( 7 ).jsonNotEqual;
 	
 	module.exports = React.createClass({
 	    displayName : 'BackboneView',
@@ -400,7 +375,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    shouldComponentUpdate : function( next ){
 	        var props = this.props;
-	        return next.View !== props.View || !shallowEqual( next.options, props.options );
+	        return next.View !== props.View || jsonNotEqual( next.options, props.options );
 	    },
 	
 	    render : function(){
@@ -442,16 +417,104 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	});
 
-
 /***/ },
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var Nested = __webpack_require__( 3 );
+	// equality checking for deep JSON comparison of plain Array and Object
+	var ArrayProto = Array.prototype,
+	    ObjectProto = Object.prototype;
 	
+	exports.jsonNotEqual = jsonNotEqual;
+	function jsonNotEqual( objA, objB) {
+	    if (objA === objB) {
+	        return false;
+	    }
+	
+	    if (typeof objA !== 'object' || !objA ||
+	        typeof objB !== 'object' || !objB ) {
+	        return true;
+	    }
+	
+	    var protoA = Object.getPrototypeOf( objA ),
+	        protoB = Object.getPrototypeOf( objB );
+	
+	    if( protoA !== protoB ) return true;
+	
+	    if( protoA === ArrayProto ) return arraysNotEqual( objA, objB );
+	    if( protoA === ObjectProto ) return objectsNotEqual( objA, objB );
+	
+	    return true;
+	}
+	
+	function objectsNotEqual( objA, objB ){
+	    var keysA = Object.keys(objA);
+	    var keysB = Object.keys(objB);
+	
+	    if (keysA.length !== keysB.length) {
+	        return true;
+	    }
+	
+	    // Test for A's keys different from B.
+	    var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
+	
+	    for (var i = 0; i < keysA.length; i++) {
+	        var key = keysA[i];
+	        if ( !bHasOwnProperty( key ) || jsonNotEqual( objA[ key ], objB[ key ] )) {
+	            return true;
+	        }
+	    }
+	
+	    return false;
+	}
+	
+	function arraysNotEqual( a, b ){
+	    if( a.length !== b.length ) return true;
+	
+	    for( var i = 0; i < a.length; i++ ){
+	        if( jsonNotEqual( a[ i ], b[ i ] ) ) return true;
+	    }
+	
+	    return false;
+	}
+	
+	// private array helpers
+	exports.contains = contains;
+	function contains( arr, el ){
+	    for( var i = 0; i < arr.length; i++ ){
+	        if( arr[ i ] === el ) return true;
+	    }
+	
+	    return false;
+	};
+	
+	exports.without = without;
+	function without( arr, el ){
+	    var res = [];
+	
+	    for( var i = 0; i < arr.length; i++ ){
+	        var current = arr[ i ];
+	        current === el || res.push( current );
+	    }
+	
+	    return res;
+	};
+	
+	exports.clone = clone;
 	function clone( objOrArray ){
 	    return objOrArray instanceof Array ? objOrArray.slice() : Object.assign( {}, objOrArray );
-	}
+	};
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Nested = __webpack_require__( 3 ),
+	    tools  = __webpack_require__( 7 ),
+	    contains = tools.contains,
+	    without  = tools.without,
+	    clone    = tools.clone;
 	
 	var Link = exports.Link = Object.extend( {
 	    constructor : function( val ){
@@ -525,25 +588,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    // iterates through enclosed object or array, generating set of links
 	    map : function( fun ){
-	        var i, y, res = [], arr = this.val();
-	        if( arr ){
-	            if( arr instanceof Array ){
-	                for( i = 0; i < arr.length; i++ ){
-	                    y = fun( this.at( i ), i );
-	                    y === void 0 || ( res.push( y ) );
-	                }
-	            }
-	            else{
-	                for( i in arr ){
-	                    if( arr.hasOwnProperty( i ) ){
-	                        y = fun( this.at( i ), i );
-	                        y === void 0 || ( res.push( y ) );
-	                    }
-	                }
-	            }
-	        }
-	
-	        return res;
+	        var arr = this.val();
+	        return arr ? ( arr instanceof Array ? mapArray( this, arr, fun ) : mapObject( this, arr, fun ) ) : [];
 	    },
 	
 	    // create function which updates the link
@@ -554,6 +600,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }
 	});
+	
+	function mapObject( link, object, fun ){
+	    var res = [];
+	
+	    for( var i in object ){
+	        if( object.hasOwnProperty( i ) ){
+	            var y = fun( link.at( i ), i );
+	            y === void 0 || ( res.push( y ) );
+	        }
+	    }
+	
+	    return res;
+	}
+	
+	function mapArray( link, arr, fun ){
+	    var res = [];
+	
+	    for( var i = 0; i < arr.length; i++ ){
+	        var y = fun( link.at( i ), i );
+	        y === void 0 || ( res.push( y ) );
+	    }
+	
+	    return res;
+	}
 	
 	exports.link = function( reference ){
 	    var getMaster = Nested.parseReference( reference );
@@ -586,26 +656,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    options.Attribute = LinkAttribute;
 	    return options;
 	};
-	
-	// private array helpers
-	function contains( arr, el ){
-	    for( var i = 0; i < arr.length; i++ ){
-	        if( arr[ i ] === el ) return true;
-	    }
-	
-	    return false;
-	}
-	
-	function without( arr, el ){
-	    var res = [];
-	
-	    for( var i = 0; i < arr.length; i++ ){
-	        var current = arr[ i ];
-	        current === el || res.push( current );
-	    }
-	
-	    return res;
-	}
 
 /***/ }
 /******/ ])

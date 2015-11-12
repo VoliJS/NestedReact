@@ -1,8 +1,8 @@
-var Nested = require( 'nestedtypes' );
-
-function clone( objOrArray ){
-    return objOrArray instanceof Array ? objOrArray.slice() : Object.assign( {}, objOrArray );
-}
+var Nested = require( 'nestedtypes' ),
+    tools  = require( './tools' ),
+    contains = tools.contains,
+    without  = tools.without,
+    clone    = tools.clone;
 
 var Link = exports.Link = Object.extend( {
     constructor : function( val ){
@@ -76,25 +76,8 @@ var Link = exports.Link = Object.extend( {
 
     // iterates through enclosed object or array, generating set of links
     map : function( fun ){
-        var i, y, res = [], arr = this.val();
-        if( arr ){
-            if( arr instanceof Array ){
-                for( i = 0; i < arr.length; i++ ){
-                    y = fun( this.at( i ), i );
-                    y === void 0 || ( res.push( y ) );
-                }
-            }
-            else{
-                for( i in arr ){
-                    if( arr.hasOwnProperty( i ) ){
-                        y = fun( this.at( i ), i );
-                        y === void 0 || ( res.push( y ) );
-                    }
-                }
-            }
-        }
-
-        return res;
+        var arr = this.val();
+        return arr ? ( arr instanceof Array ? mapArray( this, arr, fun ) : mapObject( this, arr, fun ) ) : [];
     },
 
     // create function which updates the link
@@ -105,6 +88,30 @@ var Link = exports.Link = Object.extend( {
         }
     }
 });
+
+function mapObject( link, object, fun ){
+    var res = [];
+
+    for( var i in object ){
+        if( object.hasOwnProperty( i ) ){
+            var y = fun( link.at( i ), i );
+            y === void 0 || ( res.push( y ) );
+        }
+    }
+
+    return res;
+}
+
+function mapArray( link, arr, fun ){
+    var res = [];
+
+    for( var i = 0; i < arr.length; i++ ){
+        var y = fun( link.at( i ), i );
+        y === void 0 || ( res.push( y ) );
+    }
+
+    return res;
+}
 
 exports.link = function( reference ){
     var getMaster = Nested.parseReference( reference );
@@ -137,23 +144,3 @@ exports.link = function( reference ){
     options.Attribute = LinkAttribute;
     return options;
 };
-
-// private array helpers
-function contains( arr, el ){
-    for( var i = 0; i < arr.length; i++ ){
-        if( arr[ i ] === el ) return true;
-    }
-
-    return false;
-}
-
-function without( arr, el ){
-    var res = [];
-
-    for( var i = 0; i < arr.length; i++ ){
-        var current = arr[ i ];
-        current === el || res.push( current );
-    }
-
-    return res;
-}
