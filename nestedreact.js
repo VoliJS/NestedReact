@@ -88,17 +88,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	} );
 	
 	var Link = NestedReact.Link = __webpack_require__( 7 );
-	Nested.valueLink = Link.valueLink;
+	Nested.link = Link.link;
 	
 	var ModelProto = Nested.Model.prototype,
 	    LinkAttr   = Link.Attr;
 	
-	ModelProto.lget = function( name ){ return new LinkAttr( this, name ); };
+	ModelProto.getLink = function( attr ){ return new LinkAttr( this, attr ); };
 	
 	var CollectionProto = Nested.Collection.prototype,
 	    LinkHas         = Link.CollectionHas;
 	
-	CollectionProto.lhas = function( model ){
+	CollectionProto.getLink = function( model ){
 	    return new LinkHas( this, model );
 	};
 
@@ -406,75 +406,101 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Nested = __webpack_require__( 3 );
 	
 	var Value = exports.Value = Object.extend( {
+	    val : function( x ){},
+	
 	    properties :{
 	        value : {
-	            get : function(){ return this.get(); },
-	            set : function( val ){ this.set( val ); }
+	            get : function(){ return this.val(); },
+	            set : function( x ){ this.val( x ); }
 	        }
 	    },
 	
-	    requestChange : function( val ){ this.set( val ); },
-	    toggle : function(){ this.set( !this.get() ); },
-	
-	    get  : function(){ throw new ReferenceError( 'Not implemented' ); },
-	    set  : function(){ throw new ReferenceError( 'Not implemented' ); }
+	    requestChange : function( x ){ this.val( x ); },
+	    get  : function(){ return this.val(); },
+	    set  : function( x ){ this.val( x ); },
+	    toggle : function(){ this.val( !this.val() ); }
 	} );
 	
 	exports.Attr = Value.extend( {
 	    constructor : function( model, attr ){
-	        this.get = function(){ return model[ attr ]; };
-	        this.set = function( val ){ model[ attr ] = val; };
+	        this.val = function( x ){
+	            if( arguments.length ){
+	                model[ attr ] = x;
+	            }
+	
+	            return model[ attr ];
+	        };
 	    },
 	
 	    // create boolean link for value in array
-	    lhas : function( value ){
+	    contains : function( value ){
 	        return new ArrayHas( this, value );
 	    },
 	
 	    // create boolean link for value equality
-	    leql : function( value ){
+	    equals : function( value ){
 	        return new ValueEql( this, value );
 	    }
 	} );
 	
 	var ValueEql = exports.ValueEql = Value.extend( {
 	    constructor : function( link, asTrue ){
-	        this.get = function(){ return link.get() === asTrue; };
-	        this.set = function( val ){ link.set( val ? asTrue : null ); };
+	        this.val = function( x ){
+	            if( arguments.length ) link.val( x ? asTrue : null );
+	
+	            return link.val() === asTrue;
+	        };
 	    }
 	} );
 	
 	var ArrayHas = exports.ArrayHas = Value.extend( {
 	    constructor : function( link, element ){
-	        this.get = function(){ return contains( link.get(), element ); };
+	        this.val = function( x ){
+	            var arr = link.val(),
+	                prev = contains( arr, element );
 	
-	        this.set = function( next ){
-	            var arr = link.get();
-	            if( contains( arr, element ) !== Boolean( next ) ){
-	                link.set( next ? arr.concat( element ) : without( arr, element ) );
+	            if( arguments.length ){
+	                var next = Boolean( x );
+	                if( prev !== next ){
+	                    link.val( x ? arr.concat( element ) : without( arr, element ) );
+	                    return next;
+	                }
 	            }
+	
+	            return prev;
 	        };
 	    }
 	} );
 	
 	exports.CollectionHas = Value.extend( {
 	    constructor : function( collection, model ){
-	        this.get = function(){ return Boolean( collection.get( model ) ); };
-	        this.set = function( val ){ collection.toggle( model, val ); };
+	        this.val = function( x ){
+	            var prev = Boolean( collection.get( model ) );
+	
+	            if( arguments.length ){
+	                var next = Boolean( x );
+	                if( prev !== next ){
+	                    collection.toggle( model, x );
+	                    return next;
+	                }
+	            }
+	
+	            return prev;
+	        };
 	    }
 	} );
 	
-	exports.valueLink = function( reference ){
+	exports.link = function( reference ){
 	    var getMaster = Nested.parseReference( reference );
 	
 	    function setLink( value ){
 	        var link = getMaster.call( this );
-	        link && link.set( value );
+	        link && link.val( value );
 	    }
 	
 	    function getLink(){
 	        var link = getMaster.call( this );
-	        return link && link.get();
+	        return link && link.val();
 	    }
 	
 	    var LinkAttribute = Nested.attribute.Type.extend( {
