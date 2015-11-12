@@ -171,6 +171,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	};
 	
+	var ListenToPropsArray = {
+	    componentDidMount : function(){
+	        var props    = this.props,
+	            updateOn = this.listenToProps;
+	
+	        for( var i = 0; i < updateOn.length; i++ ){
+	            var emitter = props[ updateOn[ i ] ];
+	            emitter && this.listenTo( emitter, emitter.triggerWhenChanged, forceUpdate );
+	        }
+	    }
+	};
+	
 	var ModelState = {
 	    listenToState : 'change',
 	    model         : null,
@@ -210,7 +222,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    if( spec.Model ) mixins.push( ModelState );
 	
-	    if( spec.listenToProps ) mixins.unshift( ListenToProps );
+	    var listenToProps = spec.listenToProps;
+	    if( listenToProps ){
+	        if( typeof listenToProps === 'string' ){
+	            spec.listenToProps = listenToProps.split( ' ' );
+	            mixins.unshift( ListenToPropsArray );
+	        }
+	        else{
+	            mixins.unshift( ListenToProps );
+	        }
+	    }
 	
 	    mixins.push( Events );
 	

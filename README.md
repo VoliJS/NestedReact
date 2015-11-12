@@ -155,7 +155,7 @@ var MyComponent = React.createClass({
 ## Passing Backbone objects as React components props
 ```javscript
 var MyComponent = React.createClass({
-	listenToProps : {
+	listenToProps : { // or just string with property names, separated by space
 		model : 'change'
 	},
 
