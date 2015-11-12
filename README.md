@@ -178,26 +178,34 @@ Event subscription is managed automatically. No props passed - no problems.
 
 ## Data binding
 
-`nestedreact` supports data binding based on standard React `valueLink`.
-It adds following helpers:
+`nestedreact` supports data binding based compatible with standard React's `valueLink`.
+Links are "live" in a sense that they always point to actual value based on current model or collection state.
+It doesn't break anything in React, rather extends possible use cases.
 
-- `var link = model.lget( 'attr' )` creates link for model attribute. That link can
+- `var link = model.getLink( 'attr' )` creates link for model attribute. That link can
     be further transformed to valueLink for boolean property:
-    - `link.leql( x )` creates boolean link which is true whenever link value is equal to x.
-    - `link.lhas( x )` creates boolean link which is true whenever x is contained in an array in link value.
-- `var link = collection.lhas( model )` creates link for boolean property, toggling model in collection.
+    - `link.equals( x )` creates boolean link which is true whenever link value is equal to x.
+    - `link.contains( x )` creates boolean link which is true whenever x is contained in an array in link value.
+        Updates to enclosed array made through this property will trigger model updates.
+        Avoid long arrays, operations has O(N^2) complexity. 
+- `var link = collection.getLink( model )` creates link for boolean property, toggling model in collection.
 
 All links supports following additional methods:
-- `link.set( x )` working the same as `link.requestChanges( x )`
-- `link.toggle()` works the same as `link.requestChanges( !link.value )`
+- `link.val( x )`, `link.set( x )` working the same as `link.requestChange( x )`
+- `link.val()`, `link.get()` get link value
+- `link.toggle()` works the same as `link.set( !link.get() )`
+
+Standard members `link.requestChange( x )` and `link.value` also works.
+Assignments to `link.value` are allowed, and works in the same way as `link.set`.
+
+Most efficient way to work with link is using `link.val()` function.
 
 Link received through component props can be linked with state member using
 the following declaration:
 ```javascript
 attributes : {
-   selected : Nested.valueLink( '^props.selectedLink' )
+   selected : Nested.link( '^props.selectedLink' )
 }   
 ```
-
 It can be accessed as a part of state, however, `link.requestChanges` will be call on assignment
 instead of state modification. Its value will be updated automatically when component will receive new props.
