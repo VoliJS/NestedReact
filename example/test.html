@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <script src="../node_modules/jquery/dist/jquery.js"></script>
+        <script src="../node_modules/underscore/underscore.js"></script>
+        <script src="../node_modules/nestedtypes/nestedtypes.js"></script>
+        <script src="../node_modules/react/dist/react.js"></script>
+        <script src="../node_modules/react-dom/dist/react-dom.js"></script>
+        <script src="../nestedreact.js"></script>
+
+    </head>
+    <body></body>
+    <script>
+        var State = Nested.Model.extend({
+            defaults : {
+                who : 'me'
+            }
+        });
+
+        var Hello = React.createClass({
+            Model : State,
+
+            attributes : {
+                what : 'hi'
+            },
+
+            render : function(){
+                return React.createElement( 'div', { onClick : this.click }, this.model.what + this.model.who );
+            },
+
+            click : function(){
+                this.$el.html( 'Whoaa!' );
+            }
+        });
+
+        var c = ReactDOM.render( React.createElement( Hello ), document.body );
+        c.state.set( 'who', 'he' );
+
+    </script>
+</html>
