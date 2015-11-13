@@ -210,7 +210,7 @@ For link enclosing array:
 - `arrLink.contains( x )` creates boolean link which is true whenever x is contained in an array in link value. Useful for checkboxes. Avoid long arrays, currently operations has O(N^2) complexity.
 
 For link enclosings arrays and plain JS objects:
-- `arrOrObjLink.at( key )` creates link to array of object member with a given key. Useful when working with plain JS objects in model attributes.
+- `arrOrObjLink.at( key )` creates link to array of object member with a given key. Can be applied multiple times to work with object hierarchies; on modifications, objects will be updated in purely functional way (modified parts will be shallow copied). Useful when working with plain JS objects in model attributes - updating them through links make changes visible to the model.
 - `arrOrObjLink.map( ( itemLink, key ) => <input key={ key } valieLink={ itemLink } /> )` iterates through object or array, wrapping its elements to links. Useful for JSX transofrmation.
 
 ### Links and components state
