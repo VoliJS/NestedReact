@@ -1,15 +1,16 @@
-# nestedreact
-This is React add-on designed to simplify migration to React views in large Backbone applications.
+# NestedReact
+This is React add-on providing advanced state management to React applications and convergence layer for intermixing React components and Backbone Views. 
 
-It allows you:
+Brief feature list:
 
-- To use React component in place of every Backbone View.
-- To use your existing Backbone Views from React components.
-- To use your existing Backbone Models as React component state.
-- Update React components on Backbone events.
-- Data-binding for models and collections
+- React Component's state management with [NestedTypes](https://github.com/Volicon/backbone.nestedTypes).
+- Tricky data-binding scenarious for models attributes and collection members made easy.
+- Transparent interoperation with Backbone Views:
+	- React component can be used as backbone View. `new MyComponent.View({ props })`
+	- Backbone Views can be used from React components. `<React.subview View={ MyView } />`
+	- Simplified refactoring of Backbone Views to React components. `this.$`, `this.$el`, `this.$( sel )` works forin React components too. Backbone events are also available.
 
-Thus, no refactoring of your application is required. You can start writing UI with React immediately replacing your Backbone Views one-by-one, while keeping your existing models.
+Thus, if you have Bakcbone application and want to start writing with React - you have no excuses any more. Wanna keep some of your cool Views? They works just fine? Keep 'em. And use them in yout new components, written with React, which you will use in other Backbone Views.
 
 # Breaking changes introduced in 0.3
 - `component.createView( props )` doesn't work any more, use `new component.View( props )` instead.
