@@ -1,7 +1,7 @@
 {
   "name": "nestedreact",
   "main": "nestedreact.js",
-  "description": "Essential tool for migration to React in large Backbone application",
+  "description": "Advanced models, state management, and data binding solution for React",
   "homepage": "https://github.com/Volicon/react-backbone.glue",
   "keywords": [
     "backbone",
@@ -29,7 +29,7 @@
     "nestedreact.js.map"
   ],
   "license": "MIT",
-  "version": "0.3.0-0",
+  "version": "0.3.0",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack --watch"
