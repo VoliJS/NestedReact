@@ -3,8 +3,8 @@ This is React add-on providing advanced state management to React applications a
 
 Brief feature list:
 
-- React Component's state management with [NestedTypes](https://github.com/Volicon/backbone.nestedTypes).
-- Tricky data-binding scenarious for models attributes and collection members made easy.
+- Advanced Component's state management with [NestedTypes](https://github.com/Volicon/backbone.nestedTypes).
+- Comprehensive two-way data binding - [Guide to Data Binding Use Cases](/example/databinding.md)
 - Transparent interoperation with Backbone Views:
 	- React component can be used as backbone View. `new MyComponent.View({ props })`
 	- Backbone Views can be used from React components. `<React.subview View={ MyView } />`
@@ -197,6 +197,9 @@ In addition to standard members `link.requestChange( x )` and `link.value`, link
 
 Most efficient way to work with link is using `link.val()` function, that's how its internally implemented. `val` function is bound, and can be passed around safely.
 
+Here's a brief reference for liks API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
+
+
 ### Link transformations
 
 Attribute's link can be further transformed using extended link API. Link transformations allowing you to use new `stateless functions` component definition style introduced in React 0.14 in most cases.
@@ -233,5 +236,3 @@ attributes : {
 ```
 
 Technically, "watcher" - is just a callback function with a single argument receiving new attribute value, so links are not required here.
-
-[Guide to Data Binding Use Cases](/example/databinding.md)
