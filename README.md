@@ -3,7 +3,7 @@ This is React add-on providing advanced state management to React applications a
 
 Brief feature list:
 
-- Advanced Component's state management with [NestedTypes](https://github.com/Volicon/backbone.nestedTypes).
+- Advanced component's state management with [NestedTypes](https://github.com/Volicon/backbone.nestedTypes).
 - Comprehensive two-way data binding - [Guide to Data Binding Use Cases](/example/databinding.md)
 - Transparent interoperation with Backbone Views:
 	- React component can be used as backbone View. `new MyComponent.View({ props })`
