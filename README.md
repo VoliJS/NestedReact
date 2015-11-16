@@ -7,8 +7,8 @@ Brief feature list:
 - Comprehensive two-way data binding - [Guide to Data Binding Use Cases](/example/databinding.md)
 - Transparent interoperation with Backbone Views:
 	- React component can be used as backbone View. `new MyComponent.View({ props })`
-	- Backbone Views can be used from React components. `<React.subview View={ MyView } />`
-	- Simplified refactoring of Backbone Views to React components. `this.$`, `this.$el`, `this.$( sel )` works forin React components too. Backbone events are also available.
+	- Backbone Views can be used as React components. `<React.subview View={ MyView } />`
+	- Simplified refactoring of Backbone Views to React components. `this.$`, `this.$el`, `this.$( sel )`, `this.model` works for React components too, as well as `this.trigger` and `this.listenTo`.
 
 Thus, if you have Bakcbone application and want to start writing with React - you have no excuses any more. Wanna keep some of your cool Views? They works just fine? Keep 'em. And use them in yout new components, written with React, which you will use in other Backbone Views.
 
