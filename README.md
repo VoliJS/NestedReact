@@ -233,3 +233,5 @@ attributes : {
 ```
 
 Technically, "watcher" - is just a callback function with a single argument receiving new attribute value, so links are not required here.
+
+[Guide to Data Binding Use Cases](/example/databinding.md)
