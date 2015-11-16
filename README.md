@@ -209,3 +209,5 @@ attributes : {
 ```
 It can be accessed as a part of state, however, `link.requestChanges` will be call on assignment
 instead of state modification. Its value will be updated automatically when component will receive new props.
+
+[Guide to Data Binding Use Cases](/example/databinding.md)
