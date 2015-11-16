@@ -10,7 +10,7 @@ Somewhere at the top level component(s) there must be the declaration linking mo
     listenToProps : 'myModel myCollection'
 ```
 
-For further information on this topic consult the top-level guide.
+It's generally advised to keep stateful components at the top level, and use `listenToProps` in the middle level for optimization purposes if you want local updates. Keep you bottom-level components pure, and try to do the same for the most of your middle level (`listenToProps` used wisely won't hurt). For further information on this topic consult the top-level guide.
 
 ## Checkboxes
 
