@@ -178,36 +178,59 @@ Event subscription is managed automatically. No props passed - no problems.
 
 ## Data binding
 
-`nestedreact` supports data binding based compatible with standard React's `valueLink`.
+`nestedreact` supports data binding links compatible with standard React's `valueLink`.
 Links are "live" in a sense that they always point to actual value based on current model or collection state.
 It doesn't break anything in React, rather extends possible use cases.
 
-- `var link = model.getLink( 'attr' )` creates link for model attribute. That link can
-    be further transformed to valueLink for boolean property:
-    - `link.equals( x )` creates boolean link which is true whenever link value is equal to x.
-    - `link.contains( x )` creates boolean link which is true whenever x is contained in an array in link value.
-        Updates to enclosed array made through this property will trigger model updates.
-        Avoid long arrays, operations has O(N^2) complexity. 
-- `var link = collection.getLink( model )` creates link for boolean property, toggling model in collection.
+- `var link = model.getLink( 'attr' )` creates link for model attribute. 
+- `var link = collection.getLink( model )` creates boolean link, toggling model in collection. True if model is contained in collection, assignments will add/remove given model. Useful for checkboxes.
 
-All links supports following additional methods:
-- `link.val( x )`, `link.set( x )` working the same as `link.requestChange( x )`
-- `link.val()`, `link.get()` get link value
-- `link.toggle()` works the same as `link.set( !link.get() )`
+### Value access methods
 
-Standard members `link.requestChange( x )` and `link.value` also works.
-Assignments to `link.value` are allowed, and works in the same way as `link.set`.
+In addition to standard members `link.requestChange( x )` and `link.value`, links supports all popular property access styles:
 
-Most efficient way to work with link is using `link.val()` function.
+- jQuery property style: setter `link.val( x )`, getter `link.val()`
+- Backbone style: setter `link.set( x )`, getter `link.get()`
+- plain assugnments style: setter `link.value = x`, getter `link.value`
+- `link.toggle()` is a shortcut for `link.requestChange( !link.value )`
 
-Link received through component props can be linked with state member using
-the following declaration:
+Most efficient way to work with link is using `link.val()` function, that's how its internally implemented. `val` function is bound, and can be passed around safely.
+
+### Link transformations
+
+Attribute's link can be further transformed using extended link API. Link transformations allowing you to use new `stateless functions` component definition style introduced in React 0.14 in most cases.
+
+For links with any value type:
+
+- `link.equals( x )` creates boolean link which is true whenever link value is equal to x. Useful for radio groups.
+- `link.update( x => !x )` creates function transforming link value (toggling boolean value in this case). Useful for `onClick` event handlers.
+
+For link enclosing array:
+
+- `arrLink.contains( x )` creates boolean link which is true whenever x is contained in an array in link value. Useful for checkboxes. Avoid long arrays, currently operations has O(N^2) complexity.
+
+For link enclosings arrays and plain JS objects:
+- `arrOrObjLink.at( key )` creates link to array of object member with a given key. Can be applied multiple times to work with object hierarchies; on modifications, objects will be updated in purely functional way (modified parts will be shallow copied). Useful when working with plain JS objects in model attributes - updating them through links make changes visible to the model.
+- `arrOrObjLink.map( ( itemLink, key ) => <input key={ key } valieLink={ itemLink } /> )` iterates through object or array, wrapping its elements to links. Useful for JSX transofrmation.
+
+### Links and components state
+
+Link received through component props can be mapped as state member using the following declaration:
 ```javascript
 attributes : {
    selected : Nested.link( '^props.selectedLink' )
 }   
 ```
-It can be accessed as a part of state, however, `link.requestChanges` will be call on assignment
-instead of state modification. Its value will be updated automatically when component will receive new props.
+It can be accessed as a part of state, however, in this case it's not true state. All read/write operations will be done with link itself, and local state won't be modified. 
+
+Also, links can be used to declaratively expose real component state to upper conponents. In this example, link optionally received in props will be updated every time `this.state.selected` object is replaced. In this case, updates are one way, from bottom component to upper one, and stateful component will render itself when state is changed.
+
+```javascript
+attributes : {
+   selected : Item.has.watcher( '^props.selectedLink.val' )
+}   
+```
+
+Technically, "watcher" - is just a callback function with a single argument receiving new attribute value, so links are not required here.
 
 [Guide to Data Binding Use Cases](/example/databinding.md)
