@@ -1,15 +1,16 @@
-# nestedreact
-This is React add-on designed to simplify migration to React views in large Backbone applications.
+# NestedReact
+This is React add-on providing advanced state management to React applications and convergence layer for intermixing React components and Backbone Views. 
 
-It allows you:
+Brief feature list:
 
-- To use React component in place of every Backbone View.
-- To use your existing Backbone Views from React components.
-- To use your existing Backbone Models as React component state.
-- Update React components on Backbone events.
-- Data-binding for models and collections
+- Advanced component's state management with [NestedTypes](https://github.com/Volicon/backbone.nestedTypes).
+- Comprehensive two-way data binding - [Guide to Data Binding Use Cases](/example/databinding.md)
+- Transparent interoperation with Backbone Views:
+	- React component can be used as backbone View. `new MyComponent.View({ props })`
+	- Backbone Views can be used as React components. `<React.subview View={ MyView } />`
+	- Simplified refactoring of Backbone Views to React components. `this.$`, `this.$el`, `this.$( sel )`, `this.model` works for React components too, as well as `this.trigger` and `this.listenTo`.
 
-Thus, no refactoring of your application is required. You can start writing UI with React immediately replacing your Backbone Views one-by-one, while keeping your existing models.
+Thus, if you have Bakcbone application and want to start writing with React - you have no excuses any more. Wanna keep some of your cool Views? They works just fine? Keep 'em. And use them in yout new components, written with React, which you will use in other Backbone Views.
 
 # Breaking changes introduced in 0.3
 - `component.createView( props )` doesn't work any more, use `new component.View( props )` instead.
@@ -196,6 +197,9 @@ In addition to standard members `link.requestChange( x )` and `link.value`, link
 
 Most efficient way to work with link is using `link.val()` function, that's how its internally implemented. `val` function is bound, and can be passed around safely.
 
+Here's a brief reference for liks API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
+
+
 ### Link transformations
 
 Attribute's link can be further transformed using extended link API. Link transformations allowing you to use new `stateless functions` component definition style introduced in React 0.14 in most cases.
@@ -232,5 +236,3 @@ attributes : {
 ```
 
 Technically, "watcher" - is just a callback function with a single argument receiving new attribute value, so links are not required here.
-
-[Guide to Data Binding Use Cases](/example/databinding.md)
