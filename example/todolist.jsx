@@ -26,7 +26,8 @@ TodoItem.define({
         _.bindAll( this, 'remove', 'addChildren' );
 
         // Sync done state with subitems across the tree...
-        // There won't be loop, 'change' is never fired if there are no actual change.
+        // There won't be infinite loop, 'change' is never fired if there are no actual change.
+        // Event handlers are transactional, single change event will be bubbled up.
         this.listenTo( this, {
             'change:subitems' : () => {
                 let { subitems } = this;
