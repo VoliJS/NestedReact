@@ -1,7 +1,7 @@
 {
   "name": "nestedreact",
   "main": "nestedreact.js",
-  "description": "Advanced models, state management, and data binding solution for React",
+  "description": "Advanced state management and data binding for React",
   "homepage": "https://github.com/Volicon/react-backbone.glue",
   "keywords": [
     "backbone",
@@ -17,7 +17,7 @@
   "dependencies": {
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
-    "nestedtypes": "^1.1.5"
+    "nestedtypes": "^1.2.0"
   },
   "devDependencies": {
     "jquery": "^2.1.4",
