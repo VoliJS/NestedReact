@@ -29,7 +29,7 @@
     "nestedreact.js.map"
   ],
   "license": "MIT",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack --watch"
