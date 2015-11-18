@@ -1,7 +1,5 @@
 # NestedReact
-This is React add-on providing advanced state management to React applications and convergence layer for intermixing React components and Backbone Views. 
-
-Brief feature list:
+This is React add-on providing advanced data binding and state management to React applications, as well as convergence layer for intermixing React components and Backbone Views. 
 
 - Advanced component's state management with [NestedTypes](https://github.com/Volicon/backbone.nestedTypes).
 - Comprehensive two-way data binding - [Guide to Data Binding Use Cases](/example/databinding.md)
@@ -10,7 +8,12 @@ Brief feature list:
 	- Backbone Views can be used as React components. `<React.subview View={ MyView } />`
 	- Simplified refactoring of Backbone Views to React components. `this.$`, `this.$el`, `this.$( sel )`, `this.model` works for React components too, as well as `this.trigger` and `this.listenTo`.
 
-Thus, if you have Bakcbone application and want to start writing with React - you have no excuses any more. Wanna keep some of your cool Views? They works just fine? Keep 'em. And use them in yout new components, written with React, which you will use in other Backbone Views.
+Check out [TodoMVC](https://github.com/gaperton/todomvc-nestedreact) example to see, how nice circular data flow 
+looks without `Flux`.
+
+Also, if you have Backbone application and want to start writing with React - you have no excuses any more.
+Wanna keep some of your cool Views? They works just fine? Keep 'em. 
+And use them in your new components written with React, which in turn you may use in other Backbone Views.
 
 # Breaking changes introduced in 0.3
 - `component.createView( props )` doesn't work any more, use `new component.View( props )` instead.
