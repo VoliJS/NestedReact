@@ -18,7 +18,7 @@ Standard `<input/>` will work. Custom Checkbox component might be implemented li
 
 ```javascript
 const Checkbox = ({ className = 'checkbox', checkedLink }) => (
-    <div className={ className + ( checkedLink.val() ? ' selected' : '' ) }
+    <div className={ className + ( checkedLink.value ? ' selected' : '' ) }
          onClick = { checkedLink.update( x => !x ) }
     />
 );
@@ -113,7 +113,7 @@ with one difference in click handler:
 
 ```javascript
 const Radio = ({ className = 'radio', checkedLink }) => (
-    <div className={ className + ( checkedLink.val() ? ' selected' : '' ) }
+    <div className={ className + ( checkedLink.value ? ' selected' : '' ) }
          onClick = { checkedLink.update( () => true ) }
     />
 );
@@ -155,7 +155,7 @@ with validation and appearance.
 ```javascript
 const Input = ({ valueLink, ...props }) => (
     <div className='wrapping'
-        <input {...props} value={ valueLink.val() } onChange={ e => valueLink.val( e.target.value ) }/>
+        <input {...props} value={ valueLink.value } onChange={ e => valueLink.set( e.target.value ) }/>
     </div>
 );
 ```

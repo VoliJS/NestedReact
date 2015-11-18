@@ -5,40 +5,32 @@ var Nested = require( 'nestedtypes' ),
     clone    = tools.clone;
 
 var Link = exports.Link = Object.extend( {
-    constructor : function( val ){
-        this.val = val;
+    constructor : function( value, set ){
+        this.value = value;
+        this.requestChange = set;
     },
 
-    val : function( x ){ return x; },
+    requestChange : function( x ){},
+    set           : function( x ){ this.requestChange( x ); },
+    toggle        : function(){ this.requestChange( !this.value ); },
 
-    properties : {
-        value : {
-            get : function(){ return this.val(); },
-            set : function( x ){ this.val( x ); }
+    // create function which updates the link
+    update : function( transform ){
+        var link = this;
+        return function(){
+            link.requestChange( transform( link.value ) )
         }
     },
-
-    requestChange : function( x ){ this.val( x ); },
-    get           : function(){ return this.val(); },
-    set           : function( x ){ this.val( x ); },
-    toggle        : function(){ this.val( !this.val() ); },
 
     contains : function( element ){
         var link = this;
 
-        return new Link( function( x ){
-            var arr  = link.val(),
-                prev = contains( arr, element );
-
-            if( arguments.length ){
-                var next = Boolean( x );
-                if( prev !== next ){
-                    link.val( x ? arr.concat( element ) : without( arr, element ) );
-                    return next;
-                }
+        return new Link( contains( this.value, element ), function( x ){
+            var next = Boolean( x );
+            if( this.value !== next ){
+                var arr = link.value;
+                link.requestChange( x ? arr.concat( element ) : without( arr, element ) );
             }
-
-            return prev;
         } );
     },
 
@@ -46,10 +38,8 @@ var Link = exports.Link = Object.extend( {
     equals : function( asTrue ){
         var link = this;
 
-        return new Link( function( x ){
-            if( arguments.length ) link.val( x ? asTrue : null );
-
-            return link.val() === asTrue;
+        return new Link( this.value === asTrue, function( x ){
+            link.requestChange( x ? asTrue : null );
         } );
     },
 
@@ -57,35 +47,20 @@ var Link = exports.Link = Object.extend( {
     at : function( key ){
         var link = this;
 
-        return new Link( function( x ){
-            var arr  = link.val(),
-                prev = arr[ key ];
-
-            if( arguments.length ){
-                if( prev !== x ){
-                    arr = clone( arr );
-                    arr[ key ] = x;
-                    link.val( arr );
-                    return x;
-                }
+        return new Link( this.value[ key ], function( x ){
+            if( this.value !== x ){
+                var arr = link.value;
+                arr = clone( arr );
+                arr[ key ] = x;
+                link.requestChange( arr );
             }
-
-            return prev;
         } );
     },
 
     // iterates through enclosed object or array, generating set of links
     map : function( fun ){
-        var arr = this.val();
+        var arr = this.value;
         return arr ? ( arr instanceof Array ? mapArray( this, arr, fun ) : mapObject( this, arr, fun ) ) : [];
-    },
-
-    // create function which updates the link
-    update : function( transform ){
-        var val = this.val;
-        return function(){
-            val( transform( val() ) )
-        }
     }
 });
 
@@ -118,12 +93,12 @@ exports.link = function( reference ){
 
     function setLink( value ){
         var link = getMaster.call( this );
-        link && link.val( value );
+        link && link.requestChange( value );
     }
 
     function getLink(){
         var link = getMaster.call( this );
-        return link && link.val();
+        return link && link.value;
     }
 
     var LinkAttribute = Nested.attribute.Type.extend( {
