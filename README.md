@@ -188,14 +188,14 @@ Create link for object property of Model, Collection, and every object type crea
 Create boolean link, toggling model in collection. True if model is contained in collection, assignments will add/remove given model. Useful for checkboxes.
 `var link = collection.hasLink( model )` 
 
+Here's a brief reference for links API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
+
 ### Value access methods
 
-In addition to standard members `link.requestChange( x )` and `link.value`, links supports all popular property access styles:
+In addition to standard members `link.requestChange( x )` and `link.value`, there are pair of shortcuts available:
 
 - `link.set( x )`, which is a shortcut for `this.requestChange( x )`
 - `link.toggle()` is a shortcut for `link.requestChange( !link.value )`
-
-Here's a brief reference for links API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
 
 ### Link transformations
 
