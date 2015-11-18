@@ -180,25 +180,22 @@ Event subscription is managed automatically. No props passed - no problems.
 ## Data binding
 
 `nestedreact` supports data binding links compatible with standard React's `valueLink`.
-Links are "live" in a sense that they always point to actual value based on current model or collection state.
-It doesn't break anything in React, rather extends possible use cases.
 
-- `var link = model.getLink( 'attr' )` creates link for model attribute. 
-- `var link = collection.getLink( model )` creates boolean link, toggling model in collection. True if model is contained in collection, assignments will add/remove given model. Useful for checkboxes.
+Create link for object property of Model, Collection, and every object type created with Object.extend().
+
+`var link = object.getLink( 'attr' )`  
+
+Create boolean link, toggling model in collection. True if model is contained in collection, assignments will add/remove given model. Useful for checkboxes.
+`var link = collection.hasLink( model )` 
 
 ### Value access methods
 
 In addition to standard members `link.requestChange( x )` and `link.value`, links supports all popular property access styles:
 
-- jQuery property style: setter `link.val( x )`, getter `link.val()`
-- Backbone style: setter `link.set( x )`, getter `link.get()`
-- plain assugnments style: setter `link.value = x`, getter `link.value`
+- `link.set( x )`, which is a shortcut for `this.requestChange( x )`
 - `link.toggle()` is a shortcut for `link.requestChange( !link.value )`
 
-Most efficient way to work with link is using `link.val()` function, that's how its internally implemented. `val` function is bound, and can be passed around safely.
-
-Here's a brief reference for liks API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
-
+Here's a brief reference for links API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
 
 ### Link transformations
 

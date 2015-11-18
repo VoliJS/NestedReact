@@ -37,36 +37,23 @@ var ValueLink = require( './value-link' );
 var Link = Nested.Link = ValueLink.Link;
 Nested.link = ValueLink.link;
 
-var ModelProto = Nested.Model.prototype;
+var ClassProto = Nested.Class.prototype,
+    ModelProto = Nested.Model.prototype,
+    CollectionProto = Nested.Collection.prototype;
 
-ModelProto.getLink = function( attr ){
+ClassProto.getLink = ModelProto.getLink = CollectionProto.getLink = function( attr ){
     var model = this;
 
-    return new Link( function( x ){
-        if( arguments.length ){
-            model[ attr ] = x;
-        }
-
-        return model[ attr ];
+    return new Link( model[ attr ], function( x ){
+        model[ attr ] = x;
     });
 };
 
-var CollectionProto = Nested.Collection.prototype;
-
-CollectionProto.getLink = function( model ){
+CollectionProto.hasLink = function( model ){
     var collection = this;
 
-    return new Link( function( x ){
-        var prev = Boolean( collection.get( model ) );
-
-        if( arguments.length ){
-            var next = Boolean( x );
-            if( prev !== next ){
-                collection.toggle( model, x );
-                return next;
-            }
-        }
-
-        return prev;
+    return new Link( Boolean( collection.get( model ) ), function( x ){
+        var next = Boolean( x );
+        this.value === next || collection.toggle( model, next );
     });
 };
