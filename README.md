@@ -1,7 +1,7 @@
 # NestedReact
 This is React add-on providing advanced data binding and state management to React applications, as well as convergence layer for intermixing React components and Backbone Views. 
 
-- Advanced component's state management with [NestedTypes](https://github.com/Volicon/backbone.nestedTypes).
+- Advanced component's state management with [NestedTypes](https://github.com/Volicon/NestedTypes).
 - Comprehensive two-way data binding - [Guide to Data Binding Use Cases](/example/databinding.md)
 - Transparent interoperation with Backbone Views:
 	- React component can be used as backbone View. `new MyComponent.View({ props })`
@@ -26,9 +26,9 @@ features to help managing complex application state:
 	- Type safety. Attributes are guaranteed to hold values of declared types all the time.
 
 	For more information about `NestedTypes`, visit
-	http://volicon.github.io/backbone.nestedTypes/
+	http://volicon.github.io/NestedTypes/
 	and
-	https://github.com/Volicon/backbone.nestedTypes
+	https://github.com/Volicon/NestedTypes
 
 # Usage
 It's packed as single UMD, thus grab the module or use `npm` to install.
