@@ -23,6 +23,8 @@ NestedReact.subview = require( './view-element' );
 
 NestedReact.tools = require( './tools' );
 
+NestedReact.NestedPureRender = require( './purerender-mixin' );
+
 // Extend react components to have backbone-style jquery accessors
 var Component     = React.createClass( { render : function(){} } ),
     BaseComponent = Object.getPrototypeOf( Component.prototype );

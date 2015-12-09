@@ -79,6 +79,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	NestedReact.tools = __webpack_require__( 7 );
 	
+	NestedReact.NestedPureRender = __webpack_require__( 8 );
+	
 	// Extend react components to have backbone-style jquery accessors
 	var Component     = React.createClass( { render : function(){} } ),
 	    BaseComponent = Object.getPrototypeOf( Component.prototype );
@@ -89,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $   : { value : function( sel ){ return this.$el.find( sel ); } }
 	} );
 	
-	var ValueLink = __webpack_require__( 8 );
+	var ValueLink = __webpack_require__( 9 );
 	var Link = Nested.Link = ValueLink.Link;
 	Nested.link = ValueLink.link;
 
@@ -454,13 +456,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return false;
 	}
 	
-	exports.shouldComponentUpdate = shouldComponentUpdate;
-	function shouldComponentUpdate( nextProps, nextState ){
-	    for( var name in nextProps ){
-	        this._transactions
-	    }
-	}
-	
 	exports.without = without;
 	function without( arr, el ){
 	    var res = [];
@@ -471,16 +466,79 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    return res;
-	};
+	}
 	
 	exports.clone = clone;
 	function clone( objOrArray ){
 	    return objOrArray instanceof Array ? objOrArray.slice() : Object.assign( {}, objOrArray );
-	};
+	}
 
 
 /***/ },
 /* 8 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	    shouldComponentUpdate : shouldComponentUpdate,
+	
+	    componentDidMount  : updateTokens,
+	    componentDidUpdate : updateTokens
+	};
+	
+	function shouldComponentUpdate( nextProps ){
+	    var state = this.state;
+	
+	    if( state && this._stateToken !== state._changeToken ){
+	        return true;
+	    }
+	
+	    var nextPropKeys = Object.keys( nextProps ),
+	        propKeys     = this._propKeys;
+	
+	    return nextPropKeys.length != propKeys.length ||
+	           propsChanged( propKeys, this._propTokens, this.props, nextProps );
+	}
+	
+	function updateTokens(){
+	    var props    = this.props,
+	        state    = this.state,
+	        propKeys = this._propKeys = Object.keys( props ),
+	        propTokens = Array( propKeys.length );
+	
+	    this._stateToken = state && state._changeToken;
+	
+	    for( var i = 0; i < propKeys.length; i++ ){
+	        var value = props[ propKeys[ i ] ],
+	            token = value && value._changeToken;
+	
+	        if( token ){
+	            propTokens[ i ] = token;
+	        }
+	    }
+	
+	    this._propTokens = propTokens;
+	}
+	
+	function propsChanged( propKeys, propTokens, props, nextProps ){
+	    for( var i = 0; i < propKeys.length; i++ ){
+	        var name = propKeys[ i ],
+	            next = nextProps[ name ],
+	            prev = props[ name ];
+	
+	        if( next !== prev ){
+	            return true;
+	        }
+	
+	        if( ( next && next._changeToken ) !== propTokens[ i ] ){
+	            return true;
+	        }
+	    }
+	
+	    return false;
+	}
+
+/***/ },
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Nested   = __webpack_require__( 3 ),
