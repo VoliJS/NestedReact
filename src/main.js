@@ -36,24 +36,3 @@ Object.defineProperties( BaseComponent, {
 var ValueLink = require( './value-link' );
 var Link = Nested.Link = ValueLink.Link;
 Nested.link = ValueLink.link;
-
-var ClassProto = Nested.Class.prototype,
-    ModelProto = Nested.Model.prototype,
-    CollectionProto = Nested.Collection.prototype;
-
-ClassProto.getLink = ModelProto.getLink = CollectionProto.getLink = function( attr ){
-    var model = this;
-
-    return new Link( model[ attr ], function( x ){
-        model[ attr ] = x;
-    });
-};
-
-CollectionProto.hasLink = function( model ){
-    var collection = this;
-
-    return new Link( Boolean( collection.get( model ) ), function( x ){
-        var next = Boolean( x );
-        this.value === next || collection.toggle( model, next );
-    });
-};

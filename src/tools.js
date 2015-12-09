@@ -63,7 +63,14 @@ function contains( arr, el ){
     }
 
     return false;
-};
+}
+
+exports.shouldComponentUpdate = shouldComponentUpdate;
+function shouldComponentUpdate( nextProps, nextState ){
+    for( var name in nextProps ){
+        this._transactions
+    }
+}
 
 exports.without = without;
 function without( arr, el ){

@@ -1,18 +1,52 @@
-var Nested = require( 'nestedtypes' ),
-    tools  = require( './tools' ),
+var Nested   = require( 'nestedtypes' ),
+    tools    = require( './tools' ),
     contains = tools.contains,
     without  = tools.without,
     clone    = tools.clone;
 
+var ClassProto      = Nested.Class.prototype,
+    ModelProto      = Nested.Model.prototype,
+    CollectionProto = Nested.Collection.prototype;
+
+ClassProto.getLink = ModelProto.getLink = CollectionProto.getLink = function( attr ){
+    var model = this,
+        error = model.validationError;
+
+    return new Link( model[ attr ], function( x ){
+        model[ attr ] = x;
+    }, error && error.nested[ attr ] );
+};
+
+ModelProto.deepLink = function( attr, options ){
+    var model = this,
+        values = model.deepInvalidate( attr );
+
+    return new Link( values[ 0 ], function( x ){
+        model.deepSet( attr, x, options );
+    }, values[ 1 ] );
+};
+
+CollectionProto.hasLink = function( model ){
+    var collection = this;
+
+    return new Link( Boolean( collection.get( model ) ), function( x ){
+        var next = Boolean( x );
+        this.value === next || collection.toggle( model, next );
+    } );
+};
+
 var Link = exports.Link = Object.extend( {
-    constructor : function( value, set ){
-        this.value = value;
-        this.requestChange = set;
+    constructor : function( value, set, error ){
+        this.value           = value;
+        this.requestChange   = set;
+        this.validationError = error;
     },
 
-    requestChange : function( x ){},
-    set           : function( x ){ this.requestChange( x ); },
-    toggle        : function(){ this.requestChange( !this.value ); },
+    value           : null,
+    validationError : null,
+    requestChange   : function( x ){},
+    set             : function( x ){ this.requestChange( x ); },
+    toggle          : function(){ this.requestChange( !this.value ); },
 
     // create function which updates the link
     update : function( transform ){
@@ -49,8 +83,8 @@ var Link = exports.Link = Object.extend( {
 
         return new Link( this.value[ key ], function( x ){
             if( this.value !== x ){
-                var arr = link.value;
-                arr = clone( arr );
+                var arr    = link.value;
+                arr        = clone( arr );
                 arr[ key ] = x;
                 link.requestChange( arr );
             }
@@ -62,7 +96,7 @@ var Link = exports.Link = Object.extend( {
         var arr = this.value;
         return arr ? ( arr instanceof Array ? mapArray( this, arr, fun ) : mapObject( this, arr, fun ) ) : [];
     }
-});
+} );
 
 function mapObject( link, object, fun ){
     var res = [];
