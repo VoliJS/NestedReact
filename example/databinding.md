@@ -153,12 +153,14 @@ Standard `<input>` will work. You may implement custom input controls to handle 
 with validation and appearance.
 
 ```javascript
-const Input = ({ valueLink, ...props }) => (
+const Input = ({ valueLink, className, ...props }) => (
     <div className='wrapping'
-        <input {...props} value={ valueLink.value } onChange={ e => valueLink.set( e.target.value ) }/>
+        <input className={ className + ( valieLink.error ? ' error' : '' ) } {...props} value={ valueLink.value } onChange={ e => valueLink.set( e.target.value ) }/>
     </div>
 );
 ```
+
+Errors are attached to the links automatically, when model validation is failed. Validation checks can be attached to model attributes with `.has.check` specification. `x : Number.has.check( x => x > 0 )`, `y : Number.has.check( x => x < 0, 'y should be negative' )`. 
 
 ### Binding to model attributes
 
