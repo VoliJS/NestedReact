@@ -2,7 +2,7 @@
 This is React add-on providing advanced data binding and state management to React applications, as well as convergence layer for intermixing React components and Backbone Views. 
 
 - Advanced component's state management with [NestedTypes](https://github.com/Volicon/NestedTypes).
-- Comprehensive two-way data binding - [Guide to Data Binding Use Cases](/example/databinding.md)
+- Comprehensive two-way data binding and validation - [Guide to Data Binding Use Cases](/example/databinding.md)
 - Transparent interoperation with Backbone Views:
 	- React component can be used as backbone View. `new MyComponent.View({ props })`
 	- Backbone Views can be used as React components. `<React.subview View={ MyView } />`
@@ -182,13 +182,13 @@ Event subscription is managed automatically. No props passed - no problems.
 
 ## Data binding
 
-`nestedreact` supports data binding links compatible with standard React's `valueLink`.
+`nestedreact` supports data binding links backwards compatible with standard React's `valueLink`. In addition to standard fields `value` and `requestChange`, links carries `error` field in case there was validation error in the model.
 
-Create link for object property of Model, Collection, and every object type created with Object.extend().
-
+Create link for object property of Model, Collection, and every object type created with Object.extend():
 `var link = object.getLink( 'attr' )`  
+`var link = object.deepLink( 'path.to.the.attribute' )`
 
-Create boolean link, toggling model in collection. True if model is contained in collection, assignments will add/remove given model. Useful for checkboxes.
+Create boolean link, toggling model in collection. True if model is contained in collection, assignments will add/remove given model. Useful for checkboxes:
 `var link = collection.hasLink( model )` 
 
 Here's a brief reference for links API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
