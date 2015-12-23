@@ -14,6 +14,14 @@ module.exports = React.createClass({
         return next.View !== props.View || jsonNotEqual( next.options, props.options );
     },
 
+    hasUnsavedChanges : function(){
+        var view = this.view;
+
+        return view && (
+               typeof view.hasUnsavedChanges === 'function' ? view.hasUnsavedChanges() : view.hasUnsavedChanges
+            );
+    },
+
     render : function(){
         return React.DOM.div({
             ref : 'subview',
