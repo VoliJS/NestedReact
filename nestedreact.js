@@ -118,8 +118,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React    = __webpack_require__( 1 ),
-	    Nested   = __webpack_require__( 3 );
+	var React  = __webpack_require__( 1 ),
+	    Nested = __webpack_require__( 3 );
 	
 	function forceUpdate(){ this.forceUpdate(); }
 	
@@ -129,29 +129,56 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}, Nested.Events );
 	
-	var ListenToProps = {
-	    componentDidMount : function(){
-	        var props    = this.props,
-	            updateOn = this.listenToProps;
+	function registerPropsListener( props, prevProps, name, events ){
+	    var prevEmitter = prevProps[ name ],
+	        emitter     = props[ name ];
 	
-	        for( var prop in updateOn ){
-	            var emitter = props[ prop ];
-	            emitter && this.listenTo( emitter, updateOn[ prop ], forceUpdate );
+	    if( prevEmitter !== emitter ){
+	        prevEmitter && this.stopListening( prevEmitter );
+	
+	        if( emitter ){
+	            if( typeof events === 'object' ){
+	                this.listenTo( emitter, events );
+	            }
+	            else{
+	                this.listenTo( emitter, events || emitter.triggerWhenChanged, forceUpdate );
+	            }
 	        }
 	    }
+	}
+	
+	function regHashPropsListeners( a_prevProps ){
+	    var prevProps = a_prevProps || {},
+	        updateOn = this.listenToProps;
+	
+	    for( var prop in updateOn ){
+	        registerPropsListener( this.props, prevProps, prop, updateOn[ prop ] );
+	    }
+	}
+	
+	var ListenToProps = {
+	    componentDidMount : regHashPropsListeners,
+	    componentDidUpdate : regHashPropsListeners
 	};
+	
+	function regArrayPropListeners( a_prevProps ){
+	    var prevProps = a_prevProps || {},
+	        updateOn  = this.listenToProps;
+	
+	    for( var i = 0; i < updateOn.length; i++ ){
+	        registerPropsListener( this.props, prevProps, updateOn[ i ] )
+	    }
+	}
 	
 	var ListenToPropsArray = {
-	    componentDidMount : function(){
-	        var props    = this.props,
-	            updateOn = this.listenToProps;
-	
-	        for( var i = 0; i < updateOn.length; i++ ){
-	            var emitter = props[ updateOn[ i ] ];
-	            emitter && this.listenTo( emitter, emitter.triggerWhenChanged, forceUpdate );
-	        }
-	    }
+	    componentDidMount  : regArrayPropListeners,
+	    componentDidUpdate : regArrayPropListeners
 	};
+	
+	function _mountState(){
+	    var events = this.listenToState;
+	    events && this.listenTo( this.model, events, forceUpdate );
+	}
 	
 	var ModelState = {
 	    listenToState : 'change',
@@ -170,10 +197,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.model._defaultStore;
 	    },
 	
-	    componentDidMount : function(){
-	        var events = this.listenToState;
-	        events && this.listenTo( this.model, events, forceUpdate );
-	    },
+	    _mountState : _mountState,
+	
+	    componentDidMount : _mountState,
 	
 	    componentWillUnmount : function(){
 	        this.model._owner = null;
@@ -205,7 +231,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    mixins.push( Events );
 	
-	    var component  = React.createClass( spec );
+	    var component = React.createClass( spec );
 	
 	    // attach lazily evaluated backbone View class
 	    var NestedReact = this;
@@ -214,7 +240,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get : function(){
 	            return this._View || ( this._View = NestedReact._BaseView.extend( { reactClass : component } ) );
 	        }
-	    });
+	    } );
 	
 	    return component;
 	}
@@ -285,8 +311,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.component = component;
 	
 	            if( this.prevState ){
-	                component.model.set( this.prevState );
+	                component.model = this.prevState;
+	                component.model._owner = component;
+	                component._mountState();
 	                this.prevState = null;
+	
+	                component.forceUpdate();
 	            }
 	
 	            component.trigger && this.listenTo( component, 'all', function(){
@@ -298,7 +328,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var component = this.component;
 	
 	            if( component ){
-	                this.prevState = component.model && component.model.attributes;
+	                this.prevState = component.model;
 	
 	                if( component.trigger ){
 	                    this.stopListening( component );
