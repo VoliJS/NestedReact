@@ -129,19 +129,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}, Nested.Events );
 	
-	function registerPropsListener( props, prevProps, name, events ){
+	function registerPropsListener( component, prevProps, name, events ){
 	    var prevEmitter = prevProps[ name ],
-	        emitter     = props[ name ];
+	        emitter     = component.props[ name ];
 	
 	    if( prevEmitter !== emitter ){
-	        prevEmitter && this.stopListening( prevEmitter );
+	        prevEmitter && component.stopListening( prevEmitter );
 	
 	        if( emitter ){
 	            if( typeof events === 'object' ){
-	                this.listenTo( emitter, events );
+	                component.listenTo( emitter, events );
 	            }
 	            else{
-	                this.listenTo( emitter, events || emitter.triggerWhenChanged, forceUpdate );
+	                component.listenTo( emitter, events || emitter.triggerWhenChanged, forceUpdate );
 	            }
 	        }
 	    }
@@ -152,7 +152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        updateOn = this.listenToProps;
 	
 	    for( var prop in updateOn ){
-	        registerPropsListener( this.props, prevProps, prop, updateOn[ prop ] );
+	        registerPropsListener( this, prevProps, prop, updateOn[ prop ] );
 	    }
 	}
 	
@@ -166,7 +166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        updateOn  = this.listenToProps;
 	
 	    for( var i = 0; i < updateOn.length; i++ ){
-	        registerPropsListener( this.props, prevProps, updateOn[ i ] )
+	        registerPropsListener( this, prevProps, updateOn[ i ] )
 	    }
 	}
 	
