@@ -1,5 +1,5 @@
-var React    = require( 'react' ),
-    Nested   = require( 'nestedtypes' );
+var React  = require( 'react' ),
+    Nested = require( 'nestedtypes' );
 
 function forceUpdate(){ this.forceUpdate(); }
 
@@ -9,29 +9,56 @@ var Events = Object.assign( {
     }
 }, Nested.Events );
 
-var ListenToProps = {
-    componentDidMount : function(){
-        var props    = this.props,
-            updateOn = this.listenToProps;
+function registerPropsListener( props, prevProps, name, events ){
+    var prevEmitter = prevProps[ name ],
+        emitter     = props[ name ];
 
-        for( var prop in updateOn ){
-            var emitter = props[ prop ];
-            emitter && this.listenTo( emitter, updateOn[ prop ], forceUpdate );
+    if( prevEmitter !== emitter ){
+        prevEmitter && this.stopListening( prevEmitter );
+
+        if( emitter ){
+            if( typeof events === 'object' ){
+                this.listenTo( emitter, events );
+            }
+            else{
+                this.listenTo( emitter, events || emitter.triggerWhenChanged, forceUpdate );
+            }
         }
     }
+}
+
+function regHashPropsListeners( a_prevProps ){
+    var prevProps = a_prevProps || {},
+        updateOn = this.listenToProps;
+
+    for( var prop in updateOn ){
+        registerPropsListener( this.props, prevProps, prop, updateOn[ prop ] );
+    }
+}
+
+var ListenToProps = {
+    componentDidMount : regHashPropsListeners,
+    componentDidUpdate : regHashPropsListeners
 };
+
+function regArrayPropListeners( a_prevProps ){
+    var prevProps = a_prevProps || {},
+        updateOn  = this.listenToProps;
+
+    for( var i = 0; i < updateOn.length; i++ ){
+        registerPropsListener( this.props, prevProps, updateOn[ i ] )
+    }
+}
 
 var ListenToPropsArray = {
-    componentDidMount : function(){
-        var props    = this.props,
-            updateOn = this.listenToProps;
-
-        for( var i = 0; i < updateOn.length; i++ ){
-            var emitter = props[ updateOn[ i ] ];
-            emitter && this.listenTo( emitter, emitter.triggerWhenChanged, forceUpdate );
-        }
-    }
+    componentDidMount  : regArrayPropListeners,
+    componentDidUpdate : regArrayPropListeners
 };
+
+function _mountState(){
+    var events = this.listenToState;
+    events && this.listenTo( this.model, events, forceUpdate );
+}
 
 var ModelState = {
     listenToState : 'change',
@@ -50,10 +77,9 @@ var ModelState = {
         this.model._defaultStore;
     },
 
-    componentDidMount : function(){
-        var events = this.listenToState;
-        events && this.listenTo( this.model, events, forceUpdate );
-    },
+    _mountState : _mountState,
+
+    componentDidMount : _mountState,
 
     componentWillUnmount : function(){
         this.model._owner = null;
@@ -85,7 +111,7 @@ function createClass( spec ){
 
     mixins.push( Events );
 
-    var component  = React.createClass( spec );
+    var component = React.createClass( spec );
 
     // attach lazily evaluated backbone View class
     var NestedReact = this;
@@ -94,7 +120,7 @@ function createClass( spec ){
         get : function(){
             return this._View || ( this._View = NestedReact._BaseView.extend( { reactClass : component } ) );
         }
-    });
+    } );
 
     return component;
 }
