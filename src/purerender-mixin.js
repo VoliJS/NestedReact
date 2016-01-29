@@ -1,58 +1,30 @@
-module.exports = {
-    shouldComponentUpdate : shouldComponentUpdate,
+module.exports = function( propTypes ){
+    var ctor = [ 'var v;this._s=s&&s._changeToken'], isChanged = ['var v;return(s&&s._changeToken!==this._s)'];
 
-    componentDidMount  : updateTokens,
-    componentDidUpdate : updateTokens
-};
+    for( var name in propTypes ){
+        var propExpr = '((v=p.' + name + ')&&v._changeToken)||v';
 
-function shouldComponentUpdate( nextProps ){
-    var state = this.state;
-
-    if( state && this._stateToken !== state._changeToken ){
-        return true;
+        ctor.push( 'this.' + name + '=' + propExpr );
+        isChanged.push( 'this.' + name + '!==(' + propExpr + ')' );
     }
 
-    var nextPropKeys = Object.keys( nextProps ),
-        propKeys     = this._propKeys;
+    var ChangeTokens = new Function( 'p', 's', ctor.join( ';' ) ),
+        isChanged = new Function( 't', 'p', 's', isChanged.join( '||' ) );
 
-    return nextPropKeys.length != propKeys.length ||
-           propsChanged( propKeys, this._propTokens, this.props, nextProps );
-}
+    return {
+        _changeTokens : null,
 
-function updateTokens(){
-    var props    = this.props,
-        state    = this.state,
-        propKeys = this._propKeys = Object.keys( props ),
-        propTokens = Array( propKeys.length );
+        isChanged : isChanged, ChangeTokens : ChangeTokens,
 
-    this._stateToken = state && state._changeToken;
+        shouldComponentUpdate : function( nextProps ){
+            return isChanged( this, nextProps, this.state );
+        },
 
-    for( var i = 0; i < propKeys.length; i++ ){
-        var value = props[ propKeys[ i ] ],
-            token = value && value._changeToken;
-
-        if( token ){
-            propTokens[ i ] = token;
+        componentDidMount  : function(){
+            this._changeTokens = new ChangeTokens( this.props, this.state );
+        },
+        componentDidUpdate : function(){
+            this._changeTokens = new ChangeTokens( this.props, this.state );
         }
     }
-
-    this._propTokens = propTokens;
-}
-
-function propsChanged( propKeys, propTokens, props, nextProps ){
-    for( var i = 0; i < propKeys.length; i++ ){
-        var name = propKeys[ i ],
-            next = nextProps[ name ],
-            prev = props[ name ];
-
-        if( next !== prev ){
-            return true;
-        }
-
-        if( ( next && next._changeToken ) !== propTokens[ i ] ){
-            return true;
-        }
-    }
-
-    return false;
 }

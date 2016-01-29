@@ -1,5 +1,6 @@
 var React  = require( 'react' ),
-    Nested = require( 'nestedtypes' );
+    Nested = require( 'nestedtypes' ),
+    pureRender = require( './purerender-mixin' );
 
 function forceUpdate(){ this.forceUpdate(); }
 
@@ -110,6 +111,10 @@ function createClass( spec ){
     }
 
     mixins.push( Events );
+
+    if( spec.propTypes && spec.pureRender ){
+        mixins.push( pureRender( spec.propTypes ) );
+    }
 
     var component = React.createClass( spec );
 
