@@ -1,5 +1,5 @@
 var React = require( 'react' ),
-    jsonNotEqual = require( './tools' ).jsonNotEqual;
+    jsonNotEqual = require( './json-comparison' ).jsonNotEqual;
 
 module.exports = React.createClass({
     displayName : 'BackboneView',
