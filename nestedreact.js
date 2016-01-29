@@ -91,9 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $   : { value : function( sel ){ return this.$el.find( sel ); } }
 	} );
 	
-	var ValueLink = __webpack_require__( 9 );
-	var Link = Nested.Link = ValueLink.Link;
-	Nested.link = ValueLink.link;
+	__webpack_require__( 9 );
 
 
 /***/ },
@@ -483,33 +481,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    return false;
 	}
-	
-	// private array helpers
-	exports.contains = contains;
-	function contains( arr, el ){
-	    for( var i = 0; i < arr.length; i++ ){
-	        if( arr[ i ] === el ) return true;
-	    }
-	
-	    return false;
-	}
-	
-	exports.without = without;
-	function without( arr, el ){
-	    var res = [];
-	
-	    for( var i = 0; i < arr.length; i++ ){
-	        var current = arr[ i ];
-	        current === el || res.push( current );
-	    }
-	
-	    return res;
-	}
-	
-	exports.clone = clone;
-	function clone( objOrArray ){
-	    return objOrArray instanceof Array ? objOrArray.slice() : Object.assign( {}, objOrArray );
-	}
 
 
 /***/ },
@@ -580,10 +551,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var Nested   = __webpack_require__( 3 ),
-	    tools    = __webpack_require__( 7 ),
-	    contains = tools.contains,
-	    without  = tools.without,
-	    clone    = tools.clone;
+	    Link     = __webpack_require__( 10 );
+	
+	Object.extend.attach( Link );
+	
+	Nested.Link = Link;
 	
 	var ClassProto      = Nested.Class.prototype,
 	    ModelProto      = Nested.Model.prototype,
@@ -616,94 +588,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } );
 	};
 	
-	var Link = exports.Link = Object.extend( {
-	    constructor : function( value, set, error ){
-	        this.value           = value;
-	        this.requestChange   = set;
-	        this.validationError = error;
-	    },
-	
-	    value           : null,
-	    validationError : null,
-	    requestChange   : function( x ){},
-	    set             : function( x ){ this.requestChange( x ); },
-	    toggle          : function(){ this.requestChange( !this.value ); },
-	
-	    // create function which updates the link
-	    update : function( transform ){
-	        var link = this;
-	        return function(){
-	            link.requestChange( transform( link.value ) )
-	        }
-	    },
-	
-	    contains : function( element ){
-	        var link = this;
-	
-	        return new Link( contains( this.value, element ), function( x ){
-	            var next = Boolean( x );
-	            if( this.value !== next ){
-	                var arr = link.value;
-	                link.requestChange( x ? arr.concat( element ) : without( arr, element ) );
-	            }
-	        } );
-	    },
-	
-	    // create boolean link for value equality
-	    equals : function( asTrue ){
-	        var link = this;
-	
-	        return new Link( this.value === asTrue, function( x ){
-	            link.requestChange( x ? asTrue : null );
-	        } );
-	    },
-	
-	    // link to enclosed object or array member
-	    at : function( key ){
-	        var link = this;
-	
-	        return new Link( this.value[ key ], function( x ){
-	            if( this.value !== x ){
-	                var arr    = link.value;
-	                arr        = clone( arr );
-	                arr[ key ] = x;
-	                link.requestChange( arr );
-	            }
-	        } );
-	    },
-	
-	    // iterates through enclosed object or array, generating set of links
-	    map : function( fun ){
-	        var arr = this.value;
-	        return arr ? ( arr instanceof Array ? mapArray( this, arr, fun ) : mapObject( this, arr, fun ) ) : [];
-	    }
-	} );
-	
-	function mapObject( link, object, fun ){
-	    var res = [];
-	
-	    for( var i in object ){
-	        if( object.hasOwnProperty( i ) ){
-	            var y = fun( link.at( i ), i );
-	            y === void 0 || ( res.push( y ) );
-	        }
-	    }
-	
-	    return res;
-	}
-	
-	function mapArray( link, arr, fun ){
-	    var res = [];
-	
-	    for( var i = 0; i < arr.length; i++ ){
-	        var y = fun( link.at( i ), i );
-	        y === void 0 || ( res.push( y ) );
-	    }
-	
-	    return res;
-	}
-	
-	exports.link = function( reference ){
+	Nested.link = function( reference ){
 	    var getMaster = Nested.parseReference( reference );
 	
 	    function setLink( value ){
@@ -734,6 +619,163 @@ return /******/ (function(modules) { // webpackBootstrap
 	    options.Attribute = LinkAttribute;
 	    return options;
 	};
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	/**
+	 * Advanced React value links with validation and link-to-objects capabilities
+	 * (c) 2016 Vlad Balin & Volicon, MIT License
+	 */
+	
+	function Link( value, set, error ){
+	    this.value           = value;
+	    this.requestChange   = set || doNothing;
+	    this.validationError = error;
+	}
+	
+	// create link to component's state attribute
+	Link.state = function( component, attr ){
+	    return new Link( component.state[ attr ], function( x ){
+	        var nextState = {};
+	        nextState[ attr ] = x;
+	        component.setState( nextState );
+	    });
+	};
+	
+	module.exports = Link;
+	
+	function doNothing( x ){ }
+	
+	var defaultError = 'Invalid value';
+	
+	Link.prototype = {
+	    value           : null,
+	    validationError : null,
+	    requestChange   : doNothing,
+	
+	    set             : function( x ){ this.requestChange( x ); },
+	    toggle          : function(){ this.requestChange( !this.value ); },
+	
+	    // create function which updates the link
+	    update : function( transform ){
+	        var link = this;
+	        return function(){
+	            var nextValue = transform( link.value );
+	            nextValue === void 0 || link.requestChange( nextValue );
+	        }
+	    },
+	
+	    check : function( whenValid, error ){
+	        if( !this.validationError && !whenValid( this.value ) ){
+	            this.validationError = error || defaultError;
+	        }
+	
+	        return this;
+	    },
+	
+	    // create boolean link to enclosed array element
+	    contains : function( element ){
+	        var link = this;
+	
+	        return new Link( contains( this.value, element ), function( x ){
+	            var next = Boolean( x );
+	            if( this.value !== next ){
+	                var arr = link.value;
+	                link.requestChange( x ? arr.concat( element ) : without( arr, element ) );
+	            }
+	        } );
+	    },
+	
+	    // create boolean link for value equality
+	    equals : function( asTrue ){
+	        var link = this;
+	
+	        return new Link( this.value === asTrue, function( x ){
+	            link.requestChange( x ? asTrue : null );
+	        } );
+	    },
+	
+	    // link to enclosed object or array member
+	    at : function( key ){
+	        var link = this;
+	
+	        return new Link( this.value[ key ], function( x ){
+	            if( this.value !== x ){
+	                var objOrArr    = link.value;
+	                objOrArr        = clone( objOrArr );
+	                objOrArr[ key ] = x;
+	                link.requestChange( objOrArr );
+	            }
+	        } );
+	    },
+	
+	    // iterates through enclosed object or array, generating set of links
+	    map : function( fun ){
+	        var arr = this.value;
+	        return arr ? ( arr instanceof Array ? mapArray( this, arr, fun ) : mapObject( this, arr, fun ) ) : [];
+	    },
+	
+	    // dummies for compatibility with nestedtypes object model...
+	    constructor : Link,
+	    initialize : function( value, set, error ){},
+	    get _changeToken(){
+	        return this.value;
+	    }
+	};
+	
+	function mapObject( link, object, fun ){
+	    var res = [];
+	
+	    for( var i in object ){
+	        if( object.hasOwnProperty( i ) ){
+	            var y = fun( link.at( i ), i );
+	            y === void 0 || ( res.push( y ) );
+	        }
+	    }
+	
+	    return res;
+	}
+	
+	function mapArray( link, arr, fun ){
+	    var res = [];
+	
+	    for( var i = 0; i < arr.length; i++ ){
+	        var y = fun( link.at( i ), i );
+	        y === void 0 || ( res.push( y ) );
+	    }
+	
+	    return res;
+	}
+	
+	function contains( arr, el ){
+	    for( var i = 0; i < arr.length; i++ ){
+	        if( arr[ i ] === el ) return true;
+	    }
+	
+	    return false;
+	}
+	
+	function without( arr, el ){
+	    var res = [];
+	
+	    for( var i = 0; i < arr.length; i++ ){
+	        var current = arr[ i ];
+	        current === el || res.push( current );
+	    }
+	
+	    return res;
+	}
+	
+	function clone( objOrArray ){
+	    var proto = objOrArray && Object.getPrototypeOf( objOrArray );
+	
+	    if( proto === Array.prototype ) return objOrArray.slice();
+	    if( proto === Object.prototype ) return Object.assign( {}, objOrArray );
+	
+	    return objOrArray;
+	}
 
 /***/ }
 /******/ ])

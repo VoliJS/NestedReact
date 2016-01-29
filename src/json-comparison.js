@@ -54,30 +54,3 @@ function arraysNotEqual( a, b ){
 
     return false;
 }
-
-// private array helpers
-exports.contains = contains;
-function contains( arr, el ){
-    for( var i = 0; i < arr.length; i++ ){
-        if( arr[ i ] === el ) return true;
-    }
-
-    return false;
-}
-
-exports.without = without;
-function without( arr, el ){
-    var res = [];
-
-    for( var i = 0; i < arr.length; i++ ){
-        var current = arr[ i ];
-        current === el || res.push( current );
-    }
-
-    return res;
-}
-
-exports.clone = clone;
-function clone( objOrArray ){
-    return objOrArray instanceof Array ? objOrArray.slice() : Object.assign( {}, objOrArray );
-}

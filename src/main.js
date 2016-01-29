@@ -21,7 +21,7 @@ NestedReact.useView( Nested.View );
 // React component for attaching views
 NestedReact.subview = require( './view-element' );
 
-NestedReact.tools = require( './tools' );
+NestedReact.tools = require( './json-comparison' );
 
 NestedReact.NestedPureRender = require( './purerender-mixin' );
 
@@ -35,6 +35,4 @@ Object.defineProperties( BaseComponent, {
     $   : { value : function( sel ){ return this.$el.find( sel ); } }
 } );
 
-var ValueLink = require( './value-link' );
-var Link = Nested.Link = ValueLink.Link;
-Nested.link = ValueLink.link;
+require( './nested-link' );
