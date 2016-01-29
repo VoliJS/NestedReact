@@ -553,6 +553,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Nested   = __webpack_require__( 3 ),
 	    Link     = __webpack_require__( 10 );
 	
+	Object.extend.attach( Link );
+	
 	Nested.Link = Link;
 	
 	var ClassProto      = Nested.Class.prototype,

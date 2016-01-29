@@ -1,6 +1,8 @@
 var Nested   = require( 'nestedtypes' ),
     Link     = require( 'valuelink' );
 
+Object.extend.attach( Link );
+
 Nested.Link = Link;
 
 var ClassProto      = Nested.Class.prototype,
