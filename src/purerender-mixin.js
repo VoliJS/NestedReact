@@ -14,10 +14,8 @@ module.exports = function( propTypes ){
     return {
         _changeTokens : null,
 
-        isChanged : isChanged, ChangeTokens : ChangeTokens,
-
         shouldComponentUpdate : function( nextProps ){
-            return isChanged( this, nextProps, this.state );
+            return isChanged( this._changeTokens, nextProps, this.state );
         },
 
         componentDidMount  : function(){
