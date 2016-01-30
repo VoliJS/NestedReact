@@ -1,11 +1,11 @@
 module.exports = function( propTypes ){
-    var ctor = [ 'var v;this._s=s&&s._changeToken'], isChanged = ['var v;return(s&&s._changeToken!==this._s)'];
+    var ctor = [ 'var v;this._s=s&&s._changeToken'], isChanged = ['var v;return(s&&s._changeToken!==t._s)'];
 
     for( var name in propTypes ){
         var propExpr = '((v=p.' + name + ')&&v._changeToken)||v';
 
         ctor.push( 'this.' + name + '=' + propExpr );
-        isChanged.push( 'this.' + name + '!==(' + propExpr + ')' );
+        isChanged.push( 't.' + name + '!==(' + propExpr + ')' );
     }
 
     var ChangeTokens = new Function( 'p', 's', ctor.join( ';' ) ),
