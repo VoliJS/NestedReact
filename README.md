@@ -177,6 +177,31 @@ var MyComponent = React.createClass({
 You can update react component on backbone events from component props.
 Event subscription is managed automatically. No props passed - no problems.
 
+## Pure Render Mixin
+
+```javscript
+var MyComponent = React.createClass({
+	propTypes : {
+        item : PropTypes.instanceOf( MyModel ),
+        elements : PropTypes.instanceOf( MyCollection ),
+        className : PropTypes.string
+	},
+	
+	pureRender : true,
+
+	render : function(){
+		return (
+		    ...
+		);
+	}
+});
+```
+
+PureRender optimization in enabled with `pureRender` option. It will create `shouldComponentUpdate` function
+which is optimized for props mentioned in `propTypes`.
+ 
+Therefore, it's required to declare all of component props in `propTypes` when using this optimization. 
+
 ## Data binding
 
 `nestedreact` supports data binding links compatible with standard React's `valueLink`.
@@ -188,7 +213,46 @@ Create link for object property of Model, Collection, and every object type crea
 Create boolean link, toggling model in collection. True if model is contained in collection, assignments will add/remove given model. Useful for checkboxes.
 `var link = collection.hasLink( model )` 
 
+Links can be created directly using constuctor:
+
+```javascript
+var Nested = require( 'nestedtypes' );
+
+var link = new Nested.Link( value, function( x ){ /* update */ } ); 
+```
+
 Here's a brief reference for links API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
+
+### Link validation
+
+Links carry additional `validationError` field for validation purposes (to be used inside of custom UI controls). It's populated automatically for links created from models and collection,
+utilizing `nestedtypes` validation mechanics. Therefore, if model attribute has any `check` attached, its link will carry its `validationError` object.
+   
+```javascript
+var M = Nested.Model.extend({
+    defaults : {
+        attr : Number.has.check( x => x > 0, 'attr should be positive' )    
+    }
+});
+
+...
+
+var m = new M({ attr : -1 });
+var attrLink = m.getLink( 'attr' );
+
+console.assert( m.value === -1 );
+console.assert( m.validationError === 'attr should be positive' );
+```
+
+It's possible to use ad-hoc validation in component's `render` method with `link.check` method.
+
+```javascript
+var link = model.getLink( 'something' )
+                .check( x => x > 0, 'Shoulld be positive' )
+                .check( x => x < 10, 'Shoulld be lesser than 10' );
+```
+
+Failed checks will populate link's `validationError` with first failed check's message. 
 
 ### Value access methods
 
