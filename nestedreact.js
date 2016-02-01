@@ -65,7 +65,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// listenToProps, listenToState, model, attributes, Model
 	NestedReact.createClass = __webpack_require__( 4 );
 	
-	var ComponentView = __webpack_require__( 5 );
+	var ComponentView = __webpack_require__( 6 );
 	
 	// export hook to override base View class used...
 	NestedReact.useView = function( View ){
@@ -75,11 +75,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	NestedReact.useView( Nested.View );
 	
 	// React component for attaching views
-	NestedReact.subview = __webpack_require__( 6 );
+	NestedReact.subview = __webpack_require__( 7 );
 	
-	NestedReact.tools = __webpack_require__( 7 );
+	NestedReact.tools = __webpack_require__( 8 );
 	
-	NestedReact.NestedPureRender = __webpack_require__( 8 );
+	NestedReact.NestedPureRender = __webpack_require__( 5 );
 	
 	// Extend react components to have backbone-style jquery accessors
 	var Component     = React.createClass( { render : function(){} } ),
@@ -117,7 +117,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var React  = __webpack_require__( 1 ),
-	    Nested = __webpack_require__( 3 );
+	    Nested = __webpack_require__( 3 ),
+	    pureRender = __webpack_require__( 5 );
 	
 	function forceUpdate(){ this.forceUpdate(); }
 	
@@ -229,6 +230,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    mixins.push( Events );
 	
+	    if( spec.propTypes && spec.pureRender ){
+	        mixins.push( pureRender( spec.propTypes ) );
+	    }
+	
 	    var component = React.createClass( spec );
 	
 	    // attach lazily evaluated backbone View class
@@ -271,6 +276,42 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 5 */
+/***/ function(module, exports) {
+
+	module.exports = function( propTypes ){
+	    var ctor      = [ 'var v;this._s=s&&s._changeToken' ],
+	        isChanged = [ 'var v;return(s&&s._changeToken!==t._s)' ];
+	
+	    for( var name in propTypes ){
+	        var propExpr = '((v=p.' + name + ')&&v._changeToken)||v';
+	
+	        ctor.push( 'this.' + name + '=' + propExpr );
+	        isChanged.push( 't.' + name + '!==(' + propExpr + ')' );
+	    }
+	
+	    var ChangeTokens = new Function( 'p', 's', ctor.join( ';' ) ),
+	        isChanged    = new Function( 't', 'p', 's', isChanged.join( '||' ) );
+	
+	    ChangeTokens.prototype = null;
+	
+	    return {
+	        _changeTokens : null,
+	
+	        shouldComponentUpdate : function( nextProps ){
+	            return isChanged( this._changeTokens, nextProps, this.state );
+	        },
+	
+	        componentDidMount  : function(){
+	            this._changeTokens = new ChangeTokens( this.props, this.state );
+	        },
+	        componentDidUpdate : function(){
+	            this._changeTokens = new ChangeTokens( this.props, this.state );
+	        }
+	    }
+	};
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React    = __webpack_require__( 1 ),
@@ -355,11 +396,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__( 1 ),
-	    jsonNotEqual = __webpack_require__( 7 ).jsonNotEqual;
+	    jsonNotEqual = __webpack_require__( 8 ).jsonNotEqual;
 	
 	module.exports = React.createClass({
 	    displayName : 'BackboneView',
@@ -422,7 +463,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	// equality checking for deep JSON comparison of plain Array and Object
@@ -482,69 +523,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return false;
 	}
 
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	    shouldComponentUpdate : shouldComponentUpdate,
-	
-	    componentDidMount  : updateTokens,
-	    componentDidUpdate : updateTokens
-	};
-	
-	function shouldComponentUpdate( nextProps ){
-	    var state = this.state;
-	
-	    if( state && this._stateToken !== state._changeToken ){
-	        return true;
-	    }
-	
-	    var nextPropKeys = Object.keys( nextProps ),
-	        propKeys     = this._propKeys;
-	
-	    return nextPropKeys.length != propKeys.length ||
-	           propsChanged( propKeys, this._propTokens, this.props, nextProps );
-	}
-	
-	function updateTokens(){
-	    var props    = this.props,
-	        state    = this.state,
-	        propKeys = this._propKeys = Object.keys( props ),
-	        propTokens = Array( propKeys.length );
-	
-	    this._stateToken = state && state._changeToken;
-	
-	    for( var i = 0; i < propKeys.length; i++ ){
-	        var value = props[ propKeys[ i ] ],
-	            token = value && value._changeToken;
-	
-	        if( token ){
-	            propTokens[ i ] = token;
-	        }
-	    }
-	
-	    this._propTokens = propTokens;
-	}
-	
-	function propsChanged( propKeys, propTokens, props, nextProps ){
-	    for( var i = 0; i < propKeys.length; i++ ){
-	        var name = propKeys[ i ],
-	            next = nextProps[ name ],
-	            prev = props[ name ];
-	
-	        if( next !== prev ){
-	            return true;
-	        }
-	
-	        if( ( next && next._changeToken ) !== propTokens[ i ] ){
-	            return true;
-	        }
-	    }
-	
-	    return false;
-	}
 
 /***/ },
 /* 9 */
