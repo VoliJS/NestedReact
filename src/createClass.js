@@ -134,19 +134,22 @@ function getModelAttributes( spec ){
     var attributes = null;
 
     for( var i = spec.mixins.length - 1; i >= 0; i-- ){
-        var mixin = spec.mixins[ i ];
-        if( mixin.attributes ){
+        var mixin = spec.mixins[ i ],
+            mixinAttrs = mixin.attributes || mixin.state;
+
+        if( mixinAttrs ){
             attributes || ( attributes = {} );
-            Object.assign( attributes, mixin.attributes );
+            Object.assign( attributes, mixin.mixinAttrs );
         }
     }
 
-    if( spec.attributes ){
+    var specAttrs = spec.attributes || spec.state;
+    if( specAttrs ){
         if( attributes ){
-            Object.assign( attributes, spec.attributes );
+            Object.assign( attributes, specAttrs );
         }
         else{
-            attributes = spec.attributes;
+            attributes = specAttrs;
         }
     }
 
