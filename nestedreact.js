@@ -277,7 +277,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        if( mixinAttrs ){
 	            attributes || ( attributes = {} );
-	            Object.assign( attributes, mixin.mixinAttrs );
+	            Object.assign( attributes, mixinAttrs );
 	        }
 	    }
 	

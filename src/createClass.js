@@ -159,7 +159,7 @@ function getTypeSpecs( spec, name1, name2 ){
 
         if( mixinAttrs ){
             attributes || ( attributes = {} );
-            Object.assign( attributes, mixin.mixinAttrs );
+            Object.assign( attributes, mixinAttrs );
         }
     }
 
