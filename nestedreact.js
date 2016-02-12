@@ -65,7 +65,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// listenToProps, listenToState, model, attributes, Model
 	NestedReact.createClass = __webpack_require__( 4 );
 	
-	var ComponentView = __webpack_require__( 6 );
+	var ComponentView = __webpack_require__( 7 );
 	
 	// export hook to override base View class used...
 	NestedReact.useView = function( View ){
@@ -75,11 +75,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	NestedReact.useView( Nested.View );
 	
 	// React component for attaching views
-	NestedReact.subview = __webpack_require__( 7 );
+	NestedReact.subview = __webpack_require__( 8 );
 	
-	NestedReact.tools = __webpack_require__( 8 );
-	
-	NestedReact.NestedPureRender = __webpack_require__( 5 );
+	var propTypes  = __webpack_require__( 6 );
+	NestedReact.Node = propTypes.Node.value( null );
+	NestedReact.Element = propTypes.Element.value( null );
 	
 	// Extend react components to have backbone-style jquery accessors
 	var Component     = React.createClass( { render : function(){} } ),
@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $   : { value : function( sel ){ return this.$el.find( sel ); } }
 	} );
 	
-	__webpack_require__( 9 );
+	__webpack_require__( 10 );
 
 
 /***/ },
@@ -116,9 +116,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React  = __webpack_require__( 1 ),
-	    Nested = __webpack_require__( 3 ),
-	    pureRender = __webpack_require__( 5 );
+	var React      = __webpack_require__( 1 ),
+	    Nested     = __webpack_require__( 3 ),
+	    pureRender = __webpack_require__( 5 ),
+	    propTypes  = __webpack_require__( 6 );
 	
 	function forceUpdate(){ this.forceUpdate(); }
 	
@@ -148,7 +149,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function regHashPropsListeners( a_prevProps ){
 	    var prevProps = a_prevProps || {},
-	        updateOn = this.listenToProps;
+	        updateOn  = this.listenToProps;
 	
 	    for( var prop in updateOn ){
 	        registerPropsListener( this, prevProps, prop, updateOn[ prop ] );
@@ -156,7 +157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	var ListenToProps = {
-	    componentDidMount : regHashPropsListeners,
+	    componentDidMount  : regHashPropsListeners,
 	    componentDidUpdate : regHashPropsListeners
 	};
 	
@@ -209,7 +210,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function createClass( spec ){
 	    var mixins = spec.mixins || ( spec.mixins = [] );
 	
-	    var attributes = getModelAttributes( spec );
+	    // process state spec...
+	    var attributes = getTypeSpecs( spec, 'attributes', 'state' );
 	    if( attributes ){
 	        var BaseModel = spec.Model || Nested.Model;
 	        spec.Model    = BaseModel.extend( { defaults : attributes } );
@@ -217,6 +219,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    if( spec.Model ) mixins.push( ModelState );
 	
+	    // process props spec...
+	    var props = getTypeSpecs( spec, 'props' );
+	
+	    if( props ){
+	        var parsedProps = propTypes.parseProps( props ),
+	            propsModel = parsedProps.model;
+	
+	        spec.propTypes = parsedProps.propTypes;
+	
+	        if( propsModel ){
+	            spec.getDefaultProps = function(){
+	                return propsModel.defaults();
+	            }
+	        }
+	    }
+	
+	    // process listenToProps spec
 	    var listenToProps = spec.listenToProps;
 	    if( listenToProps ){
 	        if( typeof listenToProps === 'string' ){
@@ -228,8 +247,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }
 	
+	    // add Events capabilities
 	    mixins.push( Events );
 	
+	    // compile pure render mixin
 	    if( spec.propTypes && spec.pureRender ){
 	        mixins.push( pureRender( spec.propTypes ) );
 	    }
@@ -248,23 +269,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return component;
 	}
 	
-	function getModelAttributes( spec ){
+	function getTypeSpecs( spec, name1, name2 ){
 	    var attributes = null;
 	
 	    for( var i = spec.mixins.length - 1; i >= 0; i-- ){
-	        var mixin = spec.mixins[ i ];
-	        if( mixin.attributes ){
+	        var mixin      = spec.mixins[ i ],
+	            mixinAttrs = mixin[ name1 ] || ( name2 && mixin[ name2 ] );
+	
+	        if( mixinAttrs ){
 	            attributes || ( attributes = {} );
-	            Object.assign( attributes, mixin.attributes );
+	            Object.assign( attributes, mixin.mixinAttrs );
 	        }
 	    }
 	
-	    if( spec.attributes ){
+	    var specAttrs = spec[ name1 ] || ( name2 && spec[ name2 ] );
+	    if( specAttrs ){
 	        if( attributes ){
-	            Object.assign( attributes, spec.attributes );
+	            Object.assign( attributes, specAttrs );
 	        }
 	        else{
-	            attributes = spec.attributes;
+	            attributes = specAttrs;
 	        }
 	    }
 	
@@ -312,6 +336,71 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Nested = __webpack_require__( 3 );
+	
+	function parseProps( props ){
+	    var propTypes = {},
+	        defaults, defaultsProto,
+	        modelProto = Nested.Model.defaults( props ).prototype;
+	
+	    modelProto.forEachAttr( modelProto.__attributes, function( spec, name ){
+	        propTypes[ name ] = translateType( spec.type );
+	        if( spec.value !== void 0 ){
+	            defaults || ( defaults = {} );
+	            defaults[ name ] = props[ name ];
+	        }
+	    });
+	
+	    if( defaults ){
+	        defaultsProto = Nested.Model.defaults( defaults ).prototype;
+	    }
+	
+	    return {
+	        propTypes : propTypes,
+	        model : defaultsProto
+	    };
+	}
+	
+	var PropTypes = React.PropTypes;
+	
+	function Node(){}
+	function Element(){}
+	
+	function translateType( Type ){
+	    switch( Type ){
+	        case Number :
+	        case Integer :
+	            return PropTypes.number;
+	        case String :
+	            return PropTypes.string;
+	        case Boolean :
+	            return PropTypes.bool;
+	        case Array :
+	            return PropTypes.array;
+	        case Function :
+	            return PropTypes.func;
+	        case Object :
+	            return PropTypes.object;
+	        case Node :
+	            return PropTypes.node;
+	        case Element :
+	            return PropTypes.element;
+	        case void 0 :
+	        case null :
+	            return PropTypes.any;
+	        default:
+	            return PropTypes.instanceOf( Type );
+	    }
+	}
+	
+	exports.Node = Node;
+	exports.Element = Element;
+	exports.parseProps = parseProps;
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React    = __webpack_require__( 1 ),
@@ -396,11 +485,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__( 1 ),
-	    jsonNotEqual = __webpack_require__( 8 ).jsonNotEqual;
+	    jsonNotEqual = __webpack_require__( 9 ).jsonNotEqual;
 	
 	module.exports = React.createClass({
 	    displayName : 'BackboneView',
@@ -463,7 +552,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	// equality checking for deep JSON comparison of plain Array and Object
@@ -525,11 +614,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Nested   = __webpack_require__( 3 ),
-	    Link     = __webpack_require__( 10 );
+	    Link     = __webpack_require__( 11 );
 	
 	Object.extend.attach( Link );
 	
@@ -599,7 +688,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	/**

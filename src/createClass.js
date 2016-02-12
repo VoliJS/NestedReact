@@ -1,6 +1,7 @@
-var React  = require( 'react' ),
-    Nested = require( 'nestedtypes' ),
-    pureRender = require( './purerender-mixin' );
+var React      = require( 'react' ),
+    Nested     = require( 'nestedtypes' ),
+    pureRender = require( './purerender-mixin' ),
+    propTypes  = require( './propTypes' );
 
 function forceUpdate(){ this.forceUpdate(); }
 
@@ -30,7 +31,7 @@ function registerPropsListener( component, prevProps, name, events ){
 
 function regHashPropsListeners( a_prevProps ){
     var prevProps = a_prevProps || {},
-        updateOn = this.listenToProps;
+        updateOn  = this.listenToProps;
 
     for( var prop in updateOn ){
         registerPropsListener( this, prevProps, prop, updateOn[ prop ] );
@@ -38,7 +39,7 @@ function regHashPropsListeners( a_prevProps ){
 }
 
 var ListenToProps = {
-    componentDidMount : regHashPropsListeners,
+    componentDidMount  : regHashPropsListeners,
     componentDidUpdate : regHashPropsListeners
 };
 
@@ -91,7 +92,8 @@ var ModelState = {
 function createClass( spec ){
     var mixins = spec.mixins || ( spec.mixins = [] );
 
-    var attributes = getModelAttributes( spec );
+    // process state spec...
+    var attributes = getTypeSpecs( spec, 'attributes', 'state' );
     if( attributes ){
         var BaseModel = spec.Model || Nested.Model;
         spec.Model    = BaseModel.extend( { defaults : attributes } );
@@ -99,6 +101,23 @@ function createClass( spec ){
 
     if( spec.Model ) mixins.push( ModelState );
 
+    // process props spec...
+    var props = getTypeSpecs( spec, 'props' );
+
+    if( props ){
+        var parsedProps = propTypes.parseProps( props ),
+            propsModel = parsedProps.model;
+
+        spec.propTypes = parsedProps.propTypes;
+
+        if( propsModel ){
+            spec.getDefaultProps = function(){
+                return propsModel.defaults();
+            }
+        }
+    }
+
+    // process listenToProps spec
     var listenToProps = spec.listenToProps;
     if( listenToProps ){
         if( typeof listenToProps === 'string' ){
@@ -110,8 +129,10 @@ function createClass( spec ){
         }
     }
 
+    // add Events capabilities
     mixins.push( Events );
 
+    // compile pure render mixin
     if( spec.propTypes && spec.pureRender ){
         mixins.push( pureRender( spec.propTypes ) );
     }
@@ -130,23 +151,26 @@ function createClass( spec ){
     return component;
 }
 
-function getModelAttributes( spec ){
+function getTypeSpecs( spec, name1, name2 ){
     var attributes = null;
 
     for( var i = spec.mixins.length - 1; i >= 0; i-- ){
-        var mixin = spec.mixins[ i ];
-        if( mixin.attributes ){
+        var mixin      = spec.mixins[ i ],
+            mixinAttrs = mixin[ name1 ] || ( name2 && mixin[ name2 ] );
+
+        if( mixinAttrs ){
             attributes || ( attributes = {} );
-            Object.assign( attributes, mixin.attributes );
+            Object.assign( attributes, mixin.mixinAttrs );
         }
     }
 
-    if( spec.attributes ){
+    var specAttrs = spec[ name1 ] || ( name2 && spec[ name2 ] );
+    if( specAttrs ){
         if( attributes ){
-            Object.assign( attributes, spec.attributes );
+            Object.assign( attributes, specAttrs );
         }
         else{
-            attributes = spec.attributes;
+            attributes = specAttrs;
         }
     }
 
