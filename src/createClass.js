@@ -92,11 +92,26 @@ var ModelState = {
 function createClass( spec ){
     var mixins = spec.mixins || ( spec.mixins = [] );
 
+
+    // process context specs...
+    var context = getTypeSpecs( spec, 'context' );
+    if( context ){
+        spec.contextTypes = propTypes.parseProps( context ).propTypes;
+        spec.context = void 0;
+    }
+
+    var childContext = getTypeSpecs( spec, 'childContext' );
+    if( childContext ){
+        spec.childContextTypes = propTypes.parseProps( childContext ).propTypes;
+        spec.childContext = void 0;
+    }
+
     // process state spec...
     var attributes = getTypeSpecs( spec, 'attributes', 'state' );
     if( attributes ){
         var BaseModel = spec.Model || Nested.Model;
         spec.Model    = BaseModel.extend( { defaults : attributes } );
+        spec.state = void 0;
     }
 
     if( spec.Model ) mixins.push( ModelState );
@@ -114,6 +129,8 @@ function createClass( spec ){
                 return parsedProps.defaults;
             }
         }
+
+        spec.props = void 0;
     }
 
     // process listenToProps spec
