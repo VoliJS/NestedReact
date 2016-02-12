@@ -105,14 +105,13 @@ function createClass( spec ){
     var props = getTypeSpecs( spec, 'props' );
 
     if( props ){
-        var parsedProps = propTypes.parseProps( props ),
-            propsModel = parsedProps.model;
+        var parsedProps = propTypes.parseProps( props );
 
         spec.propTypes = parsedProps.propTypes;
 
-        if( propsModel ){
+        if( parsedProps.defaults ){
             spec.getDefaultProps = function(){
-                return propsModel.defaults();
+                return parsedProps.defaults;
             }
         }
     }

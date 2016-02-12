@@ -223,14 +223,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var props = getTypeSpecs( spec, 'props' );
 	
 	    if( props ){
-	        var parsedProps = propTypes.parseProps( props ),
-	            propsModel = parsedProps.model;
+	        var parsedProps = propTypes.parseProps( props );
 	
 	        spec.propTypes = parsedProps.propTypes;
 	
-	        if( propsModel ){
+	        if( parsedProps.defaults ){
 	            spec.getDefaultProps = function(){
-	                return propsModel.defaults();
+	                return parsedProps.defaults;
 	            }
 	        }
 	    }
@@ -343,24 +342,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function parseProps( props ){
 	    var propTypes = {},
-	        defaults, defaultsProto,
+	        defaults,
 	        modelProto = Nested.Model.defaults( props ).prototype;
 	
 	    modelProto.forEachAttr( modelProto.__attributes, function( spec, name ){
-	        propTypes[ name ] = translateType( spec.type );
-	        if( spec.value !== void 0 ){
-	            defaults || ( defaults = {} );
-	            defaults[ name ] = props[ name ];
+	        if( name !== 'id' ){
+	            propTypes[ name ] = translateType( spec.type );
+	
+	            if( spec.value !== void 0 ){
+	                defaults || ( defaults = {} );
+	                defaults[ name ] = spec.value;
+	            }
 	        }
 	    });
 	
-	    if( defaults ){
-	        defaultsProto = Nested.Model.defaults( defaults ).prototype;
-	    }
-	
 	    return {
 	        propTypes : propTypes,
-	        model : defaultsProto
+	        defaults : defaults
 	    };
 	}
 	

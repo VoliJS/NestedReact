@@ -3,24 +3,23 @@ var Nested = require( 'nestedtypes' ),
 
 function parseProps( props ){
     var propTypes = {},
-        defaults, defaultsProto,
+        defaults,
         modelProto = Nested.Model.defaults( props ).prototype;
 
     modelProto.forEachAttr( modelProto.__attributes, function( spec, name ){
-        propTypes[ name ] = translateType( spec.type );
-        if( spec.value !== void 0 ){
-            defaults || ( defaults = {} );
-            defaults[ name ] = props[ name ];
+        if( name !== 'id' ){
+            propTypes[ name ] = translateType( spec.type );
+
+            if( spec.value !== void 0 ){
+                defaults || ( defaults = {} );
+                defaults[ name ] = spec.value;
+            }
         }
     });
 
-    if( defaults ){
-        defaultsProto = Nested.Model.defaults( defaults ).prototype;
-    }
-
     return {
         propTypes : propTypes,
-        model : defaultsProto
+        defaults : defaults
     };
 }
 
