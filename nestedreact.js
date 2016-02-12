@@ -215,13 +215,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var context = getTypeSpecs( spec, 'context' );
 	    if( context ){
 	        spec.contextTypes = propTypes.parseProps( context ).propTypes;
-	        spec.context = void 0;
+	        delete spec.context;
 	    }
 	
 	    var childContext = getTypeSpecs( spec, 'childContext' );
 	    if( childContext ){
 	        spec.childContextTypes = propTypes.parseProps( childContext ).propTypes;
-	        spec.childContext = void 0;
+	        delete spec.childContext;
 	    }
 	
 	    // process state spec...
@@ -229,7 +229,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if( attributes ){
 	        var BaseModel = spec.Model || Nested.Model;
 	        spec.Model    = BaseModel.extend( { defaults : attributes } );
-	        spec.state = void 0;
+	        delete spec.state;
 	    }
 	
 	    if( spec.Model ) mixins.push( ModelState );
@@ -248,7 +248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	
-	        spec.props = void 0;
+	        delete spec.props;
 	    }
 	
 	    // process listenToProps spec
