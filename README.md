@@ -211,7 +211,7 @@ Simplified NestedTypes-style type annotations can be used as props spec:
 No other type annotation features are supported for `props`.
 
 When component has `props` type spec:
-- proper React PropTypes will be automatically generated for every props;
+- React component propTypes will be automatically generated for every props;
 - if props has explicitly defined default value, getDefaultProps() method will be created. It means, that there are *no*
     default objects generated for simple `Type` style type spec.  
 
@@ -236,9 +236,9 @@ var MyComponent = React.createClass({
 ```
 
 PureRender optimization in enabled with `pureRender` option. It will create `shouldComponentUpdate` function
-which is optimized for props mentioned in `propTypes`.
+which is optimized for props mentioned in `propTypes` or `props` declaration.
  
-Therefore, it's required to declare all of component props in `propTypes` when using this optimization. 
+Therefore, it's required to declare all of component props when using this optimization. 
 
 ## Data binding
 
