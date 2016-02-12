@@ -1,4 +1,5 @@
-var Nested = require( 'nestedtypes' );
+var Nested = require( 'nestedtypes' ),
+    React  = require( 'react' );
 
 function parseProps( props ){
     var propTypes = {},
