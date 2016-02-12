@@ -126,7 +126,7 @@ var React = require( 'nestedreact' );
 var MyComponent = React.createClass({
 	//Model : BackboneModel,
 
-	attributes : { // Model defaults
+	state : { // Model defaults
 		count : 0
 	},
 
@@ -144,9 +144,9 @@ var MyComponent = React.createClass({
 });
 ```
 
-- New `NestedTypes` Model definition will be created, using `attributes` as Model.defaults.
+- New `NestedTypes` Model definition will be created, using `state` as Model.defaults.
 - If Model property is specified, it will be used as base model and extended.
-- `attributes` property from mixins will be properly merged.
+- `state` property from mixins will be properly merged.
 - Since `state` is `NestedTypes` model in this case,
 	- All attributes *must* be declared using `NestedTypes` standard type specs.
 	- `state` attributes allows direct assignments - treat it as regular object.
@@ -177,14 +177,52 @@ var MyComponent = React.createClass({
 You can update react component on backbone events from component props.
 Event subscription is managed automatically. No props passed - no problems.
 
+## NestedTypes-style props specs
+
+```javscript
+var MyComponent = React.createClass({
+    props : {
+        model : MyFancyModel    
+    },
+    
+	listenToProps : { // or just string with property names, separated by space
+		model : 'change'
+	},
+
+	render : function(){
+		return (
+			<div onClick={ this.onClick }>
+				{ this.props.model.count }
+			</div>
+		);
+	},
+
+	onClick : function(){
+		this.props.model.count = this.props.model.count + 1;
+	}
+});
+```
+
+Simplified NestedTypes-style type annotations can be used as props spec:
+- constructor functions: `Type`
+- constructors with default values: `Type.value( x )`
+- JSON and primitive values: `"default string"`
+
+No other type annotation features are supported for `props`.
+
+When component has `props` type spec:
+- proper React PropTypes will be automatically generated for every props;
+- if props has explicitly defined default value, getDefaultProps() method will be created. It means, that there are *no*
+    default objects generated for simple `Type` style type spec.  
+
 ## Pure Render Mixin
 
 ```javscript
 var MyComponent = React.createClass({
-	propTypes : {
-        item : PropTypes.instanceOf( MyModel ),
-        elements : PropTypes.instanceOf( MyCollection ),
-        className : PropTypes.string
+	props : {
+        item      : MyModel,
+        elements  : MyCollection,
+        className : String
 	},
 	
 	pureRender : true,
@@ -282,7 +320,7 @@ For link enclosings arrays and plain JS objects:
 
 Link received through component props can be mapped as state member using the following declaration:
 ```javascript
-attributes : {
+state : {
    selected : Nested.link( '^props.selectedLink' )
 }   
 ```
@@ -291,7 +329,7 @@ It can be accessed as a part of state, however, in this case it's not true state
 Also, links can be used to declaratively expose real component state to upper conponents. In this example, link optionally received in props will be updated every time `this.state.selected` object is replaced. In this case, updates are one way, from bottom component to upper one, and stateful component will render itself when state is changed.
 
 ```javascript
-attributes : {
+state : {
    selected : Item.has.watcher( '^props.selectedLink.val' )
 }   
 ```
