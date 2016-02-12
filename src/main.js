@@ -21,9 +21,9 @@ NestedReact.useView( Nested.View );
 // React component for attaching views
 NestedReact.subview = require( './view-element' );
 
-NestedReact.tools = require( './json-comparison' );
-
-NestedReact.NestedPureRender = require( './purerender-mixin' );
+var propTypes  = require( './propTypes' );
+NestedReact.Node = propTypes.Node.value( null );
+NestedReact.Element = propTypes.Element.value( null );
 
 // Extend react components to have backbone-style jquery accessors
 var Component     = React.createClass( { render : function(){} } ),
