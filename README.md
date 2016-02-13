@@ -3,120 +3,46 @@ This is React add-on providing advanced state management to React applications a
 
 Brief feature list:
 
-- Advanced component's state management with [NestedTypes](https://github.com/Volicon/backbone.nestedTypes).
-- Comprehensive two-way data binding - [Guide to Data Binding Use Cases](/example/databinding.md)
-- Transparent interoperation with Backbone Views:
+- Component's state management with [NestedTypes](https://github.com/Volicon/NestedTypes) model instead of React state.
+- Extended two-way data binding with -React- Nested links - [Guide to Data Binding Use Cases](/example/databinding.md)
+- Lightweight `NestedTypes`-style type annotations for props and context as a replacement of `PropTypes`.
+- *Pure render optimization* with mutable models and collections in props. Works like a charm :) 
+- Transparent interoperation with existing Backbone Views:
 	- React component can be used as backbone View. `new MyComponent.View({ props })`
 	- Backbone Views can be used as React components. `<React.subview View={ MyView } />`
 	- Simplified refactoring of Backbone Views to React components. `this.$`, `this.$el`, `this.$( sel )`, `this.model` works for React components too, as well as `this.trigger` and `this.listenTo`.
 
-Thus, if you have Bakcbone application and want to start writing with React - you have no excuses any more. Wanna keep some of your cool Views? They works just fine? Keep 'em. And use them in yout new components, written with React, which you will use in other Backbone Views.
-
-# Breaking changes introduced in 0.3
-- `component.createView( props )` doesn't work any more, use `new component.View( props )` instead.
-- module and `npm` package name is now `nestedreact`.
-- Raw `backbone` is not supported any more. Upgrade to `NestedTypes` 1.1.5 or more is required. It will give you following
-features to help managing complex application state:
-	- Proper nested models and collections implementation with deep changes detection. React components will
-	update UI on nested attribute changes.
-	- Dramatic improvement in model update performance compared to Backbone. Up to 40x faster in Chrome. Important for mobile devices.
-	- Type safety. Attributes are guaranteed to hold values of declared types all the time.
+Though `NestedReact` offers excellent convergence layer for backbone views, raw backbone models are not supported. 
+To use it for smooth migration of existing backbone application to React, you need to replace `backbone` with `NestedTypes`
+first (it's mostly backward compatible with backbone 1.2 by API, so transition is not hard).
+Which by itself will be a big step forward, because:
+	- It's order of magnitude faster, so your application becomes more responsive and you can handle collection which are 10 times larger than you have now. [No kidding](http://slides.com/vladbalin/performance#/).
+	- It implements nested models and collections handling in the right way. During `fetch`, nested objects are updated in place, so it's safe to pass them by reference.   
+	- It can handle model references by `id` in attributes for you too, operating on a set of independently fetched collections.
+	- It's type-safe, providing the same contract for model attributes as in statically typed language. Thus, 
+	    attributes are guaranteed to hold values of declared types whatever you do, making it impossible to break client-server protocol.
+	- At the moment of writing, no other traditional model framework supports React's pure render optimization. :)
 
 	For more information about `NestedTypes`, visit
 	http://volicon.github.io/backbone.nestedTypes/
 	and
 	https://github.com/Volicon/backbone.nestedTypes
 
-# Usage
+# Installation
 It's packed as single UMD, thus grab the module or use `npm` to install.
 	`npm install --save nestedreact`
 
-Module export's modified React namespace (without touching original React), and its
+Module extends React namespace (without touching original React), and its
 safe to use it as a replacement for `react`.
-
+    `import React from 'nestedreact'`
+    
 If you're using backbone-based frameworks such as `ChaplinJS` or `Marionette`,
-you need to do following things:
+you need to do following things to make convergence layer work properly:
 - Make sure that frameworks includes `nestedtypes` instead of `backbone`.
-- On application start, tell `nestedreact` to use proper base class for View.
-	`require( 'nestedreact' ).useView( Chaplin.View )`
+- On application start, tell `nestedreact` to use proper base class for the View.
+	`React.useView( Chaplin.View )`
 
 # Features
-## Use React components as Backbone View
-
-```javscript
-var backboneView = new MyReactComponent.View( props );
-```
-
-## Use Backbone View in React component
-
-```javscript
-var React = require( 'nestedreact' );
-
-var MyComponent = React.createClass({
-	render : function(){
-		return (
-			<div>
-				<React.subview
-					className="classes for root element"
-					View={ BackboneView }
-					options={ viewOptions }
-				/>
-			</div>
-		);
-	}
-});
-```
-
-## Helper methods for easy Backbone to React transition
-
-There are `el`, `$el`, and `$( selector )` available for the React components,
-which simplifies refactoring of the existing event handlers and usage of
-`jquery` plugins.
-
-```javscript
-var React = require( 'nestedreact' );
-
-var MyComponent = React.createClass({
-	onClick : function(){
-		this.$( '#somewhere' ).html( 'Hi' );
-	}
-});
-```
-
-It is extremely dangerous and conceptually wrong to directly *modify existing*
-DOM subtree in React component. Read is safe, modify DOM when you know what you're
-doing. Lets say, integrating `jQuery` plugins.
-
-*You must not use these methods in render*. `jquery` plugins can be initialized
- in `componentDidMount` method or in event handlers.
-
-## Use Existing Backbone Model as component's state
-
-```javscript
-var React = require( 'nestedreact' );
-
-var MyComponent = React.createClass({
-	Model : BackboneModel,
-
-	render : function(){
-		return (
-			<div onClick={ this.onClick }>
-				{ this.state.count }
-			</div>
-		);
-	},
-
-	onClick : function(){
-		this.state.count = this.state.count + 1;
-	}
-});
-```
-
-If Model is specified for the component,
-- `this.state` and `this.model` holds backbone model. Usage of `setState` is *not allowed*.
-- React component will update itself whenever model emit `change` event.
-	- You can customize UI update events supplying `listenToState` property. For example, `listenToState : 'change:attr sync'`.
-	- You can disable UI updates on state change, supplying `listenToState : false` option.
 
 ## Managing state with ad-hoc Backbone model
 
