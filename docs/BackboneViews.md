@@ -144,7 +144,7 @@ var MyComponent = React.createClass({
 	- You can customize UI update events supplying `listenToState` property. For example, `listenToState : 'change:attr sync'`.
 	- You can disable UI updates on state change, supplying `listenToState : false` option.
 
-## Passing Models and Collections as React components props
+### Passing Models and Collections as React components props
 
 In backbone, you might listen to models and collection changes which comes from the View `options`.
  
@@ -188,7 +188,7 @@ var MyComponent = React.createClass({
 
 That's simple and safe. No props passed - no events subscription.
 
-## Helper methods for easy Backbone View refactoring
+### Helper methods for event handlers
 
 When you will copy over your event handlers, most likely, they will just work.
  
