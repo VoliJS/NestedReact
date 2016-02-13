@@ -3,6 +3,22 @@
 There are many different ways you may approach the problem when dealing with existing Bakcbone UI.
 All of them are supported, enabling easy and gradual transition to React.  
 
+Though `NestedReact` offers excellent convergence layer for backbone views, raw backbone models are not supported. 
+To use it for smooth migration of existing backbone application to React, you need to replace `backbone` with `NestedTypes`
+first (it's mostly backward compatible with Backbone 1.2 API, so transition is not hard).
+Which by itself will be a big step forward, because:
+	- It's order of magnitude faster, so your application becomes more responsive and you can handle collection which are 10 times larger than you have now. [No kidding](http://slides.com/vladbalin/performance#/).
+	- It implements nested models and collections handling in the right way. During `fetch`, nested objects are updated in place, so it's safe to pass them by reference.   
+	- It can handle model references by `id` in attributes for you too, operating on a set of independently fetched collections.
+	- It's type-safe, providing the same contract for model attributes as in statically typed language. Thus, 
+	    attributes are guaranteed to hold values of declared types whatever you do, making it impossible to break client-server protocol.
+	- At the moment of writing, no other traditional model framework supports React's pure render optimization. :)
+
+	For more information about `NestedTypes`, visit
+	http://volicon.github.io/backbone.nestedTypes/
+	and
+	https://github.com/Volicon/backbone.nestedTypes
+	
 ## Interoperation with existing Backbone Views
 
 Key factor of success for technology transition project is to avoid naive 'upfront rewrite' strategy.
@@ -57,13 +73,13 @@ Occasionally, you may decide to refactor your existing View to React component.
 
 Since Backbone generally use the same architectural concept as React (detect change and then render), it's an easy process.
  First of all, short vocabulary:
- 1. View.extend({}) -> React.createClass({}). That's an obvious part.
- 2. View.template -> Component.render(). Yeah. In React, `render` function just *returns* markup. 
- 3. View.render -> Component.forceUpdate(). And if you want to update component, you should call this thingy instead.
- 4. View.render -> Component.componentDidUpdate(), Component.componentDidMount(). If you want to attach jQuery plugin after render, you do it here. 
- 5. View.initialize( options ) -> View.componentWillMount()
- 6. View options you receive in (4) -> Component.props
- 7. View.model -> Component.state
+ 1. `View.extend({})` -> `React.createClass({})`. That's an obvious part.
+ 2. `View.template` -> `Component.render()`. Yeah. In React, `render` function just *returns* markup. 
+ 3. `View.render` -> `Component.forceUpdate()`. And if you want to update component, you should call this thingy instead.
+ 4. `View.render` -> `Component.componentDidUpdate()`, `Component.componentDidMount()`. If you want to attach jQuery plugin after render, you do it here. 
+ 5. `View.initialize( options )` -> `View.componentWillMount()`
+ 6. `View options you receive in (4)` -> `Component.props`
+ 7. `View.model` -> `Component.state`
  
 You approach the refactoring process in sequence:
   1. Create an empty React component. 
@@ -77,9 +93,9 @@ must completely define an appearance of your markup. Since for Backbone it's not
 View's state model.
 
 In Backbone, you might assign values from `options` to the model. Do not do this with React. Remember, `options` is `props`. 
-Therefore, it might be required to remove some items from the View's model. 
+Therefore, it might be required to remove some items from the View's model.
 
-### Use Existing Backbone Model as component's state
+### Use Existing Model as component's state
 
 If you already have one model, describing View's state (usual pattern is listening to model's `change` event and calling `this.render()`),
  you can just attach it to you React component. Like this. It will be created, disposed, and listened to automatically.
@@ -111,7 +127,7 @@ var MyComponent = React.createClass({
 	- You can customize UI update events supplying `listenToState` property. For example, `listenToState : 'change:attr sync'`.
 	- You can disable UI updates on state change, supplying `listenToState : false` option.
 
-## Passing Backbone objects as React components props
+## Passing Models and Collections as React components props
 
 In backbone, you might listen to models and collection changes which comes from the View `options`.
  
@@ -155,7 +171,7 @@ var MyComponent = React.createClass({
 
 That's simple and safe. No props passed - no events subscription.
 
-## Helper methods for easy Backbone to React refactoring
+## Helper methods for easy Backbone View refactoring
 
 When you will copy over your event handlers, most likely, they will just work.
  
