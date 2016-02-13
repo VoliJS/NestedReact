@@ -45,7 +45,7 @@ dealing with small isolated parts of the code first.
 Or, you can decide to start refactoring from the top. In this case, you will likely want to reuse
   your existing lower-level backbone subviews.
 
-You can do it like that. And it will work okay.
+You can do it like that.
 
 ```javscript
 var React = require( 'nestedreact' );
@@ -64,6 +64,8 @@ var MyComponent = React.createClass({
 	}
 });
 ```
+
+It's easy, for example, to take [react-router](https://github.com/reactjs/react-router) and use it in your application without any changes in Backbone View layer.
 
 Taking these two features together, you can take literally any view from the subview hierarchy, and replace it with
   React component. It will also work fine if there are multiple layers - React using Backbone using React...  
@@ -95,6 +97,19 @@ View's state model.
 
 In Backbone, you might assign values from `options` to the model. Do not do this with React. Remember, `options` is `props`. 
 Therefore, it might be required to remove some items from the View's model.
+
+### Converting EJS template to JSX
+
+I will assume we're using EJS to be specific. JSX is not text, it's hidden JS tree construction expression, thus control structures must be transformed to functional form. In short, branches becomes logical expressions, loops becomes `map` expressions. Expression must return single node or array, in the last case you're required to add `key` attribute. Component must return single node at the top level.
+
+`class` should be substitued with `className`
+`<%= expr %>` -> `{ expr }`
+
+`<%if( expr ){%> <div/> <%}%>` -> `{ expr && <div/> }`
+
+`<%if( expr ){%> <div/> <%}else{%> <span/> <%}%>` -> `{ expr ? <div/> : <span/> }`
+
+`<%for( var i = 0; i < arr.length; i++ ){%> <div/> <%}%>` -> `{ arr.map( ( x, i ) => <div key={ i } /> )}`
 
 ### Use Existing Model as component's state
 
