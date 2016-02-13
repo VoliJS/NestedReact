@@ -7,6 +7,7 @@ Though `NestedReact` offers excellent convergence layer for backbone views, raw 
 To use it for smooth migration of existing backbone application to React, you need to replace `backbone` with `NestedTypes`
 first (it's mostly backward compatible with Backbone 1.2 API, so transition is not hard).
 Which by itself will be a big step forward, because:
+
 	- It's order of magnitude faster, so your application becomes more responsive and you can handle collection which are 10 times larger than you have now. [No kidding](http://slides.com/vladbalin/performance#/).
 	- It implements nested models and collections handling in the right way. During `fetch`, nested objects are updated in place, so it's safe to pass them by reference.   
 	- It can handle model references by `id` in attributes for you too, operating on a set of independently fetched collections.
