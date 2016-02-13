@@ -102,14 +102,11 @@ Therefore, it might be required to remove some items from the View's model.
 
 I will assume we're using EJS to be specific. JSX is not text, it's hidden JS tree construction expression, thus control structures must be transformed to functional form. In short, branches becomes logical expressions, loops becomes `map` expressions. Expression must return single node or array, in the last case you're required to add `key` attribute. Component must return single node at the top level.
 
-`class` should be substitued with `className`
-`<%= expr %>` -> `{ expr }`
-
-`<%if( expr ){%> <div/> <%}%>` -> `{ expr && <div/> }`
-
-`<%if( expr ){%> <div/> <%}else{%> <span/> <%}%>` -> `{ expr ? <div/> : <span/> }`
-
-`<%for( var i = 0; i < arr.length; i++ ){%> <div/> <%}%>` -> `{ arr.map( ( x, i ) => <div key={ i } /> )}`
+- `class` should be substitued with `className`
+- `<%= expr %>` -> `{ expr }`
+- `<%if( expr ){%> <div/> <%}%>` -> `{ expr && <div/> }`
+- `<%if( expr ){%> <div/> <%}else{%> <span/> <%}%>` -> `{ expr ? <div/> : <span/> }`
+- `<%for( var i = 0; i < arr.length; i++ ){%> <div/> <%}%>` -> `{ arr.map( ( x, i ) => <div key={ i } /> )}`
 
 ### Use Existing Model as component's state
 
