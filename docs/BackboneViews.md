@@ -15,10 +15,10 @@ Which by itself will be a big step forward, because:
 	    attributes are guaranteed to hold values of declared types whatever you do, making it impossible to break client-server protocol.
 	- At the moment of writing, no other traditional model framework supports React's pure render optimization. :)
 
-	For more information about `NestedTypes`, visit
-	http://volicon.github.io/backbone.nestedTypes/
-	and
-	https://github.com/Volicon/backbone.nestedTypes
+For more information about `NestedTypes`, visit
+http://volicon.github.io/backbone.nestedTypes/
+and
+https://github.com/Volicon/backbone.nestedTypes
 	
 ## Interoperation with existing Backbone Views
 
