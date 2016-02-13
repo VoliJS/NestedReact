@@ -8,17 +8,17 @@ To use it for smooth migration of existing backbone application to React, you ne
 first (it's mostly backward compatible with Backbone 1.2 API, so transition is not hard).
 Which by itself will be a big step forward, because:
 
-	- It's order of magnitude faster, so your application becomes more responsive and you can handle collection which are 10 times larger than you have now. [No kidding](http://slides.com/vladbalin/performance#/).
-	- It implements nested models and collections handling in the right way. During `fetch`, nested objects are updated in place, so it's safe to pass them by reference.   
-	- It can handle model references by `id` in attributes for you too, operating on a set of independently fetched collections.
-	- It's type-safe, providing the same contract for model attributes as in statically typed language. Thus, 
+- It's order of magnitude faster, so your application becomes more responsive and you can handle collection which are 10 times larger than you have now. [No kidding](http://slides.com/vladbalin/performance#/).
+- It implements nested models and collections handling in the right way. During `fetch`, nested objects are updated in place, so it's safe to pass them by reference.   
+- It can handle model references by `id` in attributes for you too, operating on a set of independently fetched collections.
+- It's type-safe, providing the same contract for model attributes as in statically typed language. Thus, 
 	    attributes are guaranteed to hold values of declared types whatever you do, making it impossible to break client-server protocol.
-	- At the moment of writing, no other traditional model framework supports React's pure render optimization. :)
+- At the moment of writing, no other traditional model framework supports React's pure render optimization. :)
 
-For more information about `NestedTypes`, visit
-http://volicon.github.io/backbone.nestedTypes/
-and
-https://github.com/Volicon/backbone.nestedTypes
+	For more information about `NestedTypes`, visit
+	http://volicon.github.io/backbone.nestedTypes/
+	and
+	https://github.com/Volicon/backbone.nestedTypes
 	
 ## Interoperation with existing Backbone Views
 
