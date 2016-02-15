@@ -47,7 +47,7 @@ var ModelState = {
 
     // reference global store to fix model's store locator
     getStore : function(){
-        this.model._defaultStore;
+        return this.model._defaultStore;
     },
 
     componentDidMount : function(){

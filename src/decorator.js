@@ -1,18 +1,31 @@
+/**
+ * ES6 class Decorator, design based on base class
+ * (trying to manage without mixins).
+ *
+ * TODO: What to do with inheritance?
+ * - state: extend attributes? Common sense tells us we need to inherit model.
+ * - props: inherit props? Likely, we need it too.
+ * Ok, so we inherit both props and state attributes.
+ * Both cases will be handled by model inheritance.
+ */
+
 var React  = require( 'react' ),
     Nested = require( 'nestedtypes' );
 
 Object.extend.attach( React.Component );
-Object.assign( React.Component, Events );
+Object.assign( React.Component.prototype, Events );
 
-React.Component.extend( {
+var Component = React.Component.extend( {
     Model    : null,
     autobind : null,
+    listenToProps : null,
 
     constructor : function( props ){
         React.Component.call( this, props );
 
         if( this.Model ){
-            this.state = new this.Model();
+            this.state = this.model = new this.Model();
+            this.model._owner = this;
         }
 
         var autobind = this.autobind;
@@ -26,6 +39,63 @@ React.Component.extend( {
                 }
             }
         }
+    },
+
+    getStore : function(){
+        return this.model._defaultStore;
+    },
+
+    componentWillReceiveProps : function( nextProps ){
+        var updateOn = this.listenToProps;
+
+        // if there are any subscription to prop changes,
+        // make sure that it's up to date.
+        if( updateOn ){
+            var props = this.props;
+
+            for( var i = 0; i < updateOn.length; i++ ){
+                var name = updateOn[ i ],
+                    prev = props[ name ],
+                    next = nextProps[ name ];
+
+                if( prev !== next ){
+                    prev && this.stopListening( prev );
+                    next && this.listenTo( next, next.triggerWhenChanged, forceUpdate );
+                }
+            }
+        }
+    },
+
+    componentDidMount : function(){
+        var model = this.model,
+            updateOn = this.listenToProps;
+
+        // If component has state, subscribe for state changes...
+        // Likely it has, otherwise stateless component will be used.
+        if( model ){
+            this.listenTo( model, 'change', forceUpdate );
+        }
+
+        // If we're watching for prop changes, take care.
+        if( updateOn ){
+            var props    = this.props;
+
+            for( var i = 0; i < updateOn.length; i++ ){
+                var emitter = props[ updateOn[ i ] ];
+                emitter && this.listenTo( emitter, emitter.triggerWhenChanged, forceUpdate );
+            }
+        }
+    },
+
+    componentWillUnmount : function(){
+        // remove owner from the model...
+        var model = this.model;
+        model && ( model._owner = null );
+
+        //TODO: Should I call dispose to our state?
+
+        // unsubscribe from all events...
+        this.stopListening();
     }
 } );
 
