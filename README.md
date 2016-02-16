@@ -1,62 +1,51 @@
 # NestedReact
-This is React add-on providing advanced state management to React applications and convergence layer for intermixing React components and Backbone Views. 
+
+React application architecture with [classical OO models]() in the data layer.
 
 Brief feature list:
 
-- Component's state management with [NestedTypes](https://github.com/Volicon/NestedTypes) model instead of React state.
-- Extended two-way data binding with -React- Nested links - [Guide to Data Binding Use Cases](/example/databinding.md)
-- Lightweight `NestedTypes`-style type annotations for props and context as a replacement of `PropTypes`.
-- *Pure render optimization* with mutable models and collections in props. Works like a charm :) 
-- Transparent interoperation with existing Backbone Views:
-	- React component can be used as backbone View. `new MyComponent.View({ props })`
-	- Backbone Views can be used as React components. `<React.subview View={ MyView } />`
-	- Simplified refactoring of Backbone Views to React components. `this.$`, `this.$el`, `this.$( sel )`, `this.model` works for React components too, as well as `this.trigger` and `this.listenTo`.
+- First-class support for mutable models and collections in props, state, and context.
+    - Unidirectional data flow and safe *pure render optimization*.
+    - Two-way data binding ([Guide to Data Binding Use Cases](/example/databinding.md))
+    - Optional local component subtree updates.     
+- Lightweight type annotations for props, *state*, and context as a replacement for `PropTypes`.
+- Gradual transition procedure for backbone applications ([Backbone Migration Guide]()):
+    - Complete interoperation with existing Backbone Views allowing you to reuse existing code and avoid upfront application rewrite.
+    - Any type of application refactoring strategy is possible - top-to-bottom, bottom-to-top, and random parts at the middle.  
+    - Support for Backbone events and jQuery accessors in React components simplifies View refactoring. 
 
-Though `NestedReact` offers excellent convergence layer for backbone views, raw backbone models are not supported. 
-To use it for smooth migration of existing backbone application to React, you need to replace `backbone` with `NestedTypes`
-first (it's mostly backward compatible with backbone 1.2 by API, so transition is not hard).
-Which by itself will be a big step forward, because:
-	- It's order of magnitude faster, so your application becomes more responsive and you can handle collection which are 10 times larger than you have now. [No kidding](http://slides.com/vladbalin/performance#/).
-	- It implements nested models and collections handling in the right way. During `fetch`, nested objects are updated in place, so it's safe to pass them by reference.   
-	- It can handle model references by `id` in attributes for you too, operating on a set of independently fetched collections.
-	- It's type-safe, providing the same contract for model attributes as in statically typed language. Thus, 
-	    attributes are guaranteed to hold values of declared types whatever you do, making it impossible to break client-server protocol.
-	- At the moment of writing, no other traditional model framework supports React's pure render optimization. :)
-
-	For more information about `NestedTypes`, visit
-	http://volicon.github.io/backbone.nestedTypes/
-	and
-	https://github.com/Volicon/backbone.nestedTypes
+Compare solution size and complexity to any of `flux` implementation on [TodoMVC example]().
 
 # Installation
 It's packed as single UMD, thus grab the module or use `npm` to install.
 	`npm install --save nestedreact`
 
-Module extends React namespace (without touching original React), and its
+It has [NestedTypes model framework]() and [React]() as strong dependencies.
+
+Module extends React namespace (without modifying original React), and its
 safe to use it as a replacement for `react`.
     `import React from 'nestedreact'`
     
-If you're using backbone-based frameworks such as `ChaplinJS` or `Marionette`,
+If you're migrating from backbone-based frameworks such as `ChaplinJS` or `Marionette`,
 you need to do following things to make convergence layer work properly:
 - Make sure that frameworks includes `nestedtypes` instead of `backbone`.
 - On application start, tell `nestedreact` to use proper base class for the View.
 	`React.useView( Chaplin.View )`
 
-# Features
+# Basics 
+## Managing component's state
 
-## Managing state with ad-hoc Backbone model
+In the simplest case, it looks like this:
 
 ```javscript
-var React = require( 'nestedreact' );
+import React from 'nestedreact'
 
-var MyComponent = React.createClass({
-	//Model : BackboneModel,
-
-	state : { // Model defaults
-		count : 0
+export const MyComponent = React.createClass({
+	state : {
+		count : 0 // Number attribute with 0 as default value.
 	},
 
-	render : function(){
+	render(){
 		return (
 			<div onClick={ this.onClick }>
 				{ this.state.count }
@@ -64,107 +53,154 @@ var MyComponent = React.createClass({
 		);
 	},
 
-	onClick : function(){
+	onClick(){
+	    // state change will be detected and component will be updated
 		this.state.count = this.state.count + 1;
 	}
 });
 ```
 
-- New `NestedTypes` Model definition will be created, using `state` as Model.defaults.
-- If Model property is specified, it will be used as base model and extended.
-- `state` property from mixins will be properly merged.
-- Since `state` is `NestedTypes` model in this case,
-	- All attributes *must* be declared using `NestedTypes` standard type specs.
-	- `state` attributes allows direct assignments - treat it as regular object.
-	- Every `state` modification (including direct assignments and nested attributes changes) will
-	cause automagical react update.
+Behind the scene, `state` is managed with `NestedTypes` model which is implicitly created using
+attribute's spec taken from `state` declaration (refer to [NestedTypes documentation]() for complete
+attribute spec syntax). It has following implications:
 
-## Passing Backbone objects as React components props
-```javscript
-var MyComponent = React.createClass({
-	listenToProps : { // or just string with property names, separated by space
-		model : 'change'
-	},
+- You can use primitive type values or constructor functions as attribute's type specs.
+- Plain objects and arrays used as defaults will be properly deep copied.
+- All state members *must* be declared in `state`.
+- State attributes behaves as regular object attributes, which can be directly accessed and assigned.
+- State attributes can hold deeply nested models and collections; deep changes will be automatically detected and will cause component update.
 
-	render : function(){
-		return (
-			<div onClick={ this.onClick }>
-				{ this.props.model.count }
-			</div>
-		);
-	},
+In addition, 
+- `state` property from mixins will be properly merged. So, mixins can have state too.
+- You can specify the base class for state model using `Model` component's property.
+- Entire model's state can be externally defined as `NestedTypes` Model, and attached to component by referencing it in `Model` property.
+- `state` supports everything what regular models can do, e.g. it can have custom methods,
+    be transactionally changed, serialized, saved, fetched, etc.  
 
-	onClick : function(){
-		this.props.model.count = this.props.model.count + 1;
-	}
+Usage of `getInitialState()` and `setState()` is not allowed when you're using `state` declaration.
+
+## Passing models and collections as components props
+
+It's quite common practice to describe complex application's page state in top-level component, and
+ pass the parts of the state down as props. In this case, any changes to nested models
+  and collections will be detected by top-level component and will cause update of the whole subtree.
+  Resulting in so-called _unidirectional data flow_.
+
+```javascript
+// data layer
+const Counter = Model.extend({
+    attributes : {
+        count : 0
+    }
 });
-```
 
-You can update react component on backbone events from component props.
-Event subscription is managed automatically. No props passed - no problems.
-
-## NestedTypes-style props specs
-
-```javscript
-var MyComponent = React.createClass({
-    props : {
-        model : MyFancyModel    
+// Application or application's page
+const Top = React.createClass({
+    // all changes made to the parts of the state will cause component update
+    state : {
+        model1 : Counter,
+        model2 : Counter
     },
     
-	listenToProps : { // or just string with property names, separated by space
-		model : 'change'
-	},
-
-	render : function(){
-		return (
-			<div onClick={ this.onClick }>
-				{ this.props.model.count }
-			</div>
-		);
-	},
-
-	onClick : function(){
-		this.props.model.count = this.props.model.count + 1;
-	}
+    render(){
+        // pass down elements of the state...
+        return (
+            <div>
+                <Bottom model={ this.state.model1 } />
+                <Bottom model={ this.state.model2 } />
+            </div>
+        );
+    }
 });
+
+// Pure component. Click will trigger update of the Top component.
+const Bottom = ({ model }) => (
+    <div onClick={ () => model.count += 1 }>
+        { model.count }
+    </div>
+);
 ```
 
-Simplified NestedTypes-style type annotations can be used as props spec:
-- constructor functions: `Type`
-- constructors with default values: `Type.value( x )`
-- JSON and primitive values: `"default string"`
+Also, this example demonstrates the point which really differentiate our approach to 
+application state management. Here the simple fact comes into play - `NestedTypes` models 
+can declaratively describe very complex state, and detect deeply nested changes.
+So, you have unidirectional data flow for no effort.  
 
-No other type annotation features are supported for `props`.
+## Props specs and pure render optimization
 
-When component has `props` type spec:
-- React component propTypes will be automatically generated for every props;
-- if props has explicitly defined default value, getDefaultProps() method will be created. It means, that there are *no*
-    default objects generated for simple `Type` style type spec.  
+One of the problems of unidirectional data flow is that large part of UI is being
+ updated for every small change. Though React does its job avoiding unnecessary DOM manipulations,
+ it's still takes a lot of computation resources to compare new and old UI components trees. 
+`Pure render` optimization strategy avoids rendering and comparison of subtrees which has not been changed
+by adding special `props` comparison function (`shouldComponentUpdate`). This optimization 
+is most effective on the top level close to the state holder component. 
 
-## Pure Render Mixin
+NestedReact support this optimization, comparing props model's and collection version tokens to ones used during the last render,
+and comparing other props values for strict equality.  
+
+To enable this optimization for the particular component, you need to:
+ - Declare all props that will be tracked for changes in `props` (or `propTypes`) spec.
+    Which is the good practice by itself, so you encouraged to do it unless you're using 
+    stateless function components syntax, which is preferable.
+ - Add `pureRender : true` to component definition.
+
+As from previous example:
 
 ```javscript
-var MyComponent = React.createClass({
-	props : {
-        item      : MyModel,
-        elements  : MyCollection,
-        className : String
-	},
-	
-	pureRender : true,
+var Bottom = React.createClass({
+    props : {
+        model : Counter    
+    },
 
-	render : function(){
-		return (
-		    ...
-		);
-	}
+    pureRender : true,
+    
+    render(){
+        const { model } = this.props;
+        return (
+            <div onClick={ () => model.count += 1 }>
+                { model.count }
+            </div>
+        );
+    )
 });
 ```
 
-PureRender optimization in enabled with `pureRender` option. It will create `shouldComponentUpdate` function
-which is optimized for props mentioned in `propTypes` or `props` declaration.
+NestedReact `props` spec uses the simple subset of `state` spec, and acts as substitution for `propTypes` (in fact,
+ it internally compiles itself to the `propTypes` and `getDefaultProps()`). 
+
+Following type annotations are allowed for `props`:
+1. Constructor functions: `prop1 : String`
+2. Constructors with default value: `prop2 : String.value( "default string" )`
+3. JSON and primitive values: `prop3 : "default string"`
+4. Special PropTypes cases:
+    - `PropTypes.any` -> `undefined` (no default value) or `null` (with `null` default value)
+    - `PropTypes.node` -> `React.Node`
+    - `PropTypes.element` -> `React.Element` 
  
-Therefore, it's required to declare all of component props when using this optimization. 
+If prop has explicitly declared default value, as in (2) or (3), it will be added to `getDefaultProps`.  
+
+## Partial component subtree updates
+
+For the number of reasons, you may need some parts of components subtrees to listen for props updates independently.
+It might be required if model or collection props are not the part of any upper component state.
+This situation frequently happens during transition period when you're in the middle of refactoring large 
+backbone application.
+
+To make `<Bottom />` component listen to and update on its `model` prop change, it's enough to add
+`listenToProps` option to component spec. It will play well with `pureRender`, effectively 
+avoiding unnecessary renders if top level component will trigger update on the same change too.
+
+```javscript
+var Bottom = React.createClass({
+    props : {
+        model : Counter    
+    },
+    
+    listenToProps : 'model', // space separated list of prop names
+    
+    // ...all other stays the same...
+});
+```
 
 ## Data binding
 
