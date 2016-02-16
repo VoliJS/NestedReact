@@ -202,18 +202,23 @@ var Bottom = React.createClass({
 });
 ```
 
-## Data binding
+# Two-way data binding
 
-`nestedreact` supports data binding links compatible with standard React's `valueLink`.
+Some lower-level components like custom `<input />` controls does not need models 
+and collections, rather single value. Also, there might be very different ways how particular
+model attribute is bound to UI control. [React Link](https://facebook.github.io/react/docs/two-way-binding-helpers.html)
+is the perfect abstraction to isolate data binding details from the particular bound UI control. 
 
-Create link for object property of Model, Collection, and every object type created with Object.extend().
+`NestedReact` supports data binding links which are backward compatible with standard React's Link.
 
-`var link = object.getLink( 'attr' )`  
+You can create link for any property of the state, as well as for any model.
 
-Create boolean link, toggling model in collection. True if model is contained in collection, assignments will add/remove given model. Useful for checkboxes.
-`var link = collection.hasLink( model )` 
+`const link = object.getLink( 'attr' )`
 
-Links can be created directly using constuctor:
+Or, you can create boolean link, toggling model in collection. `true` if model is contained in collection, assignments will add/remove given model. Useful for checkboxes.
+`const link = collection.hasLink( model )` 
+
+Links can be created directly using Link constructor, which allows you to handle any custom binding scenario:
 
 ```javascript
 var Nested = require( 'nestedtypes' );
@@ -221,9 +226,33 @@ var Nested = require( 'nestedtypes' );
 var link = new Nested.Link( value, function( x ){ /* update */ } ); 
 ```
 
-Here's a brief reference for links API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
+Below is the brief reference for links API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
 
-### Link validation
+## Value access methods
+
+In addition to standard members `link.requestChange( x )` and `link.value`, there are pair of shortcuts available:
+
+- `link.set( x )`, which is a shortcut for `this.requestChange( x )`
+- `link.toggle()` is a shortcut for `link.requestChange( !link.value )`
+
+## Link transformations
+
+Attribute's link can be further transformed using extended link API. Link transformations allowing you to use new `stateless functions` component definition style introduced in React 0.14 in most cases.
+
+For links with any value type:
+
+- `link.equals( x )` creates boolean link which is true whenever link value is equal to x. Useful for radio groups.
+- `link.update( x => !x )` creates function transforming link value (toggling boolean value in this case). Useful for `onClick` event handlers.
+
+For link enclosing array:
+
+- `arrLink.contains( x )` creates boolean link which is true whenever x is contained in an array in link value. Useful for checkboxes. Avoid long arrays, currently operations has O(N^2) complexity.
+
+For link enclosings arrays and plain JS objects:
+- `arrOrObjLink.at( key )` creates link to array of object member with a given key. Can be applied multiple times to work with object hierarchies; on modifications, objects will be updated in purely functional way (modified parts will be shallow copied). Useful when working with plain JS objects in model attributes - updating them through links make changes visible to the model.
+- `arrOrObjLink.map( ( itemLink, key ) => <input key={ key } valieLink={ itemLink } /> )` iterates through object or array, wrapping its elements to links. Useful for JSX transofrmation.
+
+## Link validation
 
 Links carry additional `validationError` field for validation purposes (to be used inside of custom UI controls). It's populated automatically for links created from models and collection,
 utilizing `nestedtypes` validation mechanics. Therefore, if model attribute has any `check` attached, its link will carry its `validationError` object.
@@ -254,31 +283,7 @@ var link = model.getLink( 'something' )
 
 Failed checks will populate link's `validationError` with first failed check's message. 
 
-### Value access methods
-
-In addition to standard members `link.requestChange( x )` and `link.value`, there are pair of shortcuts available:
-
-- `link.set( x )`, which is a shortcut for `this.requestChange( x )`
-- `link.toggle()` is a shortcut for `link.requestChange( !link.value )`
-
-### Link transformations
-
-Attribute's link can be further transformed using extended link API. Link transformations allowing you to use new `stateless functions` component definition style introduced in React 0.14 in most cases.
-
-For links with any value type:
-
-- `link.equals( x )` creates boolean link which is true whenever link value is equal to x. Useful for radio groups.
-- `link.update( x => !x )` creates function transforming link value (toggling boolean value in this case). Useful for `onClick` event handlers.
-
-For link enclosing array:
-
-- `arrLink.contains( x )` creates boolean link which is true whenever x is contained in an array in link value. Useful for checkboxes. Avoid long arrays, currently operations has O(N^2) complexity.
-
-For link enclosings arrays and plain JS objects:
-- `arrOrObjLink.at( key )` creates link to array of object member with a given key. Can be applied multiple times to work with object hierarchies; on modifications, objects will be updated in purely functional way (modified parts will be shallow copied). Useful when working with plain JS objects in model attributes - updating them through links make changes visible to the model.
-- `arrOrObjLink.map( ( itemLink, key ) => <input key={ key } valieLink={ itemLink } /> )` iterates through object or array, wrapping its elements to links. Useful for JSX transofrmation.
-
-### Links and components state
+## Links and components state
 
 Link received through component props can be mapped as state member using the following declaration:
 ```javascript
