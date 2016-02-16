@@ -207,7 +207,7 @@ var Bottom = React.createClass({
 Some lower-level components like custom `<input />` controls does not need models 
 and collections, rather single value. Also, there might be very different ways how particular
 model attribute is bound to UI control. [React Link](https://facebook.github.io/react/docs/two-way-binding-helpers.html)
-is the perfect abstraction to isolate data binding details from the particular bound UI control. 
+is the perfect abstraction to isolate data binding details from the UI control logic. 
 
 `NestedReact` supports data binding links which are backward compatible with standard React's Link.
 
@@ -223,7 +223,7 @@ Links can be created directly using Link constructor, which allows you to handle
 ```javascript
 var Nested = require( 'nestedtypes' );
 
-var link = new Nested.Link( value, function( x ){ /* update */ } ); 
+var link = new Nested.Link( value,  x => /* update */ } ); 
 ```
 
 Below is the brief reference for links API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
