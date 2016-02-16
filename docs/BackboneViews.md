@@ -5,7 +5,7 @@ All of them are supported, enabling easy and gradual transition to React.
 
 Though `NestedReact` offers excellent convergence layer for backbone views, raw backbone models are not supported. 
 To use it for smooth migration of existing backbone application to React, you need to replace `backbone` with `NestedTypes`
-first (it's mostly backward compatible with Backbone 1.2 API, so transition is not hard).
+first (it's mostly backward compatible with Backbone 1.2 API, so [transition is not hard](https://github.com/Volicon/NestedTypes/blob/develop/docs/BackboneTransitionGuide.md)).
 Which by itself will be a big step forward, because:
 
 - It's order of magnitude faster, so your application becomes more responsive and you can handle collection which are 10 times larger than you have now. [No kidding](http://slides.com/vladbalin/performance#/).
