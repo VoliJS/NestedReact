@@ -1,6 +1,6 @@
 # NestedReact
 
-React application architecture with [classical OO models]() in the data layer.
+React application architecture with [classical OO models](https://github.com/volicon/nestedtypes) in the data layer.
 
 Brief feature list:
 
@@ -9,18 +9,18 @@ Brief feature list:
     - Two-way data binding ([Guide to Data Binding Use Cases](/example/databinding.md))
     - Optional local component subtree updates.     
 - Lightweight type annotations for props, *state*, and context as a replacement for `PropTypes`.
-- Gradual transition procedure for backbone applications ([Backbone Migration Guide]()):
+- Gradual transition procedure for backbone applications ([Backbone Migration Guide](/docs/BackboneViews.md)):
     - Complete interoperation with existing Backbone Views allowing you to reuse existing code and avoid upfront application rewrite.
     - Any type of application refactoring strategy is possible - top-to-bottom, bottom-to-top, and random parts at the middle.  
     - Support for Backbone events and jQuery accessors in React components simplifies View refactoring. 
 
-Compare solution size and complexity to any of `flux` implementation on [TodoMVC example]().
+Compare solution size and complexity to any of `flux` implementation on [TodoMVC example](https://github.com/gaperton/todomvc-nestedreact).
 
 # Installation
 It's packed as single UMD, thus grab the module or use `npm` to install.
 	`npm install --save nestedreact`
 
-It has [NestedTypes model framework]() and [React]() as strong dependencies.
+It has [NestedTypes model framework](http://volicon.github.io/NestedTypes/) and [React](http://facebook.github.io/react/) as strong dependencies.
 
 Module extends React namespace (without modifying original React), and its
 safe to use it as a replacement for `react`.
@@ -61,7 +61,7 @@ export const MyComponent = React.createClass({
 ```
 
 Behind the scene, `state` is managed with `NestedTypes` model which is implicitly created using
-attribute's spec taken from `state` declaration (refer to [NestedTypes documentation]() for complete
+attribute's spec taken from `state` declaration (refer to [NestedTypes documentation](http://volicon.github.io/NestedTypes/#attribute-types) for complete
 attribute spec syntax). It has following implications:
 
 - You can use primitive type values or constructor functions as attribute's type specs.
