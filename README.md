@@ -214,6 +214,7 @@ is the perfect abstraction to isolate data binding details from the UI control l
 You can create link for any property of the state, as well as for any model.
 
 `const link = object.getLink( 'attr' )`
+`const link = object.deepLink( 'path.to.the.attribute' )`
 
 Or, you can create boolean link, toggling model in collection. `true` if model is contained in collection, assignments will add/remove given model. Useful for checkboxes.
 `const link = collection.hasLink( model )` 
