@@ -12,7 +12,7 @@
     <script>
         var State = Nested.Model.extend({
             defaults : {
-                who : 'me'
+                who : String.value( 'me' ).has.check( function( x ){ return x == 'me'; })
             }
         });
 

@@ -65,7 +65,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// listenToProps, listenToState, model, attributes, Model
 	NestedReact.createClass = __webpack_require__( 4 );
 	
-	var ComponentView = __webpack_require__( 5 );
+	var ComponentView = __webpack_require__( 7 );
 	
 	// export hook to override base View class used...
 	NestedReact.useView = function( View ){
@@ -75,9 +75,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	NestedReact.useView( Nested.View );
 	
 	// React component for attaching views
-	NestedReact.subview = __webpack_require__( 6 );
+	NestedReact.subview = __webpack_require__( 8 );
 	
-	NestedReact.tools = __webpack_require__( 7 );
+	var propTypes  = __webpack_require__( 6 );
+	NestedReact.Node = propTypes.Node.value( null );
+	NestedReact.Element = propTypes.Element.value( null );
 	
 	// Extend react components to have backbone-style jquery accessors
 	var Component     = React.createClass( { render : function(){} } ),
@@ -89,30 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $   : { value : function( sel ){ return this.$el.find( sel ); } }
 	} );
 	
-	var ValueLink = __webpack_require__( 8 );
-	var Link = Nested.Link = ValueLink.Link;
-	Nested.link = ValueLink.link;
-	
-	var ClassProto = Nested.Class.prototype,
-	    ModelProto = Nested.Model.prototype,
-	    CollectionProto = Nested.Collection.prototype;
-	
-	ClassProto.getLink = ModelProto.getLink = CollectionProto.getLink = function( attr ){
-	    var model = this;
-	
-	    return new Link( model[ attr ], function( x ){
-	        model[ attr ] = x;
-	    });
-	};
-	
-	CollectionProto.hasLink = function( model ){
-	    var collection = this;
-	
-	    return new Link( Boolean( collection.get( model ) ), function( x ){
-	        var next = Boolean( x );
-	        this.value === next || collection.toggle( model, next );
-	    });
-	};
+	__webpack_require__( 10 );
 
 
 /***/ },
@@ -137,8 +116,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React    = __webpack_require__( 1 ),
-	    Nested   = __webpack_require__( 3 );
+	var React      = __webpack_require__( 1 ),
+	    Nested     = __webpack_require__( 3 ),
+	    pureRender = __webpack_require__( 5 ),
+	    propTypes  = __webpack_require__( 6 );
 	
 	function forceUpdate(){ this.forceUpdate(); }
 	
@@ -148,29 +129,56 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}, Nested.Events );
 	
-	var ListenToProps = {
-	    componentDidMount : function(){
-	        var props    = this.props,
-	            updateOn = this.listenToProps;
+	function registerPropsListener( component, prevProps, name, events ){
+	    var prevEmitter = prevProps[ name ],
+	        emitter     = component.props[ name ];
 	
-	        for( var prop in updateOn ){
-	            var emitter = props[ prop ];
-	            emitter && this.listenTo( emitter, updateOn[ prop ], forceUpdate );
+	    if( prevEmitter !== emitter ){
+	        prevEmitter && component.stopListening( prevEmitter );
+	
+	        if( emitter ){
+	            if( typeof events === 'object' ){
+	                component.listenTo( emitter, events );
+	            }
+	            else{
+	                component.listenTo( emitter, events || emitter.triggerWhenChanged, forceUpdate );
+	            }
 	        }
 	    }
+	}
+	
+	function regHashPropsListeners( a_prevProps ){
+	    var prevProps = a_prevProps || {},
+	        updateOn  = this.listenToProps;
+	
+	    for( var prop in updateOn ){
+	        registerPropsListener( this, prevProps, prop, updateOn[ prop ] );
+	    }
+	}
+	
+	var ListenToProps = {
+	    componentDidMount  : regHashPropsListeners,
+	    componentDidUpdate : regHashPropsListeners
 	};
+	
+	function regArrayPropListeners( a_prevProps ){
+	    var prevProps = a_prevProps || {},
+	        updateOn  = this.listenToProps;
+	
+	    for( var i = 0; i < updateOn.length; i++ ){
+	        registerPropsListener( this, prevProps, updateOn[ i ] )
+	    }
+	}
 	
 	var ListenToPropsArray = {
-	    componentDidMount : function(){
-	        var props    = this.props,
-	            updateOn = this.listenToProps;
-	
-	        for( var i = 0; i < updateOn.length; i++ ){
-	            var emitter = props[ updateOn[ i ] ];
-	            emitter && this.listenTo( emitter, emitter.triggerWhenChanged, forceUpdate );
-	        }
-	    }
+	    componentDidMount  : regArrayPropListeners,
+	    componentDidUpdate : regArrayPropListeners
 	};
+	
+	function _mountState(){
+	    var events = this.listenToState;
+	    events && this.listenTo( this.model, events, forceUpdate );
+	}
 	
 	var ModelState = {
 	    listenToState : 'change',
@@ -189,10 +197,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.model._defaultStore;
 	    },
 	
-	    componentDidMount : function(){
-	        var events = this.listenToState;
-	        events && this.listenTo( this.model, events, forceUpdate );
-	    },
+	    _mountState : _mountState,
+	
+	    componentDidMount : _mountState,
 	
 	    componentWillUnmount : function(){
 	        this.model._owner = null;
@@ -203,14 +210,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	function createClass( spec ){
 	    var mixins = spec.mixins || ( spec.mixins = [] );
 	
-	    var attributes = getModelAttributes( spec );
+	
+	    // process context specs...
+	    var context = getTypeSpecs( spec, 'context' );
+	    if( context ){
+	        spec.contextTypes = propTypes.parseProps( context ).propTypes;
+	        delete spec.context;
+	    }
+	
+	    var childContext = getTypeSpecs( spec, 'childContext' );
+	    if( childContext ){
+	        spec.childContextTypes = propTypes.parseProps( childContext ).propTypes;
+	        delete spec.childContext;
+	    }
+	
+	    // process state spec...
+	    var attributes = getTypeSpecs( spec, 'attributes', 'state' );
 	    if( attributes ){
 	        var BaseModel = spec.Model || Nested.Model;
 	        spec.Model    = BaseModel.extend( { defaults : attributes } );
+	        delete spec.state;
 	    }
 	
 	    if( spec.Model ) mixins.push( ModelState );
 	
+	    // process props spec...
+	    var props = getTypeSpecs( spec, 'props' );
+	
+	    if( props ){
+	        var parsedProps = propTypes.parseProps( props );
+	
+	        spec.propTypes = parsedProps.propTypes;
+	
+	        if( parsedProps.defaults ){
+	            spec.getDefaultProps = function(){
+	                return parsedProps.defaults;
+	            }
+	        }
+	
+	        delete spec.props;
+	    }
+	
+	    // process listenToProps spec
 	    var listenToProps = spec.listenToProps;
 	    if( listenToProps ){
 	        if( typeof listenToProps === 'string' ){
@@ -222,9 +263,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }
 	
+	    // add Events capabilities
 	    mixins.push( Events );
 	
-	    var component  = React.createClass( spec );
+	    // compile pure render mixin
+	    if( spec.propTypes && spec.pureRender ){
+	        mixins.push( pureRender( spec.propTypes ) );
+	    }
+	
+	    var component = React.createClass( spec );
 	
 	    // attach lazily evaluated backbone View class
 	    var NestedReact = this;
@@ -233,28 +280,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get : function(){
 	            return this._View || ( this._View = NestedReact._BaseView.extend( { reactClass : component } ) );
 	        }
-	    });
+	    } );
 	
 	    return component;
 	}
 	
-	function getModelAttributes( spec ){
+	function getTypeSpecs( spec, name1, name2 ){
 	    var attributes = null;
 	
 	    for( var i = spec.mixins.length - 1; i >= 0; i-- ){
-	        var mixin = spec.mixins[ i ];
-	        if( mixin.attributes ){
+	        var mixin      = spec.mixins[ i ],
+	            mixinAttrs = mixin[ name1 ] || ( name2 && mixin[ name2 ] );
+	
+	        if( mixinAttrs ){
 	            attributes || ( attributes = {} );
-	            Object.assign( attributes, mixin.attributes );
+	            Object.assign( attributes, mixinAttrs );
 	        }
 	    }
 	
-	    if( spec.attributes ){
+	    var specAttrs = spec[ name1 ] || ( name2 && spec[ name2 ] );
+	    if( specAttrs ){
 	        if( attributes ){
-	            Object.assign( attributes, spec.attributes );
+	            Object.assign( attributes, specAttrs );
 	        }
 	        else{
-	            attributes = spec.attributes;
+	            attributes = specAttrs;
 	        }
 	    }
 	
@@ -266,6 +316,107 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 5 */
+/***/ function(module, exports) {
+
+	module.exports = function( propTypes ){
+	    var ctor      = [ 'var v;this._s=s&&s._changeToken' ],
+	        isChanged = [ 'var v;return(s&&s._changeToken!==t._s)' ];
+	
+	    for( var name in propTypes ){
+	        var propExpr = '((v=p.' + name + ')&&v._changeToken)||v';
+	
+	        ctor.push( 'this.' + name + '=' + propExpr );
+	        isChanged.push( 't.' + name + '!==(' + propExpr + ')' );
+	    }
+	
+	    var ChangeTokens = new Function( 'p', 's', ctor.join( ';' ) ),
+	        isChanged    = new Function( 't', 'p', 's', isChanged.join( '||' ) );
+	
+	    ChangeTokens.prototype = null;
+	
+	    return {
+	        _changeTokens : null,
+	
+	        shouldComponentUpdate : function( nextProps ){
+	            return isChanged( this._changeTokens, nextProps, this.state );
+	        },
+	
+	        componentDidMount  : function(){
+	            this._changeTokens = new ChangeTokens( this.props, this.state );
+	        },
+	        componentDidUpdate : function(){
+	            this._changeTokens = new ChangeTokens( this.props, this.state );
+	        }
+	    }
+	};
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Nested = __webpack_require__( 3 ),
+	    React  = __webpack_require__( 1 );
+	
+	function parseProps( props ){
+	    var propTypes = {},
+	        defaults,
+	        modelProto = Nested.Model.defaults( props ).prototype;
+	
+	    modelProto.forEachAttr( modelProto.__attributes, function( spec, name ){
+	        if( name !== 'id' ){
+	            propTypes[ name ] = translateType( spec.type );
+	
+	            if( spec.value !== void 0 ){
+	                defaults || ( defaults = {} );
+	                defaults[ name ] = spec.value;
+	            }
+	        }
+	    });
+	
+	    return {
+	        propTypes : propTypes,
+	        defaults : defaults
+	    };
+	}
+	
+	var PropTypes = React.PropTypes;
+	
+	function Node(){}
+	function Element(){}
+	
+	function translateType( Type ){
+	    switch( Type ){
+	        case Number :
+	        case Integer :
+	            return PropTypes.number;
+	        case String :
+	            return PropTypes.string;
+	        case Boolean :
+	            return PropTypes.bool;
+	        case Array :
+	            return PropTypes.array;
+	        case Function :
+	            return PropTypes.func;
+	        case Object :
+	            return PropTypes.object;
+	        case Node :
+	            return PropTypes.node;
+	        case Element :
+	            return PropTypes.element;
+	        case void 0 :
+	        case null :
+	            return PropTypes.any;
+	        default:
+	            return PropTypes.instanceOf( Type );
+	    }
+	}
+	
+	exports.Node = Node;
+	exports.Element = Element;
+	exports.parseProps = parseProps;
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React    = __webpack_require__( 1 ),
@@ -304,8 +455,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.component = component;
 	
 	            if( this.prevState ){
-	                component.model.set( this.prevState );
+	                component.model = this.prevState;
+	                component.model._owner = component;
+	                component._mountState();
 	                this.prevState = null;
+	
+	                component.forceUpdate();
 	            }
 	
 	            component.trigger && this.listenTo( component, 'all', function(){
@@ -317,7 +472,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var component = this.component;
 	
 	            if( component ){
-	                this.prevState = component.model && component.model.attributes;
+	                this.prevState = component.model;
 	
 	                if( component.trigger ){
 	                    this.stopListening( component );
@@ -346,11 +501,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 6 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__( 1 ),
-	    jsonNotEqual = __webpack_require__( 7 ).jsonNotEqual;
+	    jsonNotEqual = __webpack_require__( 9 ).jsonNotEqual;
 	
 	module.exports = React.createClass({
 	    displayName : 'BackboneView',
@@ -363,6 +518,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    shouldComponentUpdate : function( next ){
 	        var props = this.props;
 	        return next.View !== props.View || jsonNotEqual( next.options, props.options );
+	    },
+	
+	    hasUnsavedChanges : function(){
+	        var view = this.view;
+	
+	        return view && (
+	               typeof view.hasUnsavedChanges === 'function' ? view.hasUnsavedChanges() : view.hasUnsavedChanges
+	            );
 	    },
 	
 	    render : function(){
@@ -405,7 +568,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 /***/ },
-/* 7 */
+/* 9 */
 /***/ function(module, exports) {
 
 	// equality checking for deep JSON comparison of plain Array and Object
@@ -464,130 +627,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    return false;
 	}
-	
-	// private array helpers
-	exports.contains = contains;
-	function contains( arr, el ){
-	    for( var i = 0; i < arr.length; i++ ){
-	        if( arr[ i ] === el ) return true;
-	    }
-	
-	    return false;
-	};
-	
-	exports.without = without;
-	function without( arr, el ){
-	    var res = [];
-	
-	    for( var i = 0; i < arr.length; i++ ){
-	        var current = arr[ i ];
-	        current === el || res.push( current );
-	    }
-	
-	    return res;
-	};
-	
-	exports.clone = clone;
-	function clone( objOrArray ){
-	    return objOrArray instanceof Array ? objOrArray.slice() : Object.assign( {}, objOrArray );
-	};
 
 
 /***/ },
-/* 8 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Nested = __webpack_require__( 3 ),
-	    tools  = __webpack_require__( 7 ),
-	    contains = tools.contains,
-	    without  = tools.without,
-	    clone    = tools.clone;
+	var Nested   = __webpack_require__( 3 ),
+	    Link     = __webpack_require__( 11 );
 	
-	var Link = exports.Link = Object.extend( {
-	    constructor : function( value, set ){
-	        this.value = value;
-	        this.requestChange = set;
-	    },
+	Object.extend.attach( Link );
 	
-	    requestChange : function( x ){},
-	    set           : function( x ){ this.requestChange( x ); },
-	    toggle        : function(){ this.requestChange( !this.value ); },
+	Nested.Link = Link;
 	
-	    // create function which updates the link
-	    update : function( transform ){
-	        var link = this;
-	        return function(){
-	            link.requestChange( transform( link.value ) )
-	        }
-	    },
+	var ClassProto      = Nested.Class.prototype,
+	    ModelProto      = Nested.Model.prototype,
+	    CollectionProto = Nested.Collection.prototype;
 	
-	    contains : function( element ){
-	        var link = this;
+	ClassProto.getLink = ModelProto.getLink = CollectionProto.getLink = function( attr ){
+	    var model = this,
+	        error = model.validationError;
 	
-	        return new Link( contains( this.value, element ), function( x ){
-	            var next = Boolean( x );
-	            if( this.value !== next ){
-	                var arr = link.value;
-	                link.requestChange( x ? arr.concat( element ) : without( arr, element ) );
-	            }
-	        } );
-	    },
+	    return new Link( model[ attr ], function( x ){
+	        model[ attr ] = x;
+	    }, error && error.nested[ attr ] );
+	};
 	
-	    // create boolean link for value equality
-	    equals : function( asTrue ){
-	        var link = this;
+	ModelProto.deepLink = function( attr, options ){
+	    var model = this,
+	        values = model.deepInvalidate( attr );
 	
-	        return new Link( this.value === asTrue, function( x ){
-	            link.requestChange( x ? asTrue : null );
-	        } );
-	    },
+	    return new Link( values[ 0 ], function( x ){
+	        model.deepSet( attr, x, options );
+	    }, values[ 1 ] );
+	};
 	
-	    // link to enclosed object or array member
-	    at : function( key ){
-	        var link = this;
+	CollectionProto.hasLink = function( model ){
+	    var collection = this;
 	
-	        return new Link( this.value[ key ], function( x ){
-	            if( this.value !== x ){
-	                var arr = link.value;
-	                arr = clone( arr );
-	                arr[ key ] = x;
-	                link.requestChange( arr );
-	            }
-	        } );
-	    },
+	    return new Link( Boolean( collection.get( model ) ), function( x ){
+	        var next = Boolean( x );
+	        this.value === next || collection.toggle( model, next );
+	    } );
+	};
 	
-	    // iterates through enclosed object or array, generating set of links
-	    map : function( fun ){
-	        var arr = this.value;
-	        return arr ? ( arr instanceof Array ? mapArray( this, arr, fun ) : mapObject( this, arr, fun ) ) : [];
-	    }
-	});
-	
-	function mapObject( link, object, fun ){
-	    var res = [];
-	
-	    for( var i in object ){
-	        if( object.hasOwnProperty( i ) ){
-	            var y = fun( link.at( i ), i );
-	            y === void 0 || ( res.push( y ) );
-	        }
-	    }
-	
-	    return res;
-	}
-	
-	function mapArray( link, arr, fun ){
-	    var res = [];
-	
-	    for( var i = 0; i < arr.length; i++ ){
-	        var y = fun( link.at( i ), i );
-	        y === void 0 || ( res.push( y ) );
-	    }
-	
-	    return res;
-	}
-	
-	exports.link = function( reference ){
+	Nested.link = function( reference ){
 	    var getMaster = Nested.parseReference( reference );
 	
 	    function setLink( value ){
@@ -618,6 +702,163 @@ return /******/ (function(modules) { // webpackBootstrap
 	    options.Attribute = LinkAttribute;
 	    return options;
 	};
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	/**
+	 * Advanced React value links with validation and link-to-objects capabilities
+	 * (c) 2016 Vlad Balin & Volicon, MIT License
+	 */
+	
+	function Link( value, set, error ){
+	    this.value           = value;
+	    this.requestChange   = set || doNothing;
+	    this.validationError = error;
+	}
+	
+	// create link to component's state attribute
+	Link.state = function( component, attr ){
+	    return new Link( component.state[ attr ], function( x ){
+	        var nextState = {};
+	        nextState[ attr ] = x;
+	        component.setState( nextState );
+	    });
+	};
+	
+	module.exports = Link;
+	
+	function doNothing( x ){ }
+	
+	var defaultError = 'Invalid value';
+	
+	Link.prototype = {
+	    value           : null,
+	    validationError : null,
+	    requestChange   : doNothing,
+	
+	    set             : function( x ){ this.requestChange( x ); },
+	    toggle          : function(){ this.requestChange( !this.value ); },
+	
+	    // create function which updates the link
+	    update : function( transform ){
+	        var link = this;
+	        return function(){
+	            var nextValue = transform( link.value );
+	            nextValue === void 0 || link.requestChange( nextValue );
+	        }
+	    },
+	
+	    check : function( whenValid, error ){
+	        if( !this.validationError && !whenValid( this.value ) ){
+	            this.validationError = error || defaultError;
+	        }
+	
+	        return this;
+	    },
+	
+	    // create boolean link to enclosed array element
+	    contains : function( element ){
+	        var link = this;
+	
+	        return new Link( contains( this.value, element ), function( x ){
+	            var next = Boolean( x );
+	            if( this.value !== next ){
+	                var arr = link.value;
+	                link.requestChange( x ? arr.concat( element ) : without( arr, element ) );
+	            }
+	        } );
+	    },
+	
+	    // create boolean link for value equality
+	    equals : function( asTrue ){
+	        var link = this;
+	
+	        return new Link( this.value === asTrue, function( x ){
+	            link.requestChange( x ? asTrue : null );
+	        } );
+	    },
+	
+	    // link to enclosed object or array member
+	    at : function( key ){
+	        var link = this;
+	
+	        return new Link( this.value[ key ], function( x ){
+	            if( this.value !== x ){
+	                var objOrArr    = link.value;
+	                objOrArr        = clone( objOrArr );
+	                objOrArr[ key ] = x;
+	                link.requestChange( objOrArr );
+	            }
+	        } );
+	    },
+	
+	    // iterates through enclosed object or array, generating set of links
+	    map : function( fun ){
+	        var arr = this.value;
+	        return arr ? ( arr instanceof Array ? mapArray( this, arr, fun ) : mapObject( this, arr, fun ) ) : [];
+	    },
+	
+	    // dummies for compatibility with nestedtypes object model...
+	    constructor : Link,
+	    initialize : function( value, set, error ){},
+	    get _changeToken(){
+	        return this.value;
+	    }
+	};
+	
+	function mapObject( link, object, fun ){
+	    var res = [];
+	
+	    for( var i in object ){
+	        if( object.hasOwnProperty( i ) ){
+	            var y = fun( link.at( i ), i );
+	            y === void 0 || ( res.push( y ) );
+	        }
+	    }
+	
+	    return res;
+	}
+	
+	function mapArray( link, arr, fun ){
+	    var res = [];
+	
+	    for( var i = 0; i < arr.length; i++ ){
+	        var y = fun( link.at( i ), i );
+	        y === void 0 || ( res.push( y ) );
+	    }
+	
+	    return res;
+	}
+	
+	function contains( arr, el ){
+	    for( var i = 0; i < arr.length; i++ ){
+	        if( arr[ i ] === el ) return true;
+	    }
+	
+	    return false;
+	}
+	
+	function without( arr, el ){
+	    var res = [];
+	
+	    for( var i = 0; i < arr.length; i++ ){
+	        var current = arr[ i ];
+	        current === el || res.push( current );
+	    }
+	
+	    return res;
+	}
+	
+	function clone( objOrArray ){
+	    var proto = objOrArray && Object.getPrototypeOf( objOrArray );
+	
+	    if( proto === Array.prototype ) return objOrArray.slice();
+	    if( proto === Object.prototype ) return Object.assign( {}, objOrArray );
+	
+	    return objOrArray;
+	}
 
 /***/ }
 /******/ ])

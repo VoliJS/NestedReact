@@ -34,8 +34,12 @@ module.exports.use = function( View ){
             this.component = component;
 
             if( this.prevState ){
-                component.model.set( this.prevState );
+                component.model = this.prevState;
+                component.model._owner = component;
+                component._mountState();
                 this.prevState = null;
+
+                component.forceUpdate();
             }
 
             component.trigger && this.listenTo( component, 'all', function(){
@@ -47,7 +51,7 @@ module.exports.use = function( View ){
             var component = this.component;
 
             if( component ){
-                this.prevState = component.model && component.model.attributes;
+                this.prevState = component.model;
 
                 if( component.trigger ){
                     this.stopListening( component );

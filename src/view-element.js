@@ -1,5 +1,5 @@
 var React = require( 'react' ),
-    jsonNotEqual = require( './tools' ).jsonNotEqual;
+    jsonNotEqual = require( './json-comparison' ).jsonNotEqual;
 
 module.exports = React.createClass({
     displayName : 'BackboneView',
@@ -12,6 +12,14 @@ module.exports = React.createClass({
     shouldComponentUpdate : function( next ){
         var props = this.props;
         return next.View !== props.View || jsonNotEqual( next.options, props.options );
+    },
+
+    hasUnsavedChanges : function(){
+        var view = this.view;
+
+        return view && (
+               typeof view.hasUnsavedChanges === 'function' ? view.hasUnsavedChanges() : view.hasUnsavedChanges
+            );
     },
 
     render : function(){
