@@ -28,6 +28,7 @@ safe to use it as a replacement for `react`.
     
 If you're migrating from backbone-based frameworks such as `ChaplinJS` or `Marionette`,
 you need to do following things to make convergence layer work properly:
+
 - Make sure that frameworks includes `nestedtypes` instead of `backbone`.
 - On application start, tell `nestedreact` to use proper base class for the View.
 	`React.useView( Chaplin.View )`
@@ -70,7 +71,8 @@ attribute spec syntax). It has following implications:
 - State attributes behaves as regular object attributes, which can be directly accessed and assigned.
 - State attributes can hold deeply nested models and collections; deep changes will be automatically detected and will cause component update.
 
-In addition, 
+In addition,
+
 - `state` property from mixins will be properly merged. So, mixins can have state too.
 - You can specify the base class for state model using `Model` component's property.
 - Entire model's state can be externally defined as `NestedTypes` Model, and attached to component by referencing it in `Model` property.
@@ -139,6 +141,7 @@ NestedReact support this optimization, comparing props model's and collection ve
 and comparing other props values for strict equality.  
 
 To enable this optimization for the particular component, you need to:
+
  - Declare all props that will be tracked for changes in `props` (or `propTypes`) spec.
     Which is the good practice by itself, so you encouraged to do it unless you're using 
     stateless function components syntax, which is preferable.
@@ -169,6 +172,7 @@ NestedReact `props` spec uses the simple subset of `state` spec, and acts as sub
  it internally compiles itself to the `propTypes` and `getDefaultProps()`). 
 
 Following type annotations are allowed for `props`:
+
 1. Constructor functions: `prop1 : String`
 2. Constructors with default value: `prop2 : String.value( "default string" )`
 3. JSON and primitive values: `prop3 : "default string"`
