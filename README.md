@@ -6,7 +6,7 @@ Feature list:
 
 - First-class support for mutable models and collections in props, state, and context.
     - Unidirectional data flow and safe *pure render optimization*.
-    - Two-way data binding ([Guide to Data Binding Use Cases](/example/databinding.md))
+    - Two-way data binding ([Guide to Data Binding Use Cases](/docs/databinding.md))
     - Optional local component subtree updates.     
 - Lightweight type annotations for props, *state*, and context as a replacement for `PropTypes`.
 - Gradual transition procedure for backbone applications ([Backbone Migration Guide](/docs/BackboneViews.md)):
@@ -14,7 +14,7 @@ Feature list:
     - Any type of application refactoring strategy is possible - top-to-bottom, bottom-to-top, and random parts at the middle.  
     - Support for Backbone events and jQuery accessors in React components simplifies View refactoring. 
 
-Compare solution size and complexity to any of `flux` implementation on [TodoMVC example](https://github.com/gaperton/todomvc-nestedreact).
+Compare solution size and complexity to any of `flux` implementation on [TodoMVC example](/examples/todomvc/).
 
 # Installation
 It's packed as single UMD, thus grab the module or use `npm` to install.
@@ -231,7 +231,7 @@ var Nested = require( 'nestedtypes' );
 var link = new Nested.Link( value,  x => /* update */ } ); 
 ```
 
-Below is the brief reference for links API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
+Below is the brief reference for links API. Consult [Guide to Data Binding Use Cases](/docs/databinding.md) to understand how to use it.
 
 ## Value access methods
 
