@@ -12,12 +12,14 @@ and is on par with Angular.
 
 ![TodoMVC SLOC size comparison](SLOC-comparison.jpg)
 
-The question is - why? Lets  
+So, let's dig into details and understand why it's so different. No, it's not because we are using telegraph coding style,
+putting everything in a single LOC. :) It's something more interesting.
 
 ### JSX is twice smaller than usual
 
 So, why?
-1. We're using our [advanced React Links](https://github.com/Volicon/NestedReact#two-way-data-binding) for [two-way data binding](/docs/databinding.md).
+
+1. We're using [smart React Links](https://github.com/Volicon/NestedReact#two-way-data-binding) for [two-way data binding](/docs/databinding.md).
 2. Due to (1), we can describe the most of UI with [components defined as stateless functions](https://facebook.github.io/react/docs/reusable-components.html#stateless-functions)
 
 These two techniques in combination will save you half of the work in JSX, and make it much cleaner.
