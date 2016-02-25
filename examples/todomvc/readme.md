@@ -12,7 +12,8 @@ and is on par with Angular.
 
 ![TodoMVC SLOC size comparison](SLOC-comparison.jpg)
 
-The question is - why?  
+So, let's dig into details and understand why it's so different. No, it's not because we are using telegraph coding style,
+putting everything in a single LOC. :) It's something more interesting.
 
 ### JSX is twice smaller than usual
 
