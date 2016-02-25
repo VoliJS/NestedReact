@@ -17,6 +17,7 @@ The question is - why?
 ### JSX is twice smaller than usual
 
 So, why?
+
 1. We're using our [advanced React Links](https://github.com/Volicon/NestedReact#two-way-data-binding) for [two-way data binding](/docs/databinding.md).
 2. Due to (1), we can describe the most of UI with [components defined as stateless functions](https://facebook.github.io/react/docs/reusable-components.html#stateless-functions)
 
