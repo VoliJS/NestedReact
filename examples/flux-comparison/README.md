@@ -43,5 +43,5 @@ So, they have products. Which is, essentially, this thing:
 And cart. Which is just another collection of products.
 ![](cart.jpg)
 
-That's it. On a longer example, difference will become even bigger. Why? Because, we got quite [advanced facilities to
+That's it. On a longer example, difference will become even bigger. Why? Because, we've got quite [advanced facilities to
 deal with complex data](https://github.com/Volicon/NestedTypes/blob/master/docs/RelationsGuide.md) up our sleeve, which will come into play. They don't.
