@@ -12,7 +12,7 @@ and is on par with Angular.
 
 ![TodoMVC SLOC size comparison](SLOC-comparison.jpg)
 
-The question is - why? Lets  
+The question is - why?  
 
 ### JSX is twice smaller than usual
 
