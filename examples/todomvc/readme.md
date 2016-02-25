@@ -21,7 +21,10 @@ So, why?
 2. Due to (1), we can describe the most of UI with [components defined as stateless functions](https://facebook.github.io/react/docs/reusable-components.html#stateless-functions)
 
 These two techniques in combination will save you half of the work in JSX, and make it much cleaner.
-Remember - the best code is the code you avoided to write. :)
+Remember - the best code is the code you avoided to write. :) You might wonder how it looks like.
+Typically, like this:
+
+![](pure-components.jpg)
 
 Since our links are framework neutral and available as [separate dependency-free package](https://github.com/Volicon/valuelink),
 any React system can benefit from this style. 
