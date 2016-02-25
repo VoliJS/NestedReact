@@ -1,31 +1,54 @@
 # NestedReact • [TodoMVC](http://todomvc.com)
 
-React application architecture with [classical OO models](https://github.com/volicon/nestedtypes) in the data layer.
+This TodoMVC application is written to demonstrate how powerful and expressive declarative OO data layer can be in React.
 
-Feature list:
+It features pure unidirectional data flow (which is common for Flux applications) achieved with conventional OO design
+technique.
 
-- First-class support for mutable models and collections in props, state, and context.
-    - Unidirectional data flow and safe *pure render optimization*.
-    - Two-way data binding ([Guide to Data Binding Use Cases](https://github.com/Volicon/NestedReact/blob/master/example/databinding.md))
-    - Optional local component subtree updates.     
-- Lightweight type annotations for props, *state*, and context as a replacement for `PropTypes`.
-- Gradual transition procedure for backbone applications ([Backbone Migration Guide](https://github.com/Volicon/NestedReact/blob/master/docs/BackboneViews.md)):
-    - Complete interoperation with existing Backbone Views allowing you to reuse existing code and avoid upfront application rewrite.
-    - Any type of application refactoring strategy is possible - top-to-bottom, bottom-to-top, and random parts at the middle.  
-    - Support for Backbone events and jQuery accessors in React components simplifies View refactoring. 
+## Comparison and Analysis
+
+Solution appears to be twice shorter than with common React approach,
+and is on par with Angular.
+
+![TodoMVC SLOC size comparison](SLOC-comparison.jpg)
+
+The question is - why? Lets  
+
+### JSX is twice smaller than usual
+
+So, why?
+1. We're using our [advanced React Links](https://github.com/Volicon/NestedReact#two-way-data-binding) for [two-way data binding](/docs/databinding.md).
+2. Due to (1), we can describe the most of UI with [components defined as stateless functions](https://facebook.github.io/react/docs/reusable-components.html#stateless-functions)
+
+These two techniques in combination will save you half of the work in JSX, and make it much cleaner.
+Remember - the best code is the code you avoided to write. :)
+
+Since our links are framework neutral and available as [separate dependency-free package](https://github.com/Volicon/valuelink),
+any React system can benefit from this style. 
+
+### JS (data layer) is 2-3 times smaller
+
+Our data layer size is several times smaller than
+in other React examples following facebook's suggestions for "good architecture".
+Still, we have same "unidirectional data flow", and ["pure render"](https://github.com/Volicon/NestedReact#props-specs-and-pure-render-optimization)
+optimization. For free.
+
+And the more complex application will become, the more noticeable this difference in size will be. 
+
+Reason is that our data layer is mostly defined with declarative spec.
+All you have to do, is to describe the structure of your data, 
+and use our smart Links to [bind it to UI](/docs/databinding.md).
+It will work most of the time, [no matter, how complex your data are](https://github.com/Volicon/NestedTypes/blob/master/docs/RelationsGuide.md).
+
+In TodoMVC, however, data layer is rather rudimentary to see the full power of approach, so
+we're on par with other conventional OO data layers, such in react-backbone,
+  Angular, or Ember. 
 
 ## Resources
 
 - [NestedReact docs](https://github.com/Volicon/NestedReact)
 - [Post-backbone models](https://github.com/Volicon/NestedTypes): 10x more performance, type safety, aggregation and relations right out of box. 
 - [Used by](http://www.volicon.com/)
-
-## Implementation
-
-This TodoMVC application is written to demonstrate how powerful and expressive declarative OO data layer can be in React.
-
-It features pure unidirectional data flow (which is common for Flux applications) achieved with conventional design
-technique. Solution appears to be several times shorter than any of `flux` implementations.
 
 ##FAQ
 ### What does `editing : ToDo.from( '^props.todos' )` from `todolist.jsx` mean?
