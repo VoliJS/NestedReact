@@ -14,7 +14,7 @@ Feature list:
     - Any type of application refactoring strategy is possible - top-to-bottom, bottom-to-top, and random parts at the middle.  
     - Support for Backbone events and jQuery accessors in React components simplifies View refactoring. 
 
-Compare solution size and complexity to any of `flux` implementation on [TodoMVC example](/examples/todomvc/).
+Compare solution size and complexity to any of `flux` implementation on [TodoMVC](/examples/todomvc/) and [flux-comparison](/examples/flux-comparison) examples.
 
 # Installation
 It's packed as single UMD, thus grab the module or use `npm` to install.
