@@ -40,7 +40,7 @@ But it's not _that_ naive and simple mutable models you dealt with before. They 
 - Unidirectional data flow.
 - ["Pure render"](https://github.com/Volicon/NestedReact#props-specs-and-pure-render-optimization) optimization.
 
-Not to mention, that they are [very fast](http://slides.com/vladbalin/performance#/). NestedReact uses [NestedTypes]([https://github.com/Volicon/NestedTypes]) model framework, which is designed to handle collections of 10-50K elements smoothly and in general is order of magnitude (10x) faster than backbone.
+Not to mention, that they are [very fast](http://slides.com/vladbalin/performance#/). NestedReact uses [NestedTypes]([https://github.com/Volicon/NestedTypes]) model framework, which is designed to handle collections of 10-50K elements smoothly, and in general all operations are order of magnitude (10x) faster than backbone.
 
 The more complex application will become, the more noticeable this difference in size will be.
 Reason is that in NestedTypes case the data layer is mostly defined with declarative spec.
