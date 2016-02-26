@@ -33,7 +33,7 @@ Typically, like this:
 
 ### JS (data layer) is 2-3 times smaller
 
-The reason it's shorter is that it's _not_ flux, _not_ something strange and immutable, but [_classical mutable models_](https://github.com/Volicon/NestedTypes). Thus, it takes the same size as in Backbone, Angular, Ember, etc. 
+The reason it's shorter is that it's _not_ flux, _nor_ something strange and immutable. But [_classical mutable models_](https://github.com/Volicon/NestedTypes). Thus, it takes the same size as in Backbone, Angular, Ember, etc. 
 
 But it's not _that_ naive and simple mutable models you dealt with before. They kinda smart enough to _give you features you could expect from flux_:
 
