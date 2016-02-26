@@ -7,8 +7,8 @@ technique.
 
 ## Comparison and Analysis
 
-Solution appears to be twice shorter than with common React approach,
-and is on par with Angular.
+Solution appears to be much shorter than other React solutions,
+and is on par with Angular, Ember, Meteor, and framework-free jquery solution.
 
 ![TodoMVC SLOC size comparison](SLOC-comparison.jpg)
 
@@ -17,37 +17,36 @@ putting everything in a single LOC. :) It's something more interesting.
 
 ### JSX is twice smaller than usual
 
-So, why?
+So, how could that be? Because, we're doing something significantly different from commonly known React technique:
 
 1. We're using [smart React Links](https://github.com/Volicon/NestedReact#two-way-data-binding) for [two-way data binding](/docs/databinding.md).
-2. Due to (1), we can describe the most of UI with [components defined as stateless functions](https://facebook.github.io/react/docs/reusable-components.html#stateless-functions)
+2. Due to (1), we are able to describe the most of UI with fast and lightweight [components defined as stateless functions](https://facebook.github.io/react/docs/reusable-components.html#stateless-functions), introduced in React 0.14.
 
-These two techniques in combination will save you half of the work in JSX, and make it much cleaner.
-Remember - the best code is the code you avoided to write. :) You might wonder how it looks like.
+These two techniques in combination will save you half of the work in JSX, and make it look much cleaner.
+Remember - the best code is the code you avoided to write. :) 
+
+Since our links are framework-neutral and available as [separate dependency-free package](https://github.com/Volicon/valuelink),
+any React system can benefit from this style. You might wonder how it looks like.
 Typically, like this:
 
 ![](pure-components.jpg)
 
-Since our links are framework neutral and available as [separate dependency-free package](https://github.com/Volicon/valuelink),
-any React system can benefit from this style. 
-
 ### JS (data layer) is 2-3 times smaller
 
-Our data layer size is several times smaller than
-in other React examples following facebook's suggestions for "good architecture".
-Still, we have same "unidirectional data flow", and ["pure render"](https://github.com/Volicon/NestedReact#props-specs-and-pure-render-optimization)
-optimization. For free.
+The reason it's shorter is that it's _not_ flux, _not_ something strange and immutable, but [_classical mutable models_](https://github.com/Volicon/NestedTypes). Thus, it takes the same size as in Backbone, Angular, Ember, etc. 
 
-And the more complex application will become, the more noticeable this difference in size will be. 
+But it's not _that_ naive and simple mutable models you dealt with before. They kinda smart enough to _give you features you could expect from flux_:
 
-Reason is that our data layer is mostly defined with declarative spec.
-All you have to do, is to describe the structure of your data, 
+- Unidirectional data flow.
+- ["Pure render"](https://github.com/Volicon/NestedReact#props-specs-and-pure-render-optimization) optimization.
+
+Not to mention, that they are [very fast](http://slides.com/vladbalin/performance#/). NestedReact uses [NestedTypes]([https://github.com/Volicon/NestedTypes]) model framework, which is designed to handle collections of 10-50K elements smoothly and in general is order of magnitude (10x) faster than backbone.
+
+The more complex application will become, the more noticeable this difference in size will be.
+Reason is that in NestedTypes case the data layer is mostly defined with declarative spec.
+All you have to do, is to describe the structure of your data,
 and use our smart Links to [bind it to UI](/docs/databinding.md).
-It will work most of the time, [no matter, how complex your data are](https://github.com/Volicon/NestedTypes/blob/master/docs/RelationsGuide.md).
-
-In TodoMVC, however, data layer is rather rudimentary to see the full power of approach, so
-we're on par with other conventional OO data layers, such in react-backbone,
-  Angular, or Ember. 
+And it will work this way 90% of the time, [no matter, how complex your data are](https://github.com/Volicon/NestedTypes/blob/master/docs/RelationsGuide.md).
 
 ## Resources
 
