@@ -16,6 +16,8 @@ Feature list:
 
 Compare solution size and complexity to any of `flux` implementation on [TodoMVC](/examples/todomvc/) and [flux-comparison](/examples/flux-comparison) examples.
 
+![todomvc](/examples/todomvc/SLOC-comparison.jpg) ![flux-comparison](/examples/flux-comparison/sloc-comparison.png)
+
 # Installation
 It's packed as single UMD, thus grab the module or use `npm` to install.
 	`npm install --save nestedreact`
