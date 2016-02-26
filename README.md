@@ -14,7 +14,9 @@ Feature list:
     - Any type of application refactoring strategy is possible - top-to-bottom, bottom-to-top, and random parts at the middle.  
     - Support for Backbone events and jQuery accessors in React components simplifies View refactoring. 
 
-Compare solution size and complexity to any of `flux` implementation on [TodoMVC](/examples/todomvc/) and [flux-comparison](/examples/flux-comparison) examples.
+NestedReact is build around the idea of productivity, not ideology. When compared to common React practices, NestedReact allows you to write twice less code, being on par with AngularJS.
+
+You can compare solution size and complexity to other approaches on [TodoMVC](/examples/todomvc/) and [flux-comparison](/examples/flux-comparison) examples. 
 
 ![todomvc](/examples/todomvc/SLOC-comparison.jpg) ![flux-comparison](/examples/flux-comparison/sloc-comparison.png)
 
