@@ -51,5 +51,7 @@ But that's just type definitions. How do we actually work with these data? We ad
 
 And that's it. All you have to do next, is to relax and enjoy pure unidirectional data flow.
 
+![](unidirectional-data-flow.jpg)
+
 On a longer example, difference will become even bigger. Why? Because, we got quite [advanced facilities to
 deal with complex data](https://github.com/Volicon/NestedTypes/blob/master/docs/RelationsGuide.md) up our sleeve, which will come into play. They don't.
