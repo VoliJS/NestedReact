@@ -51,6 +51,16 @@ But that's just type definitions. How do we actually work with these data? We ad
 
 And that's it. All you have to do next, is to relax and enjoy pure unidirectional data flow.
 
+Few words to explain how this code actually works. First, App's `state` is the model,
+and our models and collection can contain each other forming deeply nested structures. Second - they are able to detect deeply nested changes. Somewhat you could achieve with Object.observe, but better, because it works across the whole models ownership tree, and logic is
+smart enough to merge many change events into one in case of bulk changes.
+
+So, whenever anything will be changed inside of products or cart, our `state` will notice it,
+and tell App component to update.
+
+Because of that, and due to the fact that models and
+collections has they own behavior, it's safe and practical just to pass state elements down to the component tree as `props`. Therefore, `<Cart />` component will depend on just `Cart` collection, while `<Products />` component doesn't know anything about `<Cart />` and `Cart`. And that kind of isolation is exactly what we want, when our system is complex.
+
 ![](unidirectional-data-flow.jpg)
 
 On a longer example, difference will become even bigger. Why? Because, we got quite [advanced facilities to
