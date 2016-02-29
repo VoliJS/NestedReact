@@ -59,7 +59,9 @@ So, whenever anything will be changed inside of products or cart, our `state` wi
 and tell App component to update.
 
 Because of that, and due to the fact that models and
-collections has they own behavior, it's safe and practical just to pass state elements down to the component tree as `props`. Therefore, `<Cart />` component will depend on just `Cart` collection, while `<Products />` component doesn't know anything about `<Cart />` and `Cart`. And that kind of isolation is exactly what we want, when our system is complex.
+collections has they own behavior, it's safe and practical just to pass state elements down to the component tree as `props`. Therefore, `<Cart />` component will depend on just `Cart` collection, while `<Products />` component doesn't know anything about `<Cart />` and `Cart`.
+
+And that type of isolation is exactly what we want, when our system grow large. How do we deal with something big and messy? We split it to smaller isolated parts we can understand and change independently.
 
 ![](unidirectional-data-flow.jpg)
 
