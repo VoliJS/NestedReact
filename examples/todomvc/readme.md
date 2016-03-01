@@ -57,11 +57,11 @@ And it will work this way 90% of the time, [no matter, how complex your data are
 ##FAQ
 ### How can you do pure render with mutable models? I heard it's impossible.
 
-By comparing object's versions. For _immutable_ data, reference to the data itself can be used as version token, it's the same thing. For _mutable_ data, you need to introduce separate version token, so we do it.
+By comparing object's versions. For _immutable_ data, reference to the data itself can be used as version token, it's the same thing. For _mutable_ data, you need to introduce separate version token, so we do it. Let's understand how this mechanics works.
 
 Every NestedTypes model and collection has `_changeToken` property, which contains empty object `{}` reassigned every time object is updated (and {} !== {}, they are separate objects allocated on heap). Inside of `shouldComponentUpdate`, we compare these version tokens for every model and collection listed in `props` with tokens used at last render. Thus, we're able to efficiently check whenever model or collection was changed since the last render.
 
-It's works faster than any generic PureRenderMixin because we dynamically compile `shouldComponentUpdate` functions with _loops unrolled _, taking props list from component's `propTypes` (loops through hashes are very expensive, as well as `Object.keys` call).
+It's works faster than any generic PureRenderMixin because we dynamically compile `shouldComponentUpdate` functions with _loops unrolled_, taking props list from component's `propTypes` (loops through hashes are very expensive, as well as `Object.keys` call).
 
 ### What does `editing : ToDo.from( '^props.todos' )` from `todolist.jsx` mean?
 
