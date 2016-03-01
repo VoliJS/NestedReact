@@ -65,6 +65,12 @@ It's works faster than any generic PureRenderMixin because we dynamically compil
 
 Why it's better than just deal with immutable data? Because we can have circular references, and premanent references to objects in data layer with no problems. Thus, you may safely pass nested models and collection around. As you most likely used to.
 
+### But how unidirectional data flow can work?
+
+Because our models and collections can be nested, and parents detects nested changes. So, when you put something complex to the top-level component state, the state (which itself is the model in our case) will notice any changes happend deep inside, and triggers UI update.
+
+There's another example illustrating that, which is a bit simpler - [flux-comparison](https://github.com/Volicon/NestedReact/tree/master/examples/flux-comparison).
+
 ### What does `editing : ToDo.from( '^props.todos' )` from `todolist.jsx` mean?
 
 This is NestedTypes type annotation, which literally means "`editing` is the model of `ToDo` type which is taken from 
