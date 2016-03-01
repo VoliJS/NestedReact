@@ -61,15 +61,31 @@ By comparing object's versions. For _immutable_ data, reference to the data itse
 
 Every NestedTypes model and collection has `_changeToken` property, which contains empty object `{}` reassigned every time object is updated (and {} !== {}, they are separate objects allocated on heap). Inside of `shouldComponentUpdate`, we compare these version tokens for every model and collection listed in `props` with tokens used at last render. Thus, we're able to efficiently check whenever model or collection was changed since the last render.
 
-It's works faster than any generic PureRenderMixin because we dynamically compile `shouldComponentUpdate` functions with _loops unrolled_, taking props list from component's `propTypes` (loops through hashes are very expensive, as well as `Object.keys` call).
+It works faster than any generic PureRenderMixin because we dynamically compile `shouldComponentUpdate` functions with _loops unrolled_, taking props list from component's `propTypes` (loops through hashes are very expensive, as well as `Object.keys` call).
 
 Why it's better than just deal with immutable data? Because we can have circular references, and premanent references to objects in data layer with no problems. Thus, you may safely pass nested models and collection around. As you most likely used to.
 
-### But how unidirectional data flow can work?
+### How unidirectional data flow can work?
 
 Because our models and collections can be nested, and parents detects nested changes. So, when you put something complex to the top-level component state, the state (which itself is the model in our case) will notice any changes happend deep inside, and triggers UI update.
 
 There's another example illustrating that, which is a bit simpler - [flux-comparison](https://github.com/Volicon/NestedReact/tree/master/examples/flux-comparison).
+
+### What are that `props` and `state` in component definitions?
+
+It's type specs. In its simplest form, it describe object's shape with pairs `name : Constructor`, or `name : <primitive value>`. Like this:
+
+```javascript
+state : {
+  s1 : String,
+  s2 : 'asasa', // same as String.value( 'asasa' ) 
+  m  : Model
+}
+```
+
+`props` spec is being compiled to `propTypes`, while `state` spec is used to create [NestedTypes model](http://volicon.github.io/NestedTypes/#nested.model) which will serve instead of standard `this.state`.
+
+Refer to [NestedTypes API Reference](http://volicon.github.io/NestedTypes/#attribute-types) for complete type annotation syntax.
 
 ### What does `editing : ToDo.from( '^props.todos' )` from `todolist.jsx` mean?
 
