@@ -63,7 +63,7 @@ Every NestedTypes model and collection has `_changeToken` property, which contai
 
 It's works faster than any generic PureRenderMixin because we dynamically compile `shouldComponentUpdate` functions with _loops unrolled_, taking props list from component's `propTypes` (loops through hashes are very expensive, as well as `Object.keys` call).
 
-Why it's better than just deal with immutable data? Because we can have circular references, and premanent references to objects in data layer with no problems. Have a reference? Pass it around, no problem.
+Why it's better than just deal with immutable data? Because we can have circular references, and premanent references to objects in data layer with no problems. Thus, you may safely pass nested models and collection around. As you most likely used to.
 
 ### What does `editing : ToDo.from( '^props.todos' )` from `todolist.jsx` mean?
 
