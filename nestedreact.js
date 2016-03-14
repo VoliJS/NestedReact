@@ -633,42 +633,125 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Nested   = __webpack_require__( 3 ),
-	    Link     = __webpack_require__( 11 );
-	
-	Object.extend.attach( Link );
+	var Nested = __webpack_require__( 3 ),
+	    Link   = __webpack_require__( 11 );
 	
 	Nested.Link = Link;
+	Object.extend.attach( Link );
 	
-	var ClassProto      = Nested.Class.prototype,
-	    ModelProto      = Nested.Model.prototype,
-	    CollectionProto = Nested.Collection.prototype;
+	/**
+	 * Link to NestedType's model attribute.
+	 * Strict evaluation of value, lazy evaluation of validation error.
+	 * Safe implementation of _changeToken.
+	 * @param model
+	 * @param attr
+	 * @constructor
+	 */
+	function ModelLink( model, attr ){
+	    this.value = model[ attr ];
+	    this.model = model;
+	    this.attr  = attr;
+	}
 	
-	ClassProto.getLink = ModelProto.getLink = CollectionProto.getLink = function( attr ){
-	    var model = this,
-	        error = model.validationError;
+	ModelLink.prototype = Object.create( Link.prototype, {
+	    constructor : { value : ModelLink },
+	    set         : {
+	        value : function( x ){
+	            this.model[ this.attr ] = x;
+	        }
+	    },
 	
-	    return new Link( model[ attr ], function( x ){
-	        model[ attr ] = x;
-	    }, error && error.nested[ attr ] );
+	    error : {
+	        get : function(){
+	            if( this._error === void 0 ){
+	                this._error = this.model.getValidationError( this.attr );
+	            }
+	
+	            return this._error;
+	        },
+	
+	        set : function( x ){
+	            this._error = x;
+	        }
+	    },
+	
+	    _changeToken : {
+	        get : function(){ return this.model._changeToken; }
+	    }
+	} );
+	
+	/**
+	 * Boolean link to presence of NestedType's model in collection.
+	 * Strict evaluation of value, no error.
+	 * Safe implementation of _changeToken.
+	 * @param collection
+	 * @param model
+	 * @constructor
+	 */
+	function CollectionLink( collection, model ){
+	    this.value      = Boolean( collection.get( model ) );
+	    this.collection = collection;
+	    this.model      = model;
+	}
+	
+	CollectionLink.prototype = Object.create( Link.prototype, {
+	    _changeToken : {
+	        get : function(){ return this.collection._changeToken; }
+	    }
+	} );
+	
+	CollectionLink.prototype.constructor = CollectionLink;
+	CollectionLink.prototype.set         = function( x ){
+	    this.collection.toggle( this.model, x );
 	};
 	
-	ModelProto.deepLink = function( attr, options ){
-	    var model = this,
-	        values = model.deepInvalidate( attr );
-	
-	    return new Link( values[ 0 ], function( x ){
-	        model.deepSet( attr, x, options );
-	    }, values[ 1 ] );
+	Nested.Collection.prototype.hasLink = function( model ){
+	    return new CollectionLink( this, model );
 	};
 	
-	CollectionProto.hasLink = function( model ){
-	    var collection = this;
+	var ModelProto      = Nested.Model.prototype;
 	
-	    return new Link( Boolean( collection.get( model ) ), function( x ){
-	        var next = Boolean( x );
-	        this.value === next || collection.toggle( model, next );
-	    } );
+	ModelProto.getLink = function( attr ){
+	    return new ModelLink( this, attr );
+	};
+	
+	
+	function ModelDeepLink( model, path, options ){
+	    this.value   = model.deepGet( path );
+	    this.model   = model;
+	    this.path    = path;
+	    this.options = options;
+	}
+	
+	ModelDeepLink.prototype = Object.create( Link.prototype, {
+	    constructor : { value : ModelDeepLink },
+	    set         : {
+	        value : function( x ){
+	            this.model.deepSet( this.path, x, this.options );
+	        }
+	    },
+	
+	    error : {
+	        get : function(){
+	            if( this._error === void 0 ){
+	                this._error = this.model.deepValidationError( this.path ) || null;
+	            }
+	
+	            return this._error;
+	        },
+	
+	        set : function( x ){
+	            this._error = x;
+	        }
+	    },
+	
+	    _changeToken : {
+	        get : function(){ return this.model._changeToken; }
+	    }
+	} );
+	
+	ModelProto.deepLink = function( path, options ){
+	    return new DeepLink( path, options )
 	};
 	
 	Nested.link = function( reference ){
@@ -676,7 +759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    function setLink( value ){
 	        var link = getMaster.call( this );
-	        link && link.requestChange( value );
+	        link && link.set( value );
 	    }
 	
 	    function getLink(){
@@ -703,28 +786,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return options;
 	};
 
+
 /***/ },
 /* 11 */
 /***/ function(module, exports) {
 
 	/**
-	 * Advanced React value links with validation and link-to-objects capabilities
-	 * (c) 2016 Vlad Balin & Volicon, MIT License
+	 * Advanced React links for purely functional two-way data binding
+	 *
+	 * MIT License, (c) 2016 Vlad Balin, Volicon.
 	 */
 	
-	function Link( value, set, error ){
-	    this.value           = value;
-	    this.requestChange   = set || doNothing;
-	    this.validationError = error;
+	/**
+	 * Link public constructor
+	 * @param {*} value - link value
+	 * @param {function(*)=} requestChange - function to set linked value.
+	 * @constructor
+	 */
+	function Link( value, requestChange ){
+	    this.value = value;
+	    this.set   = requestChange || doNothing;
 	}
 	
-	// create link to component's state attribute
+	/**
+	 * Create link to component's state attribute
+	 * @param {React.Component} component - It's your `this` in component's `render()`
+	 * @param {string} attr - state attribute's name
+	 * @returns {Link}
+	 */
 	Link.state = function( component, attr ){
 	    return new Link( component.state[ attr ], function( x ){
-	        var nextState = {};
+	        var nextState     = {};
 	        nextState[ attr ] = x;
 	        component.setState( nextState );
-	    });
+	    } );
 	};
 	
 	module.exports = Link;
@@ -734,131 +829,274 @@ return /******/ (function(modules) { // webpackBootstrap
 	var defaultError = 'Invalid value';
 	
 	Link.prototype = {
-	    value           : null,
-	    validationError : null,
-	    requestChange   : doNothing,
+	    constructor : Link,
 	
-	    set             : function( x ){ this.requestChange( x ); },
-	    toggle          : function(){ this.requestChange( !this.value ); },
+	    /**
+	     * Link value. Read-only, cannot be set.
+	     * @const
+	     */
+	    value : void 0,
 	
-	    // create function which updates the link
-	    update : function( transform ){
-	        var link = this;
-	        return function(){
-	            var nextValue = transform( link.value );
-	            nextValue === void 0 || link.requestChange( nextValue );
-	        }
+	    /**
+	     * Set link value
+	     * @param {*} x - new link value
+	     */
+	    set : function( x ){ },
+	
+	    /**
+	     * Immediately update the link value using given transform function.
+	     * @param {function( * ) : *} transform - update function receives cloned link value as an argument; returning
+	     *     `undefined` prevents update.
+	     */
+	    update : function( transform, e ){
+	        var prevValue = this.value;
+	        prevValue = helpers( prevValue ).clone( prevValue );
+	
+	        var nextValue = transform( prevValue, e );
+	        nextValue === void 0 || this.set( nextValue );
 	    },
 	
+	    /**
+	     * Create UI event handler function which will update the link with a given transform function.
+	     * @param {function(*, Event=):*} transform - update function receives cloned link value and UI event as an
+	     *     argument; returning `undefined` prevents update.
+	     * @returns {function()} - UI event handler
+	     *
+	     * Examples:
+	     *     <button onClick={ link.action( x => !x ) } ... />
+	     *     <input onChange={ link.action( ( x, e ) => e.target.value ) } ... />
+	     */
+	    action : function( transform ){
+	        var link = this;
+	        return function( e ){ link.update( transform, e ) };
+	    },
+	
+	    /**
+	     * Similar to `set`. React 0.14 backward compatibility shim.
+	     * @param {*} x - new link value
+	     */
+	    requestChange : function( x ){ this.set( x ); },
+	
+	    /**
+	     * Similar to `link.update( x => !x )`. ValueLink 1.0.x compatibility shim.
+	     * @deprecated
+	     */
+	    toggle : function(){ this.set( !this.value ); },
+	
+	    /**
+	     * Validation error. Usually is a string with error text, but can hold any type.
+	     */
+	    error : void 0,
+	
+	    /**
+	     * Similar to `error`. ValueLink 1.0.x compatibility shim.
+	     * @deprecated
+	     */
+	    get validationError(){ return this.error },
+	
+	    /**
+	     * Validate link with validness predicate and optional custom error object. Can be chained.
+	     * @param {function( * ) : boolean} whenValid - Takes link value as an argument, returns true whenever value is
+	     *     valid.
+	     * @param {*=} error - optional error object assigned to `link.error`, usually is a string with an error
+	     *     description.
+	     * @returns {Link} - pass through link for easy checks chaining.
+	     */
 	    check : function( whenValid, error ){
-	        if( !this.validationError && !whenValid( this.value ) ){
-	            this.validationError = error || defaultError;
+	        if( !this.error && !whenValid( this.value ) ){
+	            this.error = error || defaultError;
 	        }
 	
 	        return this;
 	    },
 	
-	    // create boolean link to enclosed array element
+	    /**
+	     * Create boolean link which is true whenever array has given element. Link value must be an array.
+	     * @param {*} element - value which should present in array for resulting link to be `true`.
+	     * @returns {Link} - new boolean link.
+	     */
 	    contains : function( element ){
-	        var link = this;
+	        var parent = this;
 	
-	        return new Link( contains( this.value, element ), function( x ){
+	        return new Link( this.value.indexOf( element ) >= 0, function( x ){
 	            var next = Boolean( x );
 	            if( this.value !== next ){
-	                var arr = link.value;
-	                link.requestChange( x ? arr.concat( element ) : without( arr, element ) );
+	                var arr = parent.value,
+	                    nextValue = x ? arr.concat( element ) : arr.filter( function( el ){ return el !== element; });
+	
+	                parent.set( nextValue );
 	            }
 	        } );
 	    },
 	
-	    // create boolean link for value equality
-	    equals : function( asTrue ){
-	        var link = this;
+	    /**
+	     * Create boolean link which is true whenever link value is equal to the given value.
+	     * When assigned with `true`, set parent link with `truthyValue`. When assigned with `false`, set it to `null`.
+	     * @param {*} truthyValue - the value to compare parent link value with.
+	     * @returns {Link} - new boolean link.
+	     */
+	    equals : function( truthyValue ){
+	        var parent = this;
 	
-	        return new Link( this.value === asTrue, function( x ){
-	            link.requestChange( x ? asTrue : null );
+	        return new Link( this.value === truthyValue, function( x ){
+	            parent.set( x ? truthyValue : null );
 	        } );
 	    },
 	
 	    // link to enclosed object or array member
+	    /**
+	     * Create link to array or plain object (hash) member. Whenever member link will be updated,
+	     * if will set parent link with an updated copy of enclosed array or object,
+	     * causing 'purely functional update'. Can be chained to link deeply nested structures.
+	     * @param {string|number} key - index in array or key in object hash.
+	     * @returns {ChainedLink} - new link to array or object member.
+	     */
 	    at : function( key ){
-	        var link = this;
-	
-	        return new Link( this.value[ key ], function( x ){
-	            if( this.value !== x ){
-	                var objOrArr    = link.value;
-	                objOrArr        = clone( objOrArr );
-	                objOrArr[ key ] = x;
-	                link.requestChange( objOrArr );
-	            }
-	        } );
+	        return new ChainedLink( this, key );
 	    },
 	
-	    // iterates through enclosed object or array, generating set of links
-	    map : function( fun ){
-	        var arr = this.value;
-	        return arr ? ( arr instanceof Array ? mapArray( this, arr, fun ) : mapObject( this, arr, fun ) ) : [];
-	    },
-	
-	    // dummies for compatibility with nestedtypes object model...
-	    constructor : Link,
-	    initialize : function( value, set, error ){},
-	    get _changeToken(){
-	        return this.value;
+	    /**
+	     * Iterates through the links to enclosed object or array elements.
+	     * Optionally map them to array of arbitrary values.
+	     *
+	     * @param {function( Link, index ) : * } iterator - function called for each member of object or array, optionally
+	     *     returns mapped value.
+	     * @returns {Array} - array of values returned by iterator. `undefined` elements are filtered out.
+	     */
+	    map : function( iterator ){
+	        return helpers( this.value ).map( this, iterator );
 	    }
 	};
 	
-	function mapObject( link, object, fun ){
-	    var res = [];
+	/**
+	 * Link to array or object element enclosed in parent link.
+	 * Performs purely functional update of the parent, shallow copying its value on `set`.
+	 * @param {Link} link - link with enclosed array or object.
+	 * @param {string|number} key - key or array index
+	 * @extends {Link}
+	 * @constructor
+	 */
+	function ChainedLink( link, key ){
+	    this.value  = link.value[ key ];
+	    this.parent = link;
+	    this.key    = key;
+	}
 	
-	    for( var i in object ){
-	        if( object.hasOwnProperty( i ) ){
-	            var y = fun( link.at( i ), i );
-	            y === void 0 || ( res.push( y ) );
+	ChainedLink.prototype             = Object.create( Link.prototype );
+	ChainedLink.prototype.constructor = ChainedLink;
+	
+	/**
+	 * Set new element value to parent array or object, performing purely functional update.
+	 * @param x - new element value
+	 */
+	ChainedLink.prototype.set = function( x ){
+	    if( this.value !== x ){
+	        var key = this.key;
+	
+	        this.parent.update( function( parent ){
+	            parent[ key ] = x;
+	            return parent;
+	        } );
+	    }
+	};
+	
+	/**
+	 * Select appropriate helpers function for particular value type.
+	 * @param value - value to be operated with.
+	 * @returns {object} - object with helpers functions.
+	 */
+	function helpers( value ){
+	    switch( value && Object.getPrototypeOf( value ) ){
+	        case Array.prototype :
+	            return arrayHelpers;
+	        case Object.prototype :
+	            return objectHelpers;
+	        default:
+	            return dummyHelpers;
+	    }
+	}
+	
+	/**
+	 * Do nothing for types other than Array and plain Object.
+	 *
+	 * @type {{clone: dummyHelpers.clone, map: dummyHelpers.map}}
+	 */
+	var dummyHelpers = {
+	    clone    : function( value ){ return value; },
+	    map      : function( link, fun ){ return []; }
+	};
+	
+	/**
+	 * `map` and `clone` for plain JS objects
+	 * @type {{map: objectHelpers.map, clone: objectHelpers.clone}}
+	 */
+	var objectHelpers = {
+	    /**
+	     * Map through the link to object
+	     * @param {Link} link - link with object enclosed.
+	     * @param {function( Link, string ) : * } iterator - to iterate and map through links
+	     * @returns {Array} - resulting array of mapped values.
+	     */
+	    map : function( link, iterator ){
+	        var mapped = [],
+	            hash = link.value;
+	
+	        for( var key in hash ){
+	            var element = iterator( link.at( key ), key );
+	            element === void 0 || ( mapped.push( element ) );
 	        }
+	
+	        return mapped;
+	    },
+	
+	    /**
+	     * Shallow clone plain JS object
+	     * @param {object} object
+	     * @returns {object}
+	     */
+	    clone : function( object ){
+	        var cloned = {};
+	
+	        for( var key in object ){
+	            cloned[ key ] = object[ key ];
+	        }
+	
+	        return cloned;
 	    }
+	};
 	
-	    return res;
-	}
+	/**
+	 * `map` and `clone` helpers for arrays.
+	 * @type {{clone: arrayHelpers.clone, map: arrayHelpers.map }}
+	 */
+	var arrayHelpers = {
+	    /**
+	     * Shallow clone array
+	     * @param array
+	     * @returns {array}
+	     */
+	    clone : function( array ){
+	        return array.slice();
+	    },
 	
-	function mapArray( link, arr, fun ){
-	    var res = [];
+	    /**
+	     * Map through the link to array
+	     * @param {Link} link - link with an array enclosed.
+	     * @param {function( Link, string ) : * } iterator - to iterate and map through links
+	     * @returns {Array} - resulting array of mapped values.
+	     */
+	    map : function( link, iterator ){
+	        var mapped = [],
+	            array = link.value;
 	
-	    for( var i = 0; i < arr.length; i++ ){
-	        var y = fun( link.at( i ), i );
-	        y === void 0 || ( res.push( y ) );
+	        for( var i = 0; i < array.length; i++ ){
+	            var y = iterator( link.at( i ), i );
+	            y === void 0 || ( mapped.push( y ) );
+	        }
+	
+	        return mapped;
 	    }
-	
-	    return res;
-	}
-	
-	function contains( arr, el ){
-	    for( var i = 0; i < arr.length; i++ ){
-	        if( arr[ i ] === el ) return true;
-	    }
-	
-	    return false;
-	}
-	
-	function without( arr, el ){
-	    var res = [];
-	
-	    for( var i = 0; i < arr.length; i++ ){
-	        var current = arr[ i ];
-	        current === el || res.push( current );
-	    }
-	
-	    return res;
-	}
-	
-	function clone( objOrArray ){
-	    var proto = objOrArray && Object.getPrototypeOf( objOrArray );
-	
-	    if( proto === Array.prototype ) return objOrArray.slice();
-	    if( proto === Object.prototype ) return Object.assign( {}, objOrArray );
-	
-	    return objOrArray;
-	}
+	};
 
 /***/ }
 /******/ ])
