@@ -64,96 +64,97 @@
 	
 	var _todolistJsx2 = _interopRequireDefault(_todolistJsx);
 	
-	var _filterJsx = __webpack_require__(171);
+	var _filterJsx = __webpack_require__(189);
 	
 	var _filterJsx2 = _interopRequireDefault(_filterJsx);
 	
-	var _addtodoJsx = __webpack_require__(189);
+	var _addtodoJsx = __webpack_require__(190);
 	
 	var _addtodoJsx2 = _interopRequireDefault(_addtodoJsx);
 	
 	var App = _nestedreact2['default'].createClass({
-		displayName: 'App',
+	    displayName: 'App',
 	
-		Model: _modelJs.LocalStorage,
+	    Model: _modelJs.LocalStorage,
 	
-		state: {
-			id: 'todo-mvc',
-			todos: _modelJs.ToDo.Collection,
-			filterDone: Boolean.value(null)
-		},
+	    state: {
+	        id: 'todo-mvc',
+	        todos: _modelJs.ToDo.Collection,
+	        filterDone: Boolean.value(null)
+	    },
 	
-		componentWillMount: function componentWillMount() {
-			var _this = this;
+	    componentWillMount: function componentWillMount() {
+	        var _this = this;
 	
-			this.state.fetch();
-			window.onunload = function () {
-				return _this.state.save();
-			};
-		},
+	        this.state.fetch();
+	        window.onunload = function () {
+	            return _this.state.save();
+	        };
+	    },
 	
-		render: function render() {
-			var todos = this.state.todos;
-			var hasTodos = Boolean(todos.length);
+	    render: function render() {
+	        var state = this.state;
+	        var hasTodos = Boolean(state.todos.length);
 	
-			return _nestedreact2['default'].createElement(
-				'div',
-				null,
-				_nestedreact2['default'].createElement(
-					'section',
-					{ className: 'todoapp' },
-					_nestedreact2['default'].createElement(_addtodoJsx2['default'], { onEnter: function (desc) {
-							return todos.addTodo(desc);
-						} }),
-					hasTodos && _nestedreact2['default'].createElement(_todolistJsx2['default'], { todos: todos, filterDone: this.state.filterDone }),
-					hasTodos && _nestedreact2['default'].createElement(_filterJsx2['default'], { count: todos.activeCount,
-						filterLink: this.state.getLink('filterDone'),
-						onClear: function () {
-							return todos.clearCompleted();
-						}
-					})
-				),
-				_nestedreact2['default'].createElement(
-					'footer',
-					{ className: 'info' },
-					_nestedreact2['default'].createElement(
-						'p',
-						null,
-						'Double-click to edit a todo'
-					),
-					_nestedreact2['default'].createElement(
-						'p',
-						null,
-						'Template by ',
-						_nestedreact2['default'].createElement(
-							'a',
-							{ href: 'http://sindresorhus.com' },
-							'Sindre Sorhus'
-						)
-					),
-					_nestedreact2['default'].createElement(
-						'p',
-						null,
-						'Created by ',
-						_nestedreact2['default'].createElement(
-							'a',
-							{ href: 'http://todomvc.com' },
-							'Vlad Balin'
-						)
-					),
-					_nestedreact2['default'].createElement(
-						'p',
-						null,
-						'Part of ',
-						_nestedreact2['default'].createElement(
-							'a',
-							{ href: 'http://todomvc.com' },
-							'TodoMVC'
-						)
-					)
-				)
-			);
-		}
+	        return _nestedreact2['default'].createElement(
+	            'div',
+	            null,
+	            _nestedreact2['default'].createElement(
+	                'section',
+	                { className: 'todoapp' },
+	                _nestedreact2['default'].createElement(_addtodoJsx2['default'], { onEnter: function (desc) {
+	                        return state.todos.add({ desc: desc });
+	                    } }),
+	                hasTodos && _nestedreact2['default'].createElement(_todolistJsx2['default'], { todos: state.todos,
+	                    filterDone: state.filterDone }),
+	                hasTodos && _nestedreact2['default'].createElement(_filterJsx2['default'], { count: state.todos.activeCount,
+	                    filterLink: state.getLink('filterDone'),
+	                    onClear: function () {
+	                        return state.todos.clearCompleted();
+	                    }
+	                })
+	            ),
+	            _nestedreact2['default'].createElement(
+	                'footer',
+	                { className: 'info' },
+	                _nestedreact2['default'].createElement(
+	                    'p',
+	                    null,
+	                    'Double-click to edit a todo'
+	                ),
+	                _nestedreact2['default'].createElement(
+	                    'p',
+	                    null,
+	                    'Template by ',
+	                    _nestedreact2['default'].createElement(
+	                        'a',
+	                        { href: 'http://sindresorhus.com' },
+	                        'Sindre Sorhus'
+	                    )
+	                ),
+	                _nestedreact2['default'].createElement(
+	                    'p',
+	                    null,
+	                    'Created by ',
+	                    _nestedreact2['default'].createElement(
+	                        'a',
+	                        { href: 'http://todomvc.com' },
+	                        'Vlad Balin'
+	                    )
+	                ),
+	                _nestedreact2['default'].createElement(
+	                    'p',
+	                    null,
+	                    'Part of ',
+	                    _nestedreact2['default'].createElement(
+	                        'a',
+	                        { href: 'http://todomvc.com' },
+	                        'TodoMVC'
+	                    )
+	                )
+	            )
+	        );
+	    }
 	});
 	
 	_reactDom2['default'].render(_nestedreact2['default'].createElement(App, null), document.getElementById('app-mount-root'));
@@ -207,7 +208,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".something {\n\tbackground: black;\n}\n", ""]);
+	exports.push([module.id, ".something {\r\n\tbackground: black;\r\n}\r\n", ""]);
 	
 	// exports
 
@@ -722,7 +723,7 @@
 		
 		    // reference global store to fix model's store locator
 		    getStore : function(){
-		        this.model._defaultStore;
+		        return this.model._defaultStore;
 		    },
 		
 		    _mountState : _mountState,
@@ -1161,42 +1162,131 @@
 	/* 10 */
 	/***/ function(module, exports, __webpack_require__) {
 	
-		var Nested   = __webpack_require__( 3 ),
-		    Link     = __webpack_require__( 11 );
-		
-		Object.extend.attach( Link );
+		var Nested = __webpack_require__( 3 ),
+		    Link   = __webpack_require__( 11 );
 		
 		Nested.Link = Link;
+		Object.extend.attach( Link );
 		
-		var ClassProto      = Nested.Class.prototype,
-		    ModelProto      = Nested.Model.prototype,
-		    CollectionProto = Nested.Collection.prototype;
+		/**
+		 * Link to NestedType's model attribute.
+		 * Strict evaluation of value, lazy evaluation of validation error.
+		 * Safe implementation of _changeToken.
+		 * @param model
+		 * @param attr
+		 * @constructor
+		 */
+		function ModelLink( model, attr ){
+		    this.value = model[ attr ];
+		    this.model = model;
+		    this.attr  = attr;
+		}
 		
-		ClassProto.getLink = ModelProto.getLink = CollectionProto.getLink = function( attr ){
-		    var model = this,
-		        error = model.validationError;
+		ModelLink.prototype = Object.create( Link.prototype, {
+		    constructor : { value : ModelLink },
+		    set         : {
+		        value : function( x ){
+		            this.model[ this.attr ] = x;
+		        }
+		    },
 		
-		    return new Link( model[ attr ], function( x ){
-		        model[ attr ] = x;
-		    }, error && error.nested[ attr ] );
+		    error : {
+		        get : function(){
+		            if( this._error === void 0 ){
+		                this._error = this.model.getValidationError( this.attr );
+		            }
+		
+		            return this._error;
+		        },
+		
+		        set : function( x ){
+		            this._error = x;
+		        }
+		    },
+		
+		    _changeToken : {
+		        get : function(){ return this.model._changeToken; }
+		    }
+		} );
+		
+		/**
+		 * Boolean link to presence of NestedType's model in collection.
+		 * Strict evaluation of value, no error.
+		 * Safe implementation of _changeToken.
+		 * @param collection
+		 * @param model
+		 * @constructor
+		 */
+		function CollectionLink( collection, model ){
+		    this.value      = Boolean( collection.get( model ) );
+		    this.collection = collection;
+		    this.model      = model;
+		}
+		
+		CollectionLink.prototype = Object.create( Link.prototype, {
+		    _changeToken : {
+		        get : function(){ return this.collection._changeToken; }
+		    }
+		} );
+		
+		CollectionLink.prototype.constructor = CollectionLink;
+		CollectionLink.prototype.set         = function( x ){
+		    this.collection.toggle( this.model, x );
 		};
 		
-		ModelProto.deepLink = function( attr, options ){
-		    var model = this,
-		        values = model.deepInvalidate( attr );
-		
-		    return new Link( values[ 0 ], function( x ){
-		        model.deepSet( attr, x, options );
-		    }, values[ 1 ] );
-		};
+		var CollectionProto = Nested.Collection.prototype;
 		
 		CollectionProto.hasLink = function( model ){
-		    var collection = this;
+		    return new CollectionLink( this, model );
+		};
 		
-		    return new Link( Boolean( collection.get( model ) ), function( x ){
-		        var next = Boolean( x );
-		        this.value === next || collection.toggle( model, next );
-		    } );
+		CollectionProto.getLink = function( prop ){
+		    return new ModelLink( this, prop );
+		};
+		
+		var ModelProto      = Nested.Model.prototype;
+		
+		ModelProto.getLink = function( attr ){
+		    return new ModelLink( this, attr );
+		};
+		
+		
+		function ModelDeepLink( model, path, options ){
+		    this.value   = model.deepGet( path );
+		    this.model   = model;
+		    this.path    = path;
+		    this.options = options;
+		}
+		
+		ModelDeepLink.prototype = Object.create( Link.prototype, {
+		    constructor : { value : ModelDeepLink },
+		    set         : {
+		        value : function( x ){
+		            this.model.deepSet( this.path, x, this.options );
+		        }
+		    },
+		
+		    error : {
+		        get : function(){
+		            if( this._error === void 0 ){
+		                this._error = this.model.deepValidationError( this.path ) || null;
+		            }
+		
+		            return this._error;
+		        },
+		
+		        set : function( x ){
+		            this._error = x;
+		        }
+		    },
+		
+		    _changeToken : {
+		        get : function(){ return this.model._changeToken; }
+		    }
+		} );
+		
+		ModelProto.deepLink = function( path, options ){
+		    return new DeepLink( path, options )
 		};
 		
 		Nested.link = function( reference ){
@@ -1204,7 +1294,7 @@
 		
 		    function setLink( value ){
 		        var link = getMaster.call( this );
-		        link && link.requestChange( value );
+		        link && link.set( value );
 		    }
 		
 		    function getLink(){
@@ -1231,28 +1321,40 @@
 		    return options;
 		};
 	
+	
 	/***/ },
 	/* 11 */
 	/***/ function(module, exports) {
 	
 		/**
-		 * Advanced React value links with validation and link-to-objects capabilities
-		 * (c) 2016 Vlad Balin & Volicon, MIT License
+		 * Advanced React links for purely functional two-way data binding
+		 *
+		 * MIT License, (c) 2016 Vlad Balin, Volicon.
 		 */
 		
-		function Link( value, set, error ){
-		    this.value           = value;
-		    this.requestChange   = set || doNothing;
-		    this.validationError = error;
+		/**
+		 * Link public constructor
+		 * @param {*} value - link value
+		 * @param {function(*)=} requestChange - function to set linked value.
+		 * @constructor
+		 */
+		function Link( value, requestChange ){
+		    this.value = value;
+		    this.set   = requestChange || doNothing;
 		}
 		
-		// create link to component's state attribute
+		/**
+		 * Create link to component's state attribute
+		 * @param {React.Component} component - It's your `this` in component's `render()`
+		 * @param {string} attr - state attribute's name
+		 * @returns {Link}
+		 */
 		Link.state = function( component, attr ){
 		    return new Link( component.state[ attr ], function( x ){
-		        var nextState = {};
+		        var nextState     = {};
 		        nextState[ attr ] = x;
 		        component.setState( nextState );
-		    });
+		    } );
 		};
 		
 		module.exports = Link;
@@ -1262,131 +1364,274 @@
 		var defaultError = 'Invalid value';
 		
 		Link.prototype = {
-		    value           : null,
-		    validationError : null,
-		    requestChange   : doNothing,
+		    constructor : Link,
 		
-		    set             : function( x ){ this.requestChange( x ); },
-		    toggle          : function(){ this.requestChange( !this.value ); },
+		    /**
+		     * Link value. Read-only, cannot be set.
+		     * @const
+		     */
+		    value : void 0,
 		
-		    // create function which updates the link
-		    update : function( transform ){
-		        var link = this;
-		        return function(){
-		            var nextValue = transform( link.value );
-		            nextValue === void 0 || link.requestChange( nextValue );
-		        }
+		    /**
+		     * Set link value
+		     * @param {*} x - new link value
+		     */
+		    set : function( x ){ },
+		
+		    /**
+		     * Immediately update the link value using given transform function.
+		     * @param {function( * ) : *} transform - update function receives cloned link value as an argument; returning
+		     *     `undefined` prevents update.
+		     */
+		    update : function( transform, e ){
+		        var prevValue = this.value;
+		        prevValue = helpers( prevValue ).clone( prevValue );
+		
+		        var nextValue = transform( prevValue, e );
+		        nextValue === void 0 || this.set( nextValue );
 		    },
 		
+		    /**
+		     * Create UI event handler function which will update the link with a given transform function.
+		     * @param {function(*, Event=):*} transform - update function receives cloned link value and UI event as an
+		     *     argument; returning `undefined` prevents update.
+		     * @returns {function()} - UI event handler
+		     *
+		     * Examples:
+		     *     <button onClick={ link.action( x => !x ) } ... />
+		     *     <input onChange={ link.action( ( x, e ) => e.target.value ) } ... />
+		     */
+		    action : function( transform ){
+		        var link = this;
+		        return function( e ){ link.update( transform, e ) };
+		    },
+		
+		    /**
+		     * Similar to `set`. React 0.14 backward compatibility shim.
+		     * @param {*} x - new link value
+		     */
+		    requestChange : function( x ){ this.set( x ); },
+		
+		    /**
+		     * Similar to `link.update( x => !x )`. ValueLink 1.0.x compatibility shim.
+		     * @deprecated
+		     */
+		    toggle : function(){ this.set( !this.value ); },
+		
+		    /**
+		     * Validation error. Usually is a string with error text, but can hold any type.
+		     */
+		    error : void 0,
+		
+		    /**
+		     * Similar to `error`. ValueLink 1.0.x compatibility shim.
+		     * @deprecated
+		     */
+		    get validationError(){ return this.error },
+		
+		    /**
+		     * Validate link with validness predicate and optional custom error object. Can be chained.
+		     * @param {function( * ) : boolean} whenValid - Takes link value as an argument, returns true whenever value is
+		     *     valid.
+		     * @param {*=} error - optional error object assigned to `link.error`, usually is a string with an error
+		     *     description.
+		     * @returns {Link} - pass through link for easy checks chaining.
+		     */
 		    check : function( whenValid, error ){
-		        if( !this.validationError && !whenValid( this.value ) ){
-		            this.validationError = error || defaultError;
+		        if( !this.error && !whenValid( this.value ) ){
+		            this.error = error || defaultError;
 		        }
 		
 		        return this;
 		    },
 		
-		    // create boolean link to enclosed array element
+		    /**
+		     * Create boolean link which is true whenever array has given element. Link value must be an array.
+		     * @param {*} element - value which should present in array for resulting link to be `true`.
+		     * @returns {Link} - new boolean link.
+		     */
 		    contains : function( element ){
-		        var link = this;
+		        var parent = this;
 		
-		        return new Link( contains( this.value, element ), function( x ){
+		        return new Link( this.value.indexOf( element ) >= 0, function( x ){
 		            var next = Boolean( x );
 		            if( this.value !== next ){
-		                var arr = link.value;
-		                link.requestChange( x ? arr.concat( element ) : without( arr, element ) );
+		                var arr = parent.value,
+		                    nextValue = x ? arr.concat( element ) : arr.filter( function( el ){ return el !== element; });
+		
+		                parent.set( nextValue );
 		            }
 		        } );
 		    },
 		
-		    // create boolean link for value equality
-		    equals : function( asTrue ){
-		        var link = this;
+		    /**
+		     * Create boolean link which is true whenever link value is equal to the given value.
+		     * When assigned with `true`, set parent link with `truthyValue`. When assigned with `false`, set it to `null`.
+		     * @param {*} truthyValue - the value to compare parent link value with.
+		     * @returns {Link} - new boolean link.
+		     */
+		    equals : function( truthyValue ){
+		        var parent = this;
 		
-		        return new Link( this.value === asTrue, function( x ){
-		            link.requestChange( x ? asTrue : null );
+		        return new Link( this.value === truthyValue, function( x ){
+		            parent.set( x ? truthyValue : null );
 		        } );
 		    },
 		
 		    // link to enclosed object or array member
+		    /**
+		     * Create link to array or plain object (hash) member. Whenever member link will be updated,
+		     * if will set parent link with an updated copy of enclosed array or object,
+		     * causing 'purely functional update'. Can be chained to link deeply nested structures.
+		     * @param {string|number} key - index in array or key in object hash.
+		     * @returns {ChainedLink} - new link to array or object member.
+		     */
 		    at : function( key ){
-		        var link = this;
-		
-		        return new Link( this.value[ key ], function( x ){
-		            if( this.value !== x ){
-		                var objOrArr    = link.value;
-		                objOrArr        = clone( objOrArr );
-		                objOrArr[ key ] = x;
-		                link.requestChange( objOrArr );
-		            }
-		        } );
+		        return new ChainedLink( this, key );
 		    },
 		
-		    // iterates through enclosed object or array, generating set of links
-		    map : function( fun ){
-		        var arr = this.value;
-		        return arr ? ( arr instanceof Array ? mapArray( this, arr, fun ) : mapObject( this, arr, fun ) ) : [];
-		    },
-		
-		    // dummies for compatibility with nestedtypes object model...
-		    constructor : Link,
-		    initialize : function( value, set, error ){},
-		    get _changeToken(){
-		        return this.value;
+		    /**
+		     * Iterates through the links to enclosed object or array elements.
+		     * Optionally map them to array of arbitrary values.
+		     *
+		     * @param {function( Link, index ) : * } iterator - function called for each member of object or array, optionally
+		     *     returns mapped value.
+		     * @returns {Array} - array of values returned by iterator. `undefined` elements are filtered out.
+		     */
+		    map : function( iterator ){
+		        return helpers( this.value ).map( this, iterator );
 		    }
 		};
 		
-		function mapObject( link, object, fun ){
-		    var res = [];
+		/**
+		 * Link to array or object element enclosed in parent link.
+		 * Performs purely functional update of the parent, shallow copying its value on `set`.
+		 * @param {Link} link - link with enclosed array or object.
+		 * @param {string|number} key - key or array index
+		 * @extends {Link}
+		 * @constructor
+		 */
+		function ChainedLink( link, key ){
+		    this.value  = link.value[ key ];
+		    this.parent = link;
+		    this.key    = key;
+		}
 		
-		    for( var i in object ){
-		        if( object.hasOwnProperty( i ) ){
-		            var y = fun( link.at( i ), i );
-		            y === void 0 || ( res.push( y ) );
+		ChainedLink.prototype             = Object.create( Link.prototype );
+		ChainedLink.prototype.constructor = ChainedLink;
+		
+		/**
+		 * Set new element value to parent array or object, performing purely functional update.
+		 * @param x - new element value
+		 */
+		ChainedLink.prototype.set = function( x ){
+		    if( this.value !== x ){
+		        var key = this.key;
+		
+		        this.parent.update( function( parent ){
+		            parent[ key ] = x;
+		            return parent;
+		        } );
+		    }
+		};
+		
+		/**
+		 * Select appropriate helpers function for particular value type.
+		 * @param value - value to be operated with.
+		 * @returns {object} - object with helpers functions.
+		 */
+		function helpers( value ){
+		    switch( value && Object.getPrototypeOf( value ) ){
+		        case Array.prototype :
+		            return arrayHelpers;
+		        case Object.prototype :
+		            return objectHelpers;
+		        default:
+		            return dummyHelpers;
+		    }
+		}
+		
+		/**
+		 * Do nothing for types other than Array and plain Object.
+		 *
+		 * @type {{clone: dummyHelpers.clone, map: dummyHelpers.map}}
+		 */
+		var dummyHelpers = {
+		    clone    : function( value ){ return value; },
+		    map      : function( link, fun ){ return []; }
+		};
+		
+		/**
+		 * `map` and `clone` for plain JS objects
+		 * @type {{map: objectHelpers.map, clone: objectHelpers.clone}}
+		 */
+		var objectHelpers = {
+		    /**
+		     * Map through the link to object
+		     * @param {Link} link - link with object enclosed.
+		     * @param {function( Link, string ) : * } iterator - to iterate and map through links
+		     * @returns {Array} - resulting array of mapped values.
+		     */
+		    map : function( link, iterator ){
+		        var mapped = [],
+		            hash = link.value;
+		
+		        for( var key in hash ){
+		            var element = iterator( link.at( key ), key );
+		            element === void 0 || ( mapped.push( element ) );
 		        }
+		
+		        return mapped;
+		    },
+		
+		    /**
+		     * Shallow clone plain JS object
+		     * @param {object} object
+		     * @returns {object}
+		     */
+		    clone : function( object ){
+		        var cloned = {};
+		
+		        for( var key in object ){
+		            cloned[ key ] = object[ key ];
+		        }
+		
+		        return cloned;
 		    }
+		};
 		
-		    return res;
-		}
+		/**
+		 * `map` and `clone` helpers for arrays.
+		 * @type {{clone: arrayHelpers.clone, map: arrayHelpers.map }}
+		 */
+		var arrayHelpers = {
+		    /**
+		     * Shallow clone array
+		     * @param array
+		     * @returns {array}
+		     */
+		    clone : function( array ){
+		        return array.slice();
+		    },
 		
-		function mapArray( link, arr, fun ){
-		    var res = [];
+		    /**
+		     * Map through the link to array
+		     * @param {Link} link - link with an array enclosed.
+		     * @param {function( Link, string ) : * } iterator - to iterate and map through links
+		     * @returns {Array} - resulting array of mapped values.
+		     */
+		    map : function( link, iterator ){
+		        var mapped = [],
+		            array = link.value;
 		
-		    for( var i = 0; i < arr.length; i++ ){
-		        var y = fun( link.at( i ), i );
-		        y === void 0 || ( res.push( y ) );
+		        for( var i = 0; i < array.length; i++ ){
+		            var y = iterator( link.at( i ), i );
+		            y === void 0 || ( mapped.push( y ) );
+		        }
+		
+		        return mapped;
 		    }
-		
-		    return res;
-		}
-		
-		function contains( arr, el ){
-		    for( var i = 0; i < arr.length; i++ ){
-		        if( arr[ i ] === el ) return true;
-		    }
-		
-		    return false;
-		}
-		
-		function without( arr, el ){
-		    var res = [];
-		
-		    for( var i = 0; i < arr.length; i++ ){
-		        var current = arr[ i ];
-		        current === el || res.push( current );
-		    }
-		
-		    return res;
-		}
-		
-		function clone( objOrArray ){
-		    var proto = objOrArray && Object.getPrototypeOf( objOrArray );
-		
-		    if( proto === Array.prototype ) return objOrArray.slice();
-		    if( proto === Object.prototype ) return Object.assign( {}, objOrArray );
-		
-		    return objOrArray;
-		}
+		};
 	
 	/***/ }
 	/******/ ])
@@ -21336,19 +21581,12 @@
 		        return this._deepGet( path.split( '.' ) );
 		    },
 		
-		    deepInvalidate : function( name ){
+		    deepValidationError : function( name ){
 		        var path  = name.split( '.' ),
 		            attr  = path.pop(),
-		            model = this._deepGet( path ),
-		            error, value;
+		            model = this._deepGet( path ) || null;
 		
-		        if( model ){
-		            value = model.get ? model.get( attr ) : model[ attr ];
-		            error = model.validationError;
-		            if( error ) error = error.nested[ attr ];
-		        }
-		
-		        return [ value, error ];
+		        return model && model.getValidationError( attr );
 		    },
 		
 		    _deepGet : function( path ){
@@ -23852,9 +24090,18 @@
 		        return 0;
 		    },
 		
-		    isValid : function( key ){
+		    getValidationError : function( key ){
 		        var error = this.validationError;
-		        return !error || ( Boolean( key ) && !error.nested[ key ] );
+		        return ( key ? error && error.nested[ key ] : error ) || null;
+		    },
+		
+		    /**
+		     * Extended Backbone API
+		     * @param {string} key - nested object key
+		     * @returns {boolean}
+		     */
+		    isValid : function( key ){
+		        return !this.getValidationError( key );
 		    },
 		
 		    _invalidate : function( options ){
@@ -24411,9 +24658,11 @@
 		            length = 0;
 		
 		        for( var i = 0; i < models.length; i++ ){
-		            var error = models[ i ].validationError;
+		            var model = models[ i ],
+		                error = model.validationError;
+		
 		            if( error ){
-		                errors[ name ] = error;
+		                errors[ model.cid ] = error;
 		                length++;
 		            }
 		        }
@@ -25260,7 +25509,7 @@
 		
 		var refsCollectionSpec = {
 		    _listenToChanges : 'update reset', // don't bubble changes from models
-		    __class          : 'Collection.SubsetOf',
+		    __class          : 'Collection.subsetOf',
 		
 		    resolvedWith : null,
 		    refs         : null,
@@ -37137,10 +37386,6 @@
 		},
 	
 		collection: {
-			addTodo: function addTodo(desc) {
-				this.add(new ToDo({ desc: desc }));
-			},
-	
 			clearCompleted: function clearCompleted() {
 				this.remove(this.filter(function (todo) {
 					return todo.done;
@@ -37154,6 +37399,7 @@
 							return todo.done;
 						});
 					},
+	
 					set: function set(val) {
 						var _this = this;
 	
@@ -37199,12 +37445,12 @@
 /* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
+	'use strict';
 	
 	var _interopRequireDefault = __webpack_require__(1)['default'];
 	
 	Object.defineProperty(exports, '__esModule', {
-		value: true
+	    value: true
 	});
 	
 	var _nestedreact = __webpack_require__(6);
@@ -37215,99 +37461,102 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
+	var _valuelinkTagsJsx = __webpack_require__(171);
+	
 	var _model = __webpack_require__(168);
 	
 	var TodoList = _nestedreact2['default'].createClass({
-		displayName: 'TodoList',
+	    displayName: 'TodoList',
 	
-		props: {
-			todos: _model.ToDo.Collection,
-			filterDone: Boolean
-		},
+	    props: {
+	        todos: _model.ToDo.Collection,
+	        filterDone: Boolean
+	    },
 	
-		state: {
-			editing: _model.ToDo.from('^props.todos')
-		},
+	    state: {
+	        editing: _model.ToDo.from('^props.todos')
+	    },
 	
-		pureRender: true,
+	    pureRender: true,
 	
-		render: function render() {
-			var _props = this.props;
-			var todos = _props.todos;
-			var filterDone = _props.filterDone;
-			var editingLink = this.state.getLink('editing');
+	    render: function render() {
+	        var _props = this.props;
+	        var todos = _props.todos;
+	        var filterDone = _props.filterDone;
+	        var filtered = filterDone === null ? todos.models : todos.filter(function (todo) {
+	            return todo.done === filterDone;
+	        });
 	
-			var filtered = todos.models;
+	        var editingLink = this.state.getLink('editing');
 	
-			if (filterDone !== null) {
-				filtered = _.filter(filtered, function (todo) {
-					return todo.done === filterDone;
-				});
-			}
-	
-			return _nestedreact2['default'].createElement(
-				'section',
-				{ className: 'main' },
-				_nestedreact2['default'].createElement('input', { className: 'toggle-all', type: 'checkbox',
-					checkedLink: todos.getLink('allDone') }),
-				_nestedreact2['default'].createElement(
-					'label',
-					{ htmlFor: 'toggle-all' },
-					'Mark all as complete'
-				),
-				_nestedreact2['default'].createElement(
-					'ul',
-					{ className: 'todo-list' },
-					filtered.map(function (todo) {
-						return _nestedreact2['default'].createElement(TodoItem, { key: todo.cid, todo: todo, editingLink: editingLink });
-					})
-				)
-			);
-		}
+	        return _nestedreact2['default'].createElement(
+	            'section',
+	            { className: 'main' },
+	            _nestedreact2['default'].createElement(_valuelinkTagsJsx.Input, { className: 'toggle-all', type: 'checkbox',
+	                checkedLink: todos.getLink('allDone') }),
+	            _nestedreact2['default'].createElement(
+	                'label',
+	                { htmlFor: 'toggle-all' },
+	                'Mark all as complete'
+	            ),
+	            _nestedreact2['default'].createElement(
+	                'ul',
+	                { className: 'todo-list' },
+	                filtered.map(function (todo) {
+	                    return _nestedreact2['default'].createElement(TodoItem, { key: todo.cid, todo: todo,
+	                        editingLink: editingLink });
+	                })
+	            )
+	        );
+	    }
 	});
 	
 	exports['default'] = TodoList;
 	
+	function clearOnEnter(x, e) {
+	    if (e.keyCode === 13) return null;
+	}
+	
 	var TodoItem = function TodoItem(_ref) {
-		var todo = _ref.todo;
-		var editingLink = _ref.editingLink;
+	    var todo = _ref.todo;
+	    var editingLink = _ref.editingLink;
 	
-		var editing = editingLink.value === todo,
-		    className = (0, _classnames2['default'])({
-			'completed': todo.done,
-			'view': !todo.done,
-			'editing': editing
-		});
+	    var editing = editingLink.value === todo,
+	        className = (0, _classnames2['default'])({
+	        'completed': todo.done,
+	        'view': !todo.done,
+	        'editing': editing
+	    });
 	
-		return _nestedreact2['default'].createElement(
-			'li',
-			{ className: className },
-			_nestedreact2['default'].createElement(
-				'div',
-				{ className: 'view' },
-				_nestedreact2['default'].createElement('input', { className: 'toggle', type: 'checkbox', checkedLink: todo.getLink('done') }),
-				_nestedreact2['default'].createElement(
-					'label',
-					{ onDoubleClick: function () {
-							return editingLink.set(todo);
-						} },
-					todo.desc
-				),
-				_nestedreact2['default'].createElement('button', { className: 'destroy', onClick: function () {
-						return todo.remove();
-					} })
-			),
-			editing && _nestedreact2['default'].createElement('input', { className: 'edit', valueLink: todo.getLink('desc'),
-				autoFocus: true, onBlur: function () {
-					return editingLink.set(null);
-				},
-				onKeyDown: function (e) {
-					return e.keyCode === 13 && editingLink.set(null);
-				} })
-		);
+	    return _nestedreact2['default'].createElement(
+	        'li',
+	        { className: className },
+	        _nestedreact2['default'].createElement(
+	            'div',
+	            { className: 'view' },
+	            _nestedreact2['default'].createElement(_valuelinkTagsJsx.Input, { className: 'toggle', type: 'checkbox',
+	                checkedLink: todo.getLink('done') }),
+	            _nestedreact2['default'].createElement(
+	                'label',
+	                { onDoubleClick: function () {
+	                        return editingLink.set(todo);
+	                    } },
+	                todo.desc
+	            ),
+	            _nestedreact2['default'].createElement('button', { className: 'destroy', onClick: function () {
+	                    return todo.remove();
+	                } })
+	        ),
+	        editing && _nestedreact2['default'].createElement(_valuelinkTagsJsx.Input, { className: 'edit',
+	            valueLink: todo.getLink('desc'),
+	            autoFocus: true,
+	            onBlur: function () {
+	                return editingLink.set(null);
+	            },
+	            onKeyDown: editingLink.action(clearOnEnter) })
+	    );
 	};
 	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(166)))
 
 /***/ },
 /* 170 */
@@ -37367,97 +37616,165 @@
 /* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	/**
+	 * Linked React components for building forms implementing React 0.14 valueLink semantic.
+	 *
+	 * MIT License, (c) 2016 Vlad Balin, Volicon.
+	 */
 	
-	var _objectWithoutProperties = __webpack_require__(172)["default"];
+	'use strict';
 	
-	var _extends = __webpack_require__(173)["default"];
+	var _objectWithoutProperties = __webpack_require__(172)['default'];
 	
-	var _interopRequireDefault = __webpack_require__(1)["default"];
+	var _extends = __webpack_require__(173)['default'];
 	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
 	});
 	
-	var _nestedreact = __webpack_require__(6);
+	var _react = __webpack_require__(7);
 	
-	var _nestedreact2 = _interopRequireDefault(_nestedreact);
+	var _react2 = _interopRequireDefault(_react);
 	
-	var Filter = function Filter(_ref) {
-		var count = _ref.count;
-		var filterLink = _ref.filterLink;
-		var onClear = _ref.onClear;
-		return _nestedreact2["default"].createElement(
-			"footer",
-			{ className: "footer" },
-			_nestedreact2["default"].createElement(
-				"span",
-				{ className: "todo-count" },
-				_nestedreact2["default"].createElement(
-					"strong",
-					null,
-					count
-				),
-				" item left"
-			),
-			_nestedreact2["default"].createElement(
-				"ul",
-				{ className: "filters" },
-				_nestedreact2["default"].createElement(
-					"li",
-					null,
-					_nestedreact2["default"].createElement(
-						Radio,
-						{ checkedLink: filterLink.equals(null), href: "#/" },
-						"All"
-					)
-				),
-				_nestedreact2["default"].createElement(
-					"li",
-					null,
-					_nestedreact2["default"].createElement(
-						Radio,
-						{ checkedLink: filterLink.equals(false), href: "#/active" },
-						"Active"
-					)
-				),
-				_nestedreact2["default"].createElement(
-					"li",
-					null,
-					_nestedreact2["default"].createElement(
-						Radio,
-						{ checkedLink: filterLink.equals(true), href: "#/completed" },
-						"Completed"
-					)
-				)
-			),
-			_nestedreact2["default"].createElement(
-				"button",
-				{ className: "clear-completed", onClick: onClear },
-				"Clear completed"
-			)
-		);
+	var setValue = function setValue(x, e) {
+	    return e.target.value;
+	};
+	var setBoolValue = function setBoolValue(x, e) {
+	    return Boolean(e.target.checked);
 	};
 	
-	exports["default"] = Filter;
+	/**
+	 * Wrapper for standard <input/> to be compliant with React 0.14 valueLink semantic.
+	 * Simple supports for link validation - adds 'invalid' class if link has an error.
+	 *
+	 *      <input type="checkbox" checkedLink={ linkToBool } />
+	 *      <input type="radio"    valueLink={ linkToSelectedValue } value="option1value" />
+	 *      <input type="text"     valueLink={ linkToString } />
+	 */
 	
-	var Radio = function Radio(_ref2) {
-		var checkedLink = _ref2.checkedLink;
-		var children = _ref2.children;
+	var Input = function Input(_ref) {
+	    var _ref$invalid = _ref.invalid;
+	    var invalid = _ref$invalid === undefined ? 'invalid' : _ref$invalid;
+	    var _ref$className = _ref.className;
+	    var className = _ref$className === undefined ? '' : _ref$className;
+	    var valueLink = _ref.valueLink;
+	    var checkedLink = _ref.checkedLink;
 	
-		var props = _objectWithoutProperties(_ref2, ["checkedLink", "children"]);
+	    var props = _objectWithoutProperties(_ref, ['invalid', 'className', 'valueLink', 'checkedLink']);
 	
-		return _nestedreact2["default"].createElement(
-			"a",
-			_extends({ className: checkedLink.value ? 'selected' : '',
-				onClick: function () {
-					return checkedLink.set(true);
-				}
-			}, props),
-			children
-		);
+	    var type = props.type,
+	        link = valueLink || checkedLink;
+	
+	    switch (type) {
+	        case 'checkbox':
+	            return _react2['default'].createElement('input', _extends({}, props, {
+	                className: className,
+	                checked: link.value,
+	                onChange: link.action(setBoolValue) }));
+	
+	        case 'radio':
+	            return _react2['default'].createElement('input', _extends({}, props, {
+	                className: className,
+	                checked: link.value === props.value,
+	                onChange: function (e) {
+	                    e.target.checked && link.set(props.value);
+	                } }));
+	
+	        default:
+	            return _react2['default'].createElement('input', _extends({}, props, {
+	                className: valueLink.error ? invalid + ' ' + className : className,
+	                value: valueLink.value,
+	                onChange: valueLink.action(setValue) }));
+	    }
 	};
-	module.exports = exports["default"];
+	
+	exports.Input = Input;
+	/**
+	 * Wrapper for standard <textarea/> to be compliant with React 0.14 valueLink semantic.
+	 * Simple supports for link validation - adds 'invalid' class if link has an error.
+	 *
+	 *     <TextArea valueLink={ linkToText } />
+	 */
+	var TextArea = function TextArea(_ref2) {
+	    var _ref2$invalid = _ref2.invalid;
+	    var invalid = _ref2$invalid === undefined ? 'invalid' : _ref2$invalid;
+	    var _ref2$className = _ref2.className;
+	    var className = _ref2$className === undefined ? '' : _ref2$className;
+	    var valueLink = _ref2.valueLink;
+	
+	    var props = _objectWithoutProperties(_ref2, ['invalid', 'className', 'valueLink']);
+	
+	    return _react2['default'].createElement('textarea', _extends({}, props, {
+	        className: valueLink.error ? invalid + ' ' + className : className,
+	        value: valueLink.value,
+	        onChange: valueLink.action(setValue) }));
+	};
+	
+	exports.TextArea = TextArea;
+	/**
+	 * Wrapper for standard <select/> to be compliant with React 0.14 valueLink semantic.
+	 * Regular <option/> tags must be used:
+	 *
+	 *     <Select valueLink={ linkToSelectedValue }>
+	 *         <option value="a">A</option>
+	 *         <option value="b">B</option>
+	 *     </Select>
+	 */
+	var Select = function Select(_ref3) {
+	    var valueLink = _ref3.valueLink;
+	    var children = _ref3.children;
+	
+	    var props = _objectWithoutProperties(_ref3, ['valueLink', 'children']);
+	
+	    return _react2['default'].createElement(
+	        'select',
+	        _extends({}, props, {
+	            value: valueLink.value,
+	            onChange: valueLink.action(setValue) }),
+	        children
+	    );
+	};
+	
+	exports.Select = Select;
+	/**
+	 * Simple custom <Radio/> tag implementation. Can be easily styled.
+	 * Intended to be used with offhand bool link:
+	 *
+	 *    <Radio checkedLink={ linkToValue.equals( optionValue ) />
+	 */
+	
+	var Radio = function Radio(_ref4) {
+	    var _ref4$className = _ref4.className;
+	    var className = _ref4$className === undefined ? 'radio' : _ref4$className;
+	    var checkedLink = _ref4.checkedLink;
+	    return _react2['default'].createElement('div', { className: className + (checkedLink.value ? ' selected' : ''),
+	        onClick: checkedLink.action(function () {
+	            return true;
+	        })
+	    });
+	};
+	
+	exports.Radio = Radio;
+	/**
+	 * Simple custom <Checkbox /> tag implementation.
+	 * Takes any type of boolean link. Can be easily styled.
+	 *
+	 *     <Checkbox checkedLink={ boolLink } />
+	 */
+	
+	var Checkbox = function Checkbox(_ref5) {
+	    var _ref5$className = _ref5.className;
+	    var className = _ref5$className === undefined ? 'checkbox' : _ref5$className;
+	    var checkedLink = _ref5.checkedLink;
+	    return _react2['default'].createElement('div', { className: className + (checkedLink.value ? ' selected' : ''),
+	        onClick: checkedLink.action(function (x) {
+	            return !x;
+	        })
+	    });
+	};
+	exports.Checkbox = Checkbox;
 
 /***/ },
 /* 172 */
@@ -37740,58 +38057,156 @@
 
 	"use strict";
 	
+	var _objectWithoutProperties = __webpack_require__(172)["default"];
+	
+	var _extends = __webpack_require__(173)["default"];
+	
 	var _interopRequireDefault = __webpack_require__(1)["default"];
 	
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	    value: true
 	});
 	
 	var _nestedreact = __webpack_require__(6);
 	
 	var _nestedreact2 = _interopRequireDefault(_nestedreact);
 	
-	var AddTodo = _nestedreact2["default"].createClass({
-		displayName: "AddTodo",
+	var Filter = function Filter(_ref) {
+	    var count = _ref.count;
+	    var filterLink = _ref.filterLink;
+	    var onClear = _ref.onClear;
+	    return _nestedreact2["default"].createElement(
+	        "footer",
+	        { className: "footer" },
+	        _nestedreact2["default"].createElement(
+	            "span",
+	            { className: "todo-count" },
+	            _nestedreact2["default"].createElement(
+	                "strong",
+	                null,
+	                count
+	            ),
+	            " item left"
+	        ),
+	        _nestedreact2["default"].createElement(
+	            "ul",
+	            { className: "filters" },
+	            _nestedreact2["default"].createElement(
+	                "li",
+	                null,
+	                _nestedreact2["default"].createElement(
+	                    Radio,
+	                    { checkedLink: filterLink.equals(null), href: "#/" },
+	                    "All"
+	                )
+	            ),
+	            _nestedreact2["default"].createElement(
+	                "li",
+	                null,
+	                _nestedreact2["default"].createElement(
+	                    Radio,
+	                    { checkedLink: filterLink.equals(false), href: "#/active" },
+	                    "Active"
+	                )
+	            ),
+	            _nestedreact2["default"].createElement(
+	                "li",
+	                null,
+	                _nestedreact2["default"].createElement(
+	                    Radio,
+	                    { checkedLink: filterLink.equals(true), href: "#/completed" },
+	                    "Completed"
+	                )
+	            )
+	        ),
+	        _nestedreact2["default"].createElement(
+	            "button",
+	            { className: "clear-completed", onClick: onClear },
+	            "Clear completed"
+	        )
+	    );
+	};
 	
-		props: {
-			onEnter: Function.value(function () {})
-		},
+	exports["default"] = Filter;
 	
-		state: {
-			desc: String
-		},
+	var Radio = function Radio(_ref2) {
+	    var checkedLink = _ref2.checkedLink;
+	    var children = _ref2.children;
 	
-		render: function render() {
-			return _nestedreact2["default"].createElement(
-				"header",
-				{ className: "header" },
-				_nestedreact2["default"].createElement(
-					"h1",
-					null,
-					"todos"
-				),
-				_nestedreact2["default"].createElement("input", { className: "new-todo", placeholder: "What needs to be done?", autofocus: true,
-					valueLink: this.state.getLink('desc'),
-					onKeyDown: this.onKeyDown
-				})
-			);
-		},
+	    var props = _objectWithoutProperties(_ref2, ["checkedLink", "children"]);
 	
-		onKeyDown: function onKeyDown(_ref) {
-			var keyCode = _ref.keyCode;
+	    return _nestedreact2["default"].createElement(
+	        "a",
+	        _extends({ className: checkedLink.value ? 'selected' : '',
+	            onClick: function () {
+	                return checkedLink.set(true);
+	            }
+	        }, props),
+	        children
+	    );
+	};
+	module.exports = exports["default"];
+
+/***/ },
+/* 190 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 	
-			if (keyCode === 13) {
-				var state = this.state;
-				var props = this.props;
+	var _interopRequireDefault = __webpack_require__(1)['default'];
 	
-				state.desc && props.onEnter(state.desc);
-				state.desc = "";
-			}
-		}
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
 	});
 	
-	exports["default"] = AddTodo;
-	module.exports = exports["default"];
+	var _nestedreact = __webpack_require__(6);
+	
+	var _nestedreact2 = _interopRequireDefault(_nestedreact);
+	
+	var _valuelinkTagsJsx = __webpack_require__(171);
+	
+	var AddTodo = _nestedreact2['default'].createClass({
+	    displayName: 'AddTodo',
+	
+	    props: {
+	        onEnter: Function.value(function () {})
+	    },
+	
+	    state: {
+	        desc: String
+	    },
+	
+	    render: function render() {
+	        return _nestedreact2['default'].createElement(
+	            'header',
+	            { className: 'header' },
+	            _nestedreact2['default'].createElement(
+	                'h1',
+	                null,
+	                'todos'
+	            ),
+	            _nestedreact2['default'].createElement(_valuelinkTagsJsx.Input, { className: 'new-todo', placeholder: 'What needs to be done?', autofocus: true,
+	                valueLink: this.state.getLink('desc'),
+	                onKeyDown: this.onKeyDown
+	            })
+	        );
+	    },
+	
+	    onKeyDown: function onKeyDown(_ref) {
+	        var keyCode = _ref.keyCode;
+	
+	        if (keyCode === 13) {
+	            var state = this.state;
+	            var props = this.props;
+	
+	            state.desc && props.onEnter(state.desc);
+	            state.desc = "";
+	        }
+	    }
+	});
+	
+	exports['default'] = AddTodo;
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

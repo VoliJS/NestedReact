@@ -6,46 +6,48 @@ import TodoList from './todolist.jsx'
 import Filter from './filter.jsx'
 import AddTodo from './addtodo.jsx'
 
-const App = React.createClass({
-	Model : LocalStorage,
+const App = React.createClass( {
+    Model : LocalStorage,
 
-	state : {
-		id : 'todo-mvc',
-		todos : ToDo.Collection,
-		filterDone : Boolean.value( null )
-	},
+    state : {
+        id         : 'todo-mvc',
+        todos      : ToDo.Collection,
+        filterDone : Boolean.value( null )
+    },
 
-	componentWillMount(){
-		this.state.fetch();
-		window.onunload = () => this.state.save();
-	},
+    componentWillMount(){
+        this.state.fetch();
+        window.onunload = () => this.state.save();
+    },
 
-	render(){
-		let { todos } = this.state,
-			hasTodos  = Boolean( todos.length );
+    render(){
+        const { state } = this,
+              hasTodos = Boolean( state.todos.length );
 
-		return (
-			<div>
-				<section className="todoapp">
-					<AddTodo onEnter={ desc => todos.addTodo( desc ) }/>
-					{ hasTodos && <TodoList todos={ todos } filterDone={ this.state.filterDone }/> }
-					{ hasTodos && <Filter count={ todos.activeCount }
-							filterLink={ this.state.getLink( 'filterDone' )}
-							onClear={ () => todos.clearCompleted() }
-					/>}
-				</section>
-				<footer className="info">
-					<p>Double-click to edit a todo</p>
+        return (
+            <div>
+                <section className="todoapp">
+                    <AddTodo onEnter={ desc => state.todos.add({ desc : desc }) }/>
 
-					<p>Template by <a href="http://sindresorhus.com">Sindre Sorhus</a></p>
+                    { hasTodos && <TodoList todos={ state.todos }
+                                            filterDone={ state.filterDone }/> }
 
-					<p>Created by <a href="http://todomvc.com">Vlad Balin</a></p>
-					<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
-				</footer>
-			</div>
-		);
-	}
-});
+                    { hasTodos && <Filter count={ state.todos.activeCount }
+                                          filterLink={ state.getLink( 'filterDone' )}
+                                          onClear={ () => state.todos.clearCompleted() }
+                    />}
+                </section>
+
+                <footer className="info">
+                    <p>Double-click to edit a todo</p>
+                    <p>Template by <a href="http://sindresorhus.com">Sindre Sorhus</a></p>
+                    <p>Created by <a href="http://todomvc.com">Vlad Balin</a></p>
+                    <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+                </footer>
+            </div>
+        );
+    }
+} );
 
 ReactDOM.render( <App />, document.getElementById( 'app-mount-root' ) );
 

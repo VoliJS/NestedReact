@@ -63,7 +63,13 @@ Every NestedTypes model and collection has `_changeToken` property, which contai
 
 It works faster than any generic PureRenderMixin because we dynamically compile `shouldComponentUpdate` functions with _loops unrolled_, taking props list from component's `propTypes` (loops through hashes are very expensive, as well as `Object.keys` call).
 
-Why it's better than just deal with immutable data? Because we can have circular references, and premanent references to objects in data layer with no problems. Thus, you may safely pass nested models and collection around. As you most likely used to.
+Why it might be better than just deal with immutable data?
+Because it doesn't force you to build all the system around an 
+idea that JS is some bad-looking dialect of Haskell. You might have some
+old UI code you want to reuse, and mutable models are clearly beneficial in this case.
+
+Therefore, you can have circular references, and permanent references to objects in data layer with no problems.
+You may safely pass nested models and collection around. As you most likely get used to.
 
 ### How unidirectional data flow can work?
 

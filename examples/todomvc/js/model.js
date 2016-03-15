@@ -11,10 +11,6 @@ export const ToDo = Model.extend({
 	},
 
 	collection : {
-		addTodo( desc ){
-			this.add( new ToDo({ desc : desc }) );
-		},
-
 		clearCompleted(){
 			this.remove( this.filter( todo => todo.done ) );
 		},
@@ -24,6 +20,7 @@ export const ToDo = Model.extend({
 				get(){
 					return this.every( todo => todo.done );
 				},
+
 				set( val ){
 					this.transaction( () =>{
 						this.each( todo => todo.done = val );

@@ -70,8 +70,14 @@ CollectionLink.prototype.set         = function( x ){
     this.collection.toggle( this.model, x );
 };
 
-Nested.Collection.prototype.hasLink = function( model ){
+var CollectionProto = Nested.Collection.prototype;
+
+CollectionProto.hasLink = function( model ){
     return new CollectionLink( this, model );
+};
+
+CollectionProto.getLink = function( prop ){
+    return new ModelLink( this, prop );
 };
 
 var ModelProto      = Nested.Model.prototype;

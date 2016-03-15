@@ -26,8 +26,13 @@ module.exports = {
     module : {
         loaders : [
             {
-                test    : /\.jsx?$/,
+                test    : /\.js$/,
                 exclude : /(node_modules)/,
+                loader  : 'babel?optional[]=runtime'
+            },
+
+            {
+                test    : /\.jsx$/,
                 loader  : 'babel?optional[]=runtime'
             },
 
