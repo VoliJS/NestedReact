@@ -35,4 +35,4 @@ Object.defineProperties( BaseComponent, {
     $   : { value : function( sel ){ return this.$el.find( sel ); } }
 } );
 
-require( './nested-link' );
+NestedReact.Link = require( './nested-link' );

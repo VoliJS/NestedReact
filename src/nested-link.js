@@ -1,7 +1,7 @@
 var Nested = require( 'nestedtypes' ),
     Link   = require( 'valuelink' );
 
-Nested.Link = Link;
+module.exports = Nested.Link = Link;
 Object.extend.attach( Link );
 
 /**

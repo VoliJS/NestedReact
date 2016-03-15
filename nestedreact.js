@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $   : { value : function( sel ){ return this.$el.find( sel ); } }
 	} );
 	
-	__webpack_require__( 10 );
+	NestedReact.Link = __webpack_require__( 10 );
 
 
 /***/ },
@@ -636,7 +636,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Nested = __webpack_require__( 3 ),
 	    Link   = __webpack_require__( 11 );
 	
-	Nested.Link = Link;
+	module.exports = Nested.Link = Link;
 	Object.extend.attach( Link );
 	
 	/**
