@@ -757,7 +757,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	} );
 	
 	ModelProto.deepLink = function( path, options ){
-	    return new DeepLink( path, options )
+	    return new ModelDeepLink( path, options )
 	};
 	
 	Nested.link = function( reference ){
