@@ -122,7 +122,7 @@ ModelDeepLink.prototype = Object.create( Link.prototype, {
 } );
 
 ModelProto.deepLink = function( path, options ){
-    return new ModelDeepLink( path, options )
+    return new ModelDeepLink( this, path, options )
 };
 
 Nested.link = function( reference ){
