@@ -57,17 +57,12 @@ var ListenToPropsArray = {
     componentDidUpdate : regArrayPropListeners
 };
 
-function _mountState(){
-    var events = this.listenToState;
-    events && this.listenTo( this.model, events, forceUpdate );
-}
-
 var ModelState = {
     listenToState : 'change',
     model         : null,
 
     getInitialState : function(){
-        this.model = new this.Model();
+        this.model = this.props._keepState || new this.Model();
         // enable owner references in the model to access component props
         this.model._owner = this;
 
@@ -79,13 +74,13 @@ var ModelState = {
         return this.model._defaultStore;
     },
 
-    _mountState : _mountState,
-
-    componentDidMount : _mountState,
+    componentDidMount : function(){
+        var events = this.listenToState;
+        events && this.listenTo( this.model, events, forceUpdate );
+    },
 
     componentWillUnmount : function(){
         this.model._owner = null;
-        this.model.stopListening();
     }
 };
 
