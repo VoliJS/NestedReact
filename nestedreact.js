@@ -731,11 +731,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	ModelDeepLink.prototype = Object.create( Link.prototype, {
 	    constructor : { value : ModelDeepLink },
-	    set         : {
-	        value : function( x ){
-	            this.model.deepSet( this.path, x, this.options );
-	        }
-	    },
 	
 	    error : {
 	        get : function(){
@@ -755,6 +750,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get : function(){ return this.model._changeToken; }
 	    }
 	} );
+	
+	ModelDeepLink.prototype.set = function( x ){
+	    this.model.deepSet( this.path, x, this.options );
+	};
 	
 	ModelProto.deepLink = function( path, options ){
 	    return new ModelDeepLink( this, path, options )
