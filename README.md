@@ -306,7 +306,7 @@ Also, links can be used to declaratively expose real component state to upper co
 
 ```javascript
 state : {
-   selected : Item.has.watcher( '^props.selectedLink.val' )
+   selected : Item.has.watcher( '^props.selectedLink.set' )
 }   
 ```
 
