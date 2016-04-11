@@ -441,7 +441,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        component : null,
 	        prevState : null,
 	        
-	        resize(){
+	        resize : function(){
 	            Page.forceResize();
 	        },
 	

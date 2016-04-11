@@ -25,7 +25,7 @@ module.exports.use = function( View ){
         component : null,
         prevState : null,
         
-        resize(){
+        resize : function(){
             Page.forceResize();
         },
 
