@@ -440,6 +440,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // cached instance of react component...
 	        component : null,
 	        prevState : null,
+	        
+	        resize(){
+	            Page.forceResize();
+	        },
 	
 	        render : function(){
 	            var options   = this.prevState ? _.extend( { _keepState : this.prevState }, this.options ) : this.options,
