@@ -1,6 +1,4 @@
-# HOW TO
-
-## State management
+# State management 101
 
 NestedReact uses mutable models observing deep changes to manage UI state. 
 
@@ -26,7 +24,17 @@ export const MyComponent = React.createClass({
 });
 ```
 
-##### `declaration` state : { [ key ] : value | TypeSpec }
+##### `declaration` state : { [ key ] : value }
+
+##### `assignment` this.state.key = value;
+
+##### `method` this.state.transaction( body : () => void )
+
+##### `method` this.state.set({ [ key ] : value })
+
+#####  `method` state.getLink( key ) : Link
+
+#####  `method` state.linkAll( key1, key2, ... ) : { [ key ] : Link }
 
 ### Two-way data binding
 
@@ -55,40 +63,3 @@ export const MyComponent = React.createClass({
 });
 ```
 
-#####  `method` state.getLink( key ) : Link
-
-#####  `method` state.linkAll( key1, key2, ... ) : { [ key ] : Link }
-
-### Handling the complex state
-
-#### Nested Models and Collections
-
-State is NestedTypes model. Models 101.
-
-Passing down nested models and collections as props 
-
-#### Nested JSON
-
-Links is NestedLink library
-
-Passing down links to objects
-
-### Forms validation
-
-#### Ad-hoc validation in render
-
-#### Validation in models
-
-## Performance optimizations
-
-### Pure Render
-
-### Transactional data updates
-
-### Local UI updates
-
-## Integrations
-
-### Attaching jQuery plugins
-
-### Working with Backbone Views
