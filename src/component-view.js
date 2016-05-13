@@ -1,4 +1,5 @@
 var React    = require( 'react' ),
+    _        = require( 'underscore' ),
     ReactDOM = require( 'react-dom' );
 
 module.exports.use = function( View ){
@@ -13,7 +14,6 @@ module.exports.use = function( View ){
         initialize : function( props ){
             // memorise arguments to pass to React
             this.options = props || {};
-            this.element = React.createElement( this.reactClass, this.options );
         },
 
         setElement : function(){
@@ -24,27 +24,26 @@ module.exports.use = function( View ){
         // cached instance of react component...
         component : null,
         prevState : null,
+        
+        resize : function(){
+            Page.forceResize();
+        },
 
         render : function(){
-            var component = ReactDOM.render( this.element, this.el );
+            var options   = this.prevState ? _.extend( { _keepState : this.prevState }, this.options ) : this.options,
+                element   = React.createElement( this.reactClass, options ),
+                component = ReactDOM.render( element, this.el );
+
             this.component || this.mountComponent( component );
         },
 
         mountComponent : function( component ){
             this.component = component;
-
-            if( this.prevState ){
-                component.model = this.prevState;
-                component.model._owner = component;
-                component._mountState();
-                this.prevState = null;
-
-                component.forceUpdate();
-            }
+            this.prevState = null;
 
             component.trigger && this.listenTo( component, 'all', function(){
                 this.trigger.apply( this, arguments );
-            });
+            } );
         },
 
         unmountComponent : function(){

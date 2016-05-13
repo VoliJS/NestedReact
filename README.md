@@ -2,11 +2,11 @@
 
 React application architecture with [classical OO models](https://github.com/volicon/nestedtypes) in the data layer.
 
-Brief feature list:
+Feature list:
 
 - First-class support for mutable models and collections in props, state, and context.
     - Unidirectional data flow and safe *pure render optimization*.
-    - Two-way data binding ([Guide to Data Binding Use Cases](/example/databinding.md))
+    - Two-way data binding ([Guide to Data Binding Use Cases](/docs/databinding.md))
     - Optional local component subtree updates.     
 - Lightweight type annotations for props, *state*, and context as a replacement for `PropTypes`.
 - Gradual transition procedure for backbone applications ([Backbone Migration Guide](/docs/BackboneViews.md)):
@@ -14,7 +14,11 @@ Brief feature list:
     - Any type of application refactoring strategy is possible - top-to-bottom, bottom-to-top, and random parts at the middle.  
     - Support for Backbone events and jQuery accessors in React components simplifies View refactoring. 
 
-Compare solution size and complexity to any of `flux` implementation on [TodoMVC example](https://github.com/gaperton/todomvc-nestedreact).
+NestedReact is build around the idea of productivity, not ideology. When compared to common React practices, NestedReact allows you to write twice less code, being on par with AngularJS.
+
+You can compare solution size and complexity to other approaches on [TodoMVC](/examples/todomvc/) and [flux-comparison](/examples/flux-comparison) examples. 
+
+![todomvc](/examples/todomvc/SLOC-comparison.jpg) ![flux-comparison](/examples/flux-comparison/sloc-comparison.png)
 
 # Installation
 It's packed as single UMD, thus grab the module or use `npm` to install.
@@ -28,6 +32,7 @@ safe to use it as a replacement for `react`.
     
 If you're migrating from backbone-based frameworks such as `ChaplinJS` or `Marionette`,
 you need to do following things to make convergence layer work properly:
+
 - Make sure that frameworks includes `nestedtypes` instead of `backbone`.
 - On application start, tell `nestedreact` to use proper base class for the View.
 	`React.useView( Chaplin.View )`
@@ -70,7 +75,8 @@ attribute spec syntax). It has following implications:
 - State attributes behaves as regular object attributes, which can be directly accessed and assigned.
 - State attributes can hold deeply nested models and collections; deep changes will be automatically detected and will cause component update.
 
-In addition, 
+In addition,
+
 - `state` property from mixins will be properly merged. So, mixins can have state too.
 - You can specify the base class for state model using `Model` component's property.
 - Entire model's state can be externally defined as `NestedTypes` Model, and attached to component by referencing it in `Model` property.
@@ -139,6 +145,7 @@ NestedReact support this optimization, comparing props model's and collection ve
 and comparing other props values for strict equality.  
 
 To enable this optimization for the particular component, you need to:
+
  - Declare all props that will be tracked for changes in `props` (or `propTypes`) spec.
     Which is the good practice by itself, so you encouraged to do it unless you're using 
     stateless function components syntax, which is preferable.
@@ -169,6 +176,7 @@ NestedReact `props` spec uses the simple subset of `state` spec, and acts as sub
  it internally compiles itself to the `propTypes` and `getDefaultProps()`). 
 
 Following type annotations are allowed for `props`:
+
 1. Constructor functions: `prop1 : String`
 2. Constructors with default value: `prop2 : String.value( "default string" )`
 3. JSON and primitive values: `prop3 : "default string"`
@@ -214,6 +222,7 @@ is the perfect abstraction to isolate data binding details from the UI control l
 You can create link for any property of the state, as well as for any model.
 
 `const link = object.getLink( 'attr' )`
+`const link = object.deepLink( 'path.to.the.attribute' )`
 
 Or, you can create boolean link, toggling model in collection. `true` if model is contained in collection, assignments will add/remove given model. Useful for checkboxes.
 `const link = collection.hasLink( model )` 
@@ -226,7 +235,7 @@ var Nested = require( 'nestedtypes' );
 var link = new Nested.Link( value,  x => /* update */ } ); 
 ```
 
-Below is the brief reference for links API. Consult [Guide to Data Binding Use Cases](/example/databinding.md) to understand how to use it.
+Below is the brief reference for links API. Consult [Guide to Data Binding Use Cases](/docs/databinding.md) to understand how to use it.
 
 ## Value access methods
 
@@ -297,7 +306,7 @@ Also, links can be used to declaratively expose real component state to upper co
 
 ```javascript
 state : {
-   selected : Item.has.watcher( '^props.selectedLink.val' )
+   selected : Item.has.watcher( '^props.selectedLink.set' )
 }   
 ```
 
