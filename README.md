@@ -42,7 +42,7 @@ you need to do following things to make convergence layer work properly:
 
 In the simplest case, it looks like this:
 
-```js
+```jsx
 import React from 'nestedreact'
 
 export const MyComponent = React.createClass({
