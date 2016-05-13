@@ -34,22 +34,3 @@ export const ToDo = Model.extend({
 		}
 	}
 });
-
-export const LocalStorage = Model.extend({
-	fetch(){
-		if( this.id ){
-			const json = localStorage.getItem( this.id );
-			json && ( this.set( JSON.parse( json ), { parse: true }) );
-		}
-	},
-
-	save( attrs ){
-		if( attrs ){
-			this.set( attrs );
-		}
-
-		if( this.id ){
-			localStorage.setItem( this.id, JSON.stringify( this ) );
-		}
-	}
-});

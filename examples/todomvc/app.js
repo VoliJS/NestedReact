@@ -75,26 +75,31 @@
 	var App = _nestedreact2['default'].createClass({
 	    displayName: 'App',
 	
-	    Model: _modelJs.LocalStorage,
-	
+	    // Declare component state
 	    state: {
-	        id: 'todo-mvc',
 	        todos: _modelJs.ToDo.Collection,
-	        filterDone: Boolean.value(null)
+	        filterDone: Boolean.value(null) // null | true | false, initialized with null.
 	    },
 	
 	    componentWillMount: function componentWillMount() {
-	        var _this = this;
+	        var state = this.state;
+	        // load raw JSON from local storage
+	        var json = JSON.parse(localStorage.getItem('todo-mvc') || "{}");
 	
-	        this.state.fetch();
+	        // initialize state with raw JSON
+	        state.set(json, { parse: true });
+	
 	        window.onunload = function () {
-	            return _this.state.save();
+	            // Save state back to the local storage
+	            localStorage.setItem('todo-mvc', JSON.stringify(state));
 	        };
 	    },
 	
 	    render: function render() {
-	        var state = this.state;
-	        var hasTodos = Boolean(state.todos.length);
+	        var _state = this.state;
+	        var todos = _state.todos;
+	        var filterDone = _state.filterDone;
+	        var hasTodos = Boolean(todos.length);
 	
 	        return _nestedreact2['default'].createElement(
 	            'div',
@@ -103,14 +108,14 @@
 	                'section',
 	                { className: 'todoapp' },
 	                _nestedreact2['default'].createElement(_addtodoJsx2['default'], { onEnter: function (desc) {
-	                        return state.todos.add({ desc: desc });
+	                        return todos.add({ desc: desc });
 	                    } }),
-	                hasTodos && _nestedreact2['default'].createElement(_todolistJsx2['default'], { todos: state.todos,
-	                    filterDone: state.filterDone }),
-	                hasTodos && _nestedreact2['default'].createElement(_filterJsx2['default'], { count: state.todos.activeCount,
-	                    filterLink: state.getLink('filterDone'),
+	                hasTodos && _nestedreact2['default'].createElement(_todolistJsx2['default'], { todos: todos,
+	                    filterDone: filterDone }),
+	                hasTodos && _nestedreact2['default'].createElement(_filterJsx2['default'], { count: todos.activeCount,
+	                    filterLink: this.state.getLink('filterDone'),
 	                    onClear: function () {
-	                        return state.todos.clearCompleted();
+	                        return todos.clearCompleted();
 	                    }
 	                })
 	            ),
@@ -38962,27 +38967,7 @@
 			}
 		}
 	});
-	
 	exports.ToDo = ToDo;
-	var LocalStorage = _nestedtypes.Model.extend({
-		fetch: function fetch() {
-			if (this.id) {
-				var json = localStorage.getItem(this.id);
-				json && this.set(JSON.parse(json), { parse: true });
-			}
-		},
-	
-		save: function save(attrs) {
-			if (attrs) {
-				this.set(attrs);
-			}
-	
-			if (this.id) {
-				localStorage.setItem(this.id, JSON.stringify(this));
-			}
-		}
-	});
-	exports.LocalStorage = LocalStorage;
 
 /***/ },
 /* 169 */
@@ -39081,9 +39066,9 @@
 	                checkedLink: todo.getLink('done') }),
 	            _nestedreact2['default'].createElement(
 	                'label',
-	                { onDoubleClick: function () {
-	                        return editingLink.set(todo);
-	                    } },
+	                { onDoubleClick: editingLink.action(function () {
+	                        return todo;
+	                    }) },
 	                todo.desc
 	            ),
 	            _nestedreact2['default'].createElement('button', { className: 'destroy', onClick: function () {
@@ -39093,9 +39078,9 @@
 	        editing && _nestedreact2['default'].createElement(_valuelinkTagsJsx.Input, { className: 'edit',
 	            valueLink: todo.getLink('desc'),
 	            autoFocus: true,
-	            onBlur: function () {
-	                return editingLink.set(null);
-	            },
+	            onBlur: editingLink.action(function () {
+	                return null;
+	            }),
 	            onKeyDown: editingLink.action(clearOnEnter) })
 	    );
 	};
