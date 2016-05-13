@@ -2188,6 +2188,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	module.exports = Nested.Link = Link;
 	
+	Object.extend.attach( Link );
+	
 	/**
 	 * Link to NestedType's model attribute.
 	 * Strict evaluation of value, lazy evaluation of validation error.
