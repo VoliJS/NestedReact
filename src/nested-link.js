@@ -1,19 +1,18 @@
 var Nested = require( 'nestedtypes' ),
-    Link   = require( 'valuelink' );
+    Link   = require( 'valuelink' ).default;
 
 module.exports = Nested.Link = Link;
-Object.extend.attach( Link );
 
 /**
  * Link to NestedType's model attribute.
  * Strict evaluation of value, lazy evaluation of validation error.
- * Safe implementation of _changeToken.
+ * Links are cached in the models
  * @param model
  * @param attr
  * @constructor
  */
-function ModelLink( model, attr ){
-    this.value = model[ attr ];
+function ModelLink( model, attr, value ){
+    Link.call( this, value );
     this.model = model;
     this.attr  = attr;
 }
@@ -38,12 +37,50 @@ ModelLink.prototype = Object.create( Link.prototype, {
         set : function( x ){
             this._error = x;
         }
-    },
-
-    _changeToken : {
-        get : function(){ return this.model._changeToken; }
     }
 } );
+
+var ModelProto = Nested.Model.prototype;
+
+function genericIsChanged( a, b ){
+    return a !== b;
+}
+
+ModelProto.getLink = function( key ){
+    // Initialize links cache... Use model's pre-compiled Attributes constructor.
+    var links = this.links || ( this.links = new this.Attributes( {} ) );
+
+    var cached = links[ key ],
+        value,
+        attrSpec = this.__attributes[ key ],
+        isChanged = attrSpec ? attrSpec.isChanged : genericIsChanged; // support calculated properties too...
+
+    if( !cached || isChanged( cached.value, value = this[ key ] ) ){
+        cached = links[ key ] = new ModelLink( this, key, value );
+    }
+
+    return cached;
+};
+
+ModelProto.linkAll = function(){
+    // Initialize links cache... Use model's pre-compiled Attributes constructor.
+    var links = this.links || ( this.links = new this.Attributes( {} ) ),
+        value,
+        attrSpecs = this.__attributes;
+
+    for( var i = 0; i < arguments.length; i++ ){
+        var key = arguments[ i ],
+            cached = links[ key ],
+            attrSpec = attrSpecs[ key ],
+            isChanged = attrSpec ? attrSpec.isChanged : genericIsChanged;
+
+        if( !cached || isChanged( cached.value, value = this[ key ] ) ){
+            links[ key ] = new ModelLink( this, key, value );
+        }
+    }
+
+    return links;
+};
 
 /**
  * Boolean link to presence of NestedType's model in collection.
@@ -54,21 +91,19 @@ ModelLink.prototype = Object.create( Link.prototype, {
  * @constructor
  */
 function CollectionLink( collection, model ){
-    this.value      = Boolean( collection.get( model ) );
+    Link.call( this, Boolean( collection._byId( model.cid ) ) );
     this.collection = collection;
     this.model      = model;
 }
 
 CollectionLink.prototype = Object.create( Link.prototype, {
-    _changeToken : {
-        get : function(){ return this.collection._changeToken; }
+    constructor : { value : CollectionLink },
+    set : {
+        value : function( x ){
+            this.collection.toggle( this.model, x );
+        }
     }
 } );
-
-CollectionLink.prototype.constructor = CollectionLink;
-CollectionLink.prototype.set         = function( x ){
-    this.collection.toggle( this.model, x );
-};
 
 var CollectionProto = Nested.Collection.prototype;
 
@@ -77,18 +112,12 @@ CollectionProto.hasLink = function( model ){
 };
 
 CollectionProto.getLink = function( prop ){
-    return new ModelLink( this, prop );
+    var collection = this;
+    return new Link.value( collection[ prop ], function( x ){ collection[ prop ] = x; });
 };
-
-var ModelProto      = Nested.Model.prototype;
-
-ModelProto.getLink = function( attr ){
-    return new ModelLink( this, attr );
-};
-
 
 function ModelDeepLink( model, path, options ){
-    this.value   = model.deepGet( path );
+    Link.call( this, model.deepGet( path ) );
     this.model   = model;
     this.path    = path;
     this.options = options;

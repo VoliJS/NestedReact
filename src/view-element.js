@@ -1,11 +1,11 @@
-var React = require( 'react' ),
+var React        = require( 'react' ),
     jsonNotEqual = require( './json-comparison' ).jsonNotEqual;
 
-module.exports = React.createClass({
+module.exports = React.createClass( {
     displayName : 'BackboneView',
 
     propTypes : {
-        View : React.PropTypes.func.isRequired,
+        View    : React.PropTypes.func.isRequired,
         options : React.PropTypes.object
     },
 
@@ -18,31 +18,33 @@ module.exports = React.createClass({
         var view = this.view;
 
         return view && (
-               typeof view.hasUnsavedChanges === 'function' ? view.hasUnsavedChanges() : view.hasUnsavedChanges
+                typeof view.hasUnsavedChanges === 'function' ? view.hasUnsavedChanges() : view.hasUnsavedChanges
             );
     },
 
     render : function(){
-        return React.DOM.div({
-            ref : 'subview',
+        return React.DOM.div( {
+            ref       : 'subview',
             className : this.props.className
-        });
+        } );
     },
 
-    componentDidMount : function(){
+    componentDidMount    : function(){
         this._mountView();
     },
-    componentDidUpdate : function(){
+
+    componentDidUpdate   : function(){
         this._dispose();
         this._mountView();
     },
+
     componentWillUnmount : function(){
         this._dispose();
     },
 
-    _mountView: function () {
+    _mountView : function(){
         var el = this.refs.subview,
-            p = this.props;
+            p  = this.props;
 
         var view = this.view = p.options ? new p.View( p.options ) : new p.View();
 
@@ -56,7 +58,7 @@ module.exports = React.createClass({
             view.stopListening();
             if( view.dispose ) view.dispose();
             this.refs.subview.innerHTML = "";
-            this.view = null;
+            this.view                   = null;
         }
     }
-});
+} );
