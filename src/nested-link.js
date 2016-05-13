@@ -42,41 +42,29 @@ ModelLink.prototype = Object.create( Link.prototype, {
 
 var ModelProto = Nested.Model.prototype;
 
-function genericIsChanged( a, b ){
-    return a !== b;
+Object.defineProperty( ModelProto, 'links', {
+    get : function(){
+        return this._links || ( this._links = new this.Attributes( {} ) );
+    }
+});
+
+function cacheLink( links, model, key ){
+    var cached = links[ key ],
+        value = model[ key ];
+
+    return cached && cached.value === value ? cached
+                : links[ key ] = new ModelLink( model, key, value );
 }
 
 ModelProto.getLink = function( key ){
-    // Initialize links cache... Use model's pre-compiled Attributes constructor.
-    var links = this.links || ( this.links = new this.Attributes( {} ) );
-
-    var cached = links[ key ],
-        value,
-        attrSpec = this.__attributes[ key ],
-        isChanged = attrSpec ? attrSpec.isChanged : genericIsChanged; // support calculated properties too...
-
-    if( !cached || isChanged( cached.value, value = this[ key ] ) ){
-        cached = links[ key ] = new ModelLink( this, key, value );
-    }
-
-    return cached;
+    return cacheLink( this.links, this, key );
 };
 
 ModelProto.linkAll = function(){
-    // Initialize links cache... Use model's pre-compiled Attributes constructor.
-    var links = this.links || ( this.links = new this.Attributes( {} ) ),
-        value,
-        attrSpecs = this.__attributes;
+    var links = this.links;
 
     for( var i = 0; i < arguments.length; i++ ){
-        var key = arguments[ i ],
-            cached = links[ key ],
-            attrSpec = attrSpecs[ key ],
-            isChanged = attrSpec ? attrSpec.isChanged : genericIsChanged;
-
-        if( !cached || isChanged( cached.value, value = this[ key ] ) ){
-            links[ key ] = new ModelLink( this, key, value );
-        }
+        cacheLink( links, this, arguments[ i ] );
     }
 
     return links;
