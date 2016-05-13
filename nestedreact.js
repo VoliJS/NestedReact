@@ -2266,7 +2266,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @constructor
 	 */
 	function CollectionLink( collection, model ){
-	    Link.call( this, Boolean( collection._byId( model.cid ) ) );
+	    Link.call( this, Boolean( collection._byId[ model.cid ] ) );
 	    this.collection = collection;
 	    this.model      = model;
 	}
