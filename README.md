@@ -153,7 +153,7 @@ To enable this optimization for the particular component, you need to:
 
 As from previous example:
 
-```javscript
+```javascript
 var Bottom = React.createClass({
     props : {
         model : Counter    
