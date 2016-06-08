@@ -2194,9 +2194,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Link to NestedType's model attribute.
 	 * Strict evaluation of value, lazy evaluation of validation error.
 	 * Links are cached in the models
-	 * @param model
-	 * @param attr
-	 * @constructor
 	 */
 	function ModelLink( model, attr, value ){
 	    Link.call( this, value );
@@ -2288,7 +2285,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	CollectionProto.getLink = function( prop ){
 	    var collection = this;
-	    return new Link.value( collection[ prop ], function( x ){ collection[ prop ] = x; });
+	    return Link.value( collection[ prop ], function( x ){ collection[ prop ] = x; });
 	};
 	
 	function ModelDeepLink( model, path, options ){
@@ -2473,7 +2470,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    Link.prototype.check = function (whenValid, error) {
 	        if (!this.error && !whenValid(this.value)) {
-	            this.error = error || defaultError;
+	            this.error = error || whenValid.error || defaultError;
 	        }
 	        return this;
 	    };
@@ -2570,15 +2567,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return ChainedLink;
 	}(Link));
 	exports.ChainedLink = ChainedLink;
+	var ArrayProto = Array.prototype, ObjectProto = Object.prototype;
 	function helpers(value) {
-	    switch (value && Object.getPrototypeOf(value)) {
-	        case Array.prototype:
-	            return arrayHelpers;
-	        case Object.prototype:
-	            return objectHelpers;
-	        default:
-	            return dummyHelpers;
+	    if (value && typeof value === 'object') {
+	        switch (Object.getPrototypeOf(value)) {
+	            case ArrayProto: return arrayHelpers;
+	            case ObjectProto: return objectHelpers;
+	        }
 	    }
+	    return dummyHelpers;
 	}
 	// Do nothing for types other than Array and plain Object.
 	var dummyHelpers = {
