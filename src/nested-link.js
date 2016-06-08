@@ -9,9 +9,6 @@ Object.extend.attach( Link );
  * Link to NestedType's model attribute.
  * Strict evaluation of value, lazy evaluation of validation error.
  * Links are cached in the models
- * @param model
- * @param attr
- * @constructor
  */
 function ModelLink( model, attr, value ){
     Link.call( this, value );
@@ -103,7 +100,7 @@ CollectionProto.hasLink = function( model ){
 
 CollectionProto.getLink = function( prop ){
     var collection = this;
-    return new Link.value( collection[ prop ], function( x ){ collection[ prop ] = x; });
+    return Link.value( collection[ prop ], function( x ){ collection[ prop ] = x; });
 };
 
 function ModelDeepLink( model, path, options ){
