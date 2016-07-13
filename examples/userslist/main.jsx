@@ -2,6 +2,7 @@ import './main.css'
 import ReactDOM from 'react-dom'
 
 import React from 'nestedreact'
+import { Model } from 'nestedtypes'
 
 import Modal from 'react-modal'
 import {Input, isRequired, isEmail } from 'tags'
@@ -22,13 +23,13 @@ const User = Model.extend({
 
 export const UsersList = React.createClass( {
     state : {
-        users   : User.Collection,
-        editing : User.from( 'users' ),
-        adding : User.value( null )
+        users   : User.Collection, // No comments required, isn't it?
+        editing : User.from( 'users' ), // User from user collection, which is being edited.
+        adding  : User.value( null ) // new user, which is being added.
     },
 
     render(){
-        const { dialog, editing, users } = this.state;
+        const { state } = this;
 
         return (
             <div>
@@ -38,7 +39,7 @@ export const UsersList = React.createClass( {
 
                 <Header/>
 
-                { users.map( user => (
+                { state.users.map( user => (
                     <UserRow key={ user.cid }
                              user={ user }
                              onEdit={ () => state.editing = user }
@@ -59,8 +60,9 @@ export const UsersList = React.createClass( {
     },
 
     addUser( user ){
-        this.state.users.add( user );
-        this.state.adding = null;
+        const { state } = this;
+        state.users.add( user );
+        state.adding = null;
     }
 } );
 
@@ -88,8 +90,8 @@ const UserRow = ( { user, onEdit } ) =>(
 
 const EditUser = React.createClass( {
     props : {
-        user : User
-        onClose  : Function
+        user    : User
+        onClose : Function
     },
 
     state : {
