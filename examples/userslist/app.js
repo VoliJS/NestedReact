@@ -79,6 +79,10 @@
 	        email: String.has.check(_valuelinkTags.isRequired).check(_valuelinkTags.isEmail),
 	
 	        isActive: true
+	    },
+	
+	    remove: function remove() {
+	        this.collection.remove(this);
 	    }
 	});
 	
@@ -115,13 +119,13 @@
 	            }),
 	            _nestedreact2['default'].createElement(
 	                _reactModal2['default'],
-	                { isOpen: state.adding },
+	                { isOpen: Boolean(state.adding) },
 	                _nestedreact2['default'].createElement(EditUser, { user: state.adding,
 	                    onClose: this.addUser })
 	            ),
 	            _nestedreact2['default'].createElement(
 	                _reactModal2['default'],
-	                { isOpen: state.editing },
+	                { isOpen: Boolean(state.editing) },
 	                _nestedreact2['default'].createElement(EditUser, { user: state.editing,
 	                    onClose: function () {
 	                        return state.editing = null;
@@ -131,12 +135,13 @@
 	    },
 	
 	    addUser: function addUser(user) {
-	        if (user) {
-	            var state = this.state;
+	        var state = this.state;
 	
+	        if (user) {
 	            state.users.add(user);
-	            state.adding = null;
 	        }
+	
+	        state.adding = null;
 	    }
 	});
 	
@@ -238,7 +243,7 @@
 	    },
 	
 	    render: function render() {
-	        var linked = this.state.linkAll('name', 'email', 'isActive');
+	        var linked = this.state.user.linkAll('name', 'email', 'isActive');
 	
 	        return _nestedreact2['default'].createElement(
 	            'form',

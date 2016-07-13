@@ -18,7 +18,9 @@ const User = Model.extend({
                       .check( isEmail ),
 
         isActive : true
-    }
+    },
+
+    remove(){ this.collection.remove( this ); }
 });
 
 export const UsersList = React.createClass( {
@@ -46,12 +48,12 @@ export const UsersList = React.createClass( {
                     />
                 ) )}
 
-                <Modal isOpen={ state.adding }>
+                <Modal isOpen={ Boolean( state.adding ) }>
                     <EditUser user={ state.adding }
                               onClose={ this.addUser }/>
                 </Modal>
 
-                <Modal isOpen={ state.editing }>
+                <Modal isOpen={ Boolean( state.editing ) }>
                     <EditUser user={ state.editing }
                               onClose={ () => state.editing = null }/>
                 </Modal>
@@ -60,11 +62,13 @@ export const UsersList = React.createClass( {
     },
 
     addUser( user ){
+        const { state } = this;
+
         if( user ){
-            const { state } = this;
             state.users.add( user );
-            state.adding = null;
         }
+
+        state.adding = null;
     }
 } );
 
@@ -118,7 +122,7 @@ const EditUser = React.createClass( {
     },
 
     render(){
-        const linked = this.state.linkAll( 'name', 'email', 'isActive' );
+        const linked = this.state.user.linkAll( 'name', 'email', 'isActive' );
 
         return (
             <form onSubmit={ this.onSubmit }>
