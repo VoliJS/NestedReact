@@ -9,8 +9,7 @@ in size, so expressiveness is roughly the same.
 
 But. Check out how much less magical NestedReact solution feels - compare the code.
 
-In fact, there's an incredible amount of magic involved, just to make you feel that
-there are no any magic at all :).
+In fact, there's an incredible amount of dirty magic involved,
+just to make you feel that there are no any magic at all :).
 
-That's NestedReact. Relax, and write in natural way. No tricks are required from you.
-We've done all of them behind your back.
+That's NestedReact. Relax, and write in natural way, no tricks are required.

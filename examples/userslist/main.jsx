@@ -5,7 +5,7 @@ import React from 'nestedreact'
 import { Model } from 'nestedtypes'
 
 import Modal from 'react-modal'
-import {Input, isRequired, isEmail } from 'tags'
+import {Input, isRequired, isEmail } from 'valuelink/tags'
 
 const User = Model.extend({
     attributes : {
@@ -92,7 +92,7 @@ const UserRow = ( { user, onEdit } ) =>(
 
 const EditUser = React.createClass( {
     props : {
-        user    : User
+        user    : User,
         onClose : Function
     },
 
