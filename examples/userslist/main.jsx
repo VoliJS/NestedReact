@@ -25,7 +25,7 @@ export const UsersList = React.createClass( {
     state : {
         users   : User.Collection, // No comments required, isn't it?
         editing : User.from( 'users' ), // User from user collection, which is being edited.
-        adding  : User.value( null ) // new user, which is being added.
+        adding  : User.value( null ) // New user, which is being added.
     },
 
     render(){
@@ -60,9 +60,11 @@ export const UsersList = React.createClass( {
     },
 
     addUser( user ){
-        const { state } = this;
-        state.users.add( user );
-        state.adding = null;
+        if( user ){
+            const { state } = this;
+            state.users.add( user );
+            state.adding = null;
+        }
     }
 } );
 
