@@ -1,40 +1,47 @@
 import 'css/app.css'
 import React from 'nestedreact'
 import ReactDOM from 'react-dom'
-import { ToDo, LocalStorage } from './model.js'
+import {ToDo} from './model.js'
 import TodoList from './todolist.jsx'
 import Filter from './filter.jsx'
 import AddTodo from './addtodo.jsx'
 
 const App = React.createClass( {
-    Model : LocalStorage,
-
+    // Declare component state
     state : {
-        id         : 'todo-mvc',
         todos      : ToDo.Collection,
-        filterDone : Boolean.value( null )
+        filterDone : Boolean.value( null ) // null | true | false, initialized with null.
     },
 
     componentWillMount(){
-        this.state.fetch();
-        window.onunload = () => this.state.save();
+        const { state } = this,
+              // load raw JSON from local storage
+              json = JSON.parse( localStorage.getItem( 'todo-mvc' ) || "{}" );
+
+        // initialize state with raw JSON
+        state.set( json, { parse : true } );
+
+        window.onunload = () =>{
+            // Save state back to the local storage
+            localStorage.setItem( 'todo-mvc', JSON.stringify( state ) );
+        }
     },
 
     render(){
-        const { state } = this,
-              hasTodos = Boolean( state.todos.length );
+        const { todos, filterDone } = this.state,
+              hasTodos = Boolean( todos.length );
 
         return (
             <div>
                 <section className="todoapp">
-                    <AddTodo onEnter={ desc => state.todos.add({ desc : desc }) }/>
+                    <AddTodo onEnter={ desc => todos.add({ desc : desc }) }/>
 
-                    { hasTodos && <TodoList todos={ state.todos }
-                                            filterDone={ state.filterDone }/> }
+                    { hasTodos && <TodoList todos={ todos }
+                                            filterDone={ filterDone }/> }
 
-                    { hasTodos && <Filter count={ state.todos.activeCount }
-                                          filterLink={ state.getLink( 'filterDone' )}
-                                          onClear={ () => state.todos.clearCompleted() }
+                    { hasTodos && <Filter count={ todos.activeCount }
+                                          filterLink={ this.state.getLink( 'filterDone' ) }
+                                          onClear={ () => todos.clearCompleted() }
                     />}
                 </section>
 

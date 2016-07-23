@@ -23,8 +23,8 @@
   "dependencies": {
   },
   "peerDependencies" : {
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0",
+    "react": "^15.0.0||^0.14.0" ,
+    "react-dom": "^15.0.0||^0.14.0",
     "nestedtypes": "^1.3.2-rc0"
   },
   "devDependencies": {

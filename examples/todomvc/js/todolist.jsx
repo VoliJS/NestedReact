@@ -18,8 +18,7 @@ const TodoList = React.createClass( {
 
     render(){
         const { todos, filterDone } = this.props,
-              filtered = filterDone === null ?
-                            todos.models
+              filtered = filterDone === null ? todos.models
                             : todos.filter( todo => todo.done === filterDone ),
 
               editingLink = this.state.getLink( 'editing' );
@@ -62,7 +61,7 @@ const TodoItem = ( { todo, editingLink } ) =>{
                 <Input className="toggle" type="checkbox"
                        checkedLink={ todo.getLink( 'done' ) }/>
 
-                <label onDoubleClick={ () => editingLink.set( todo ) }>
+                <label onDoubleClick={ editingLink.action( () => todo ) }>
                     { todo.desc }
                 </label>
 
@@ -72,7 +71,7 @@ const TodoItem = ( { todo, editingLink } ) =>{
             { editing && <Input className="edit"
                                 valueLink={ todo.getLink( 'desc' ) }
                                 autoFocus={ true }
-                                onBlur={ () => editingLink.set( null ) }
+                                onBlur={ editingLink.action( () => null ) }
                                 onKeyDown={ editingLink.action( clearOnEnter ) }/> }
         </li>
     );

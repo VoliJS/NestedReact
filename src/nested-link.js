@@ -1,19 +1,17 @@
 var Nested = require( 'nestedtypes' ),
-    Link   = require( 'valuelink' );
+    Link   = require( 'valuelink' ).default;
 
 module.exports = Nested.Link = Link;
+
 Object.extend.attach( Link );
 
 /**
  * Link to NestedType's model attribute.
  * Strict evaluation of value, lazy evaluation of validation error.
- * Safe implementation of _changeToken.
- * @param model
- * @param attr
- * @constructor
+ * Links are cached in the models
  */
-function ModelLink( model, attr ){
-    this.value = model[ attr ];
+function ModelLink( model, attr, value ){
+    Link.call( this, value );
     this.model = model;
     this.attr  = attr;
 }
@@ -38,12 +36,38 @@ ModelLink.prototype = Object.create( Link.prototype, {
         set : function( x ){
             this._error = x;
         }
-    },
-
-    _changeToken : {
-        get : function(){ return this.model._changeToken; }
     }
 } );
+
+var ModelProto = Nested.Model.prototype;
+
+Object.defineProperty( ModelProto, 'links', {
+    get : function(){
+        return this._links || ( this._links = new this.Attributes( {} ) );
+    }
+});
+
+function cacheLink( links, model, key ){
+    var cached = links[ key ],
+        value = model[ key ];
+
+    return cached && cached.value === value ? cached
+                : links[ key ] = new ModelLink( model, key, value );
+}
+
+ModelProto.getLink = function( key ){
+    return cacheLink( this.links, this, key );
+};
+
+ModelProto.linkAll = function(){
+    var links = this.links;
+
+    for( var i = 0; i < arguments.length; i++ ){
+        cacheLink( links, this, arguments[ i ] );
+    }
+
+    return links;
+};
 
 /**
  * Boolean link to presence of NestedType's model in collection.
@@ -54,21 +78,19 @@ ModelLink.prototype = Object.create( Link.prototype, {
  * @constructor
  */
 function CollectionLink( collection, model ){
-    this.value      = Boolean( collection.get( model ) );
+    Link.call( this, Boolean( collection._byId[ model.cid ] ) );
     this.collection = collection;
     this.model      = model;
 }
 
 CollectionLink.prototype = Object.create( Link.prototype, {
-    _changeToken : {
-        get : function(){ return this.collection._changeToken; }
+    constructor : { value : CollectionLink },
+    set : {
+        value : function( x ){
+            this.collection.toggle( this.model, x );
+        }
     }
 } );
-
-CollectionLink.prototype.constructor = CollectionLink;
-CollectionLink.prototype.set         = function( x ){
-    this.collection.toggle( this.model, x );
-};
 
 var CollectionProto = Nested.Collection.prototype;
 
@@ -77,18 +99,12 @@ CollectionProto.hasLink = function( model ){
 };
 
 CollectionProto.getLink = function( prop ){
-    return new ModelLink( this, prop );
+    var collection = this;
+    return Link.value( collection[ prop ], function( x ){ collection[ prop ] = x; });
 };
-
-var ModelProto      = Nested.Model.prototype;
-
-ModelProto.getLink = function( attr ){
-    return new ModelLink( this, attr );
-};
-
 
 function ModelDeepLink( model, path, options ){
-    this.value   = model.deepGet( path );
+    Link.call( this, model.deepGet( path ) );
     this.model   = model;
     this.path    = path;
     this.options = options;

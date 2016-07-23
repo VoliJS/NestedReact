@@ -505,14 +505,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__( 1 ),
+	var React        = __webpack_require__( 1 ),
 	    jsonNotEqual = __webpack_require__( 9 ).jsonNotEqual;
 	
-	module.exports = React.createClass({
+	module.exports = React.createClass( {
 	    displayName : 'BackboneView',
 	
 	    propTypes : {
-	        View : React.PropTypes.func.isRequired,
+	        View    : React.PropTypes.func.isRequired,
 	        options : React.PropTypes.object
 	    },
 	
@@ -525,31 +525,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var view = this.view;
 	
 	        return view && (
-	               typeof view.hasUnsavedChanges === 'function' ? view.hasUnsavedChanges() : view.hasUnsavedChanges
+	                typeof view.hasUnsavedChanges === 'function' ? view.hasUnsavedChanges() : view.hasUnsavedChanges
 	            );
 	    },
 	
 	    render : function(){
-	        return React.DOM.div({
-	            ref : 'subview',
+	        return React.DOM.div( {
+	            ref       : 'subview',
 	            className : this.props.className
-	        });
+	        } );
 	    },
 	
-	    componentDidMount : function(){
+	    componentDidMount    : function(){
 	        this._mountView();
 	    },
-	    componentDidUpdate : function(){
+	
+	    componentDidUpdate   : function(){
 	        this._dispose();
 	        this._mountView();
 	    },
+	
 	    componentWillUnmount : function(){
 	        this._dispose();
 	    },
 	
-	    _mountView: function () {
+	    _mountView : function(){
 	        var el = this.refs.subview,
-	            p = this.props;
+	            p  = this.props;
 	
 	        var view = this.view = p.options ? new p.View( p.options ) : new p.View();
 	
@@ -563,10 +565,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            view.stopListening();
 	            if( view.dispose ) view.dispose();
 	            this.refs.subview.innerHTML = "";
-	            this.view = null;
+	            this.view                   = null;
 	        }
 	    }
-	});
+	} );
 
 /***/ },
 /* 9 */
@@ -635,21 +637,19 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var Nested = __webpack_require__( 3 ),
-	    Link   = __webpack_require__( 11 );
+	    Link   = __webpack_require__( 11 ).default;
 	
 	module.exports = Nested.Link = Link;
+	
 	Object.extend.attach( Link );
 	
 	/**
 	 * Link to NestedType's model attribute.
 	 * Strict evaluation of value, lazy evaluation of validation error.
-	 * Safe implementation of _changeToken.
-	 * @param model
-	 * @param attr
-	 * @constructor
+	 * Links are cached in the models
 	 */
-	function ModelLink( model, attr ){
-	    this.value = model[ attr ];
+	function ModelLink( model, attr, value ){
+	    Link.call( this, value );
 	    this.model = model;
 	    this.attr  = attr;
 	}
@@ -674,12 +674,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	        set : function( x ){
 	            this._error = x;
 	        }
-	    },
-	
-	    _changeToken : {
-	        get : function(){ return this.model._changeToken; }
 	    }
 	} );
+	
+	var ModelProto = Nested.Model.prototype;
+	
+	Object.defineProperty( ModelProto, 'links', {
+	    get : function(){
+	        return this._links || ( this._links = new this.Attributes( {} ) );
+	    }
+	});
+	
+	function cacheLink( links, model, key ){
+	    var cached = links[ key ],
+	        value = model[ key ];
+	
+	    return cached && cached.value === value ? cached
+	                : links[ key ] = new ModelLink( model, key, value );
+	}
+	
+	ModelProto.getLink = function( key ){
+	    return cacheLink( this.links, this, key );
+	};
+	
+	ModelProto.linkAll = function(){
+	    var links = this.links;
+	
+	    for( var i = 0; i < arguments.length; i++ ){
+	        cacheLink( links, this, arguments[ i ] );
+	    }
+	
+	    return links;
+	};
 	
 	/**
 	 * Boolean link to presence of NestedType's model in collection.
@@ -690,21 +716,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @constructor
 	 */
 	function CollectionLink( collection, model ){
-	    this.value      = Boolean( collection.get( model ) );
+	    Link.call( this, Boolean( collection._byId[ model.cid ] ) );
 	    this.collection = collection;
 	    this.model      = model;
 	}
 	
 	CollectionLink.prototype = Object.create( Link.prototype, {
-	    _changeToken : {
-	        get : function(){ return this.collection._changeToken; }
+	    constructor : { value : CollectionLink },
+	    set : {
+	        value : function( x ){
+	            this.collection.toggle( this.model, x );
+	        }
 	    }
 	} );
-	
-	CollectionLink.prototype.constructor = CollectionLink;
-	CollectionLink.prototype.set         = function( x ){
-	    this.collection.toggle( this.model, x );
-	};
 	
 	var CollectionProto = Nested.Collection.prototype;
 	
@@ -713,18 +737,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	CollectionProto.getLink = function( prop ){
-	    return new ModelLink( this, prop );
+	    var collection = this;
+	    return Link.value( collection[ prop ], function( x ){ collection[ prop ] = x; });
 	};
-	
-	var ModelProto      = Nested.Model.prototype;
-	
-	ModelProto.getLink = function( attr ){
-	    return new ModelLink( this, attr );
-	};
-	
 	
 	function ModelDeepLink( model, path, options ){
-	    this.value   = model.deepGet( path );
+	    Link.call( this, model.deepGet( path ) );
 	    this.model   = model;
 	    this.path    = path;
 	    this.options = options;
