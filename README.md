@@ -20,6 +20,14 @@ You can compare solution size and complexity to other approaches on [TodoMVC](/e
 
 ![todomvc](/examples/todomvc/SLOC-comparison.jpg) ![flux-comparison](/examples/flux-comparison/sloc-comparison.png)
 
+# (!) Version 0.6 notes
+ 
+New version of value links is included. There are breaking changes.
+
+`new Link( value, x => ... )` doesn't work any more, use `Link.value( value, x => ... )` instead.
+
+There are absolutely exciting new links features. Please, refer to [NestedLink documentation](https://github.com/Volicon/NestedLink) for details.   
+
 # Installation
 It's packed as single UMD, thus grab the module or use `npm` to install.
 	`npm install --save nestedreact`

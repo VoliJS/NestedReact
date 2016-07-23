@@ -1,6 +1,13 @@
 var React    = require( 'react' ),
-    _        = require( 'underscore' ),
     ReactDOM = require( 'react-dom' );
+
+function fastAssign( dest, source ){
+    for( var name in source ) {
+        dest[ name ] = source[ name ];
+    }
+
+    return dest;
+}
 
 module.exports.use = function( View ){
     var dispose    = View.prototype.dispose || function(){},
@@ -30,7 +37,7 @@ module.exports.use = function( View ){
         },
 
         render : function(){
-            var options   = this.prevState ? _.extend( { _keepState : this.prevState }, this.options ) : this.options,
+            var options   = this.prevState ? fastAssign( { _keepState : this.prevState }, this.options ) : this.options,
                 element   = React.createElement( this.reactClass, options ),
                 component = ReactDOM.render( element, this.el );
 
