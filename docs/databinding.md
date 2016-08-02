@@ -12,22 +12,6 @@ Somewhere at the top level component(s) there must be the declaration linking mo
 
 It's generally advised to keep stateful components at the top level, and use `listenToProps` in the middle level for optimization purposes if you want local updates. Keep you bottom-level components pure, and try to do the same for the most of your middle level (`listenToProps` used wisely won't hurt). For further information on this topic consult the top-level guide.
 
-## Link transformations
-
-Attribute's link can be further transformed using extended link API. Link transformations allowing you to use new `stateless functions` component definition style introduced in React 0.14 in most cases.
-
-For links with any value type:
-
-- `link.equals( x )` creates boolean link which is true whenever link value is equal to x. Useful for radio groups.
-- `link.update( x => !x )` creates function transforming link value (toggling boolean value in this case). Useful for `onClick` event handlers.
-
-For link enclosing array:
-
-- `arrLink.contains( x )` creates boolean link which is true whenever x is contained in an array in link value. Useful for checkboxes. Avoid long arrays, currently operations has O(N^2) complexity.
-
-
-
-
 ## Checkboxes
 
 Standard `<input/>` will work. Custom Checkbox component might be implemented like this:
