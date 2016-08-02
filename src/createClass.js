@@ -194,15 +194,21 @@ var tools = Nested.tools;
 Nested.Mixable.mixTo( React.Component );
 React.Component.define = function( protoProps, staticProps ){
     var staticsDefinition = tools.getChangedStatics( this, 'state', 'props', 'context', 'childContext', 'listenToProps', 'listenToState', 'pureRender' ),
-        definition = tools.assign( staticsDefinition, protoProps || {}, {
+        definition = compileSpec( tools.assign( staticsDefinition, protoProps || {}, {
             properties : {
                 View : function(){
                     return this._View || ( this._View = Nested._BaseView.extend( { reactClass : component } ) );
                 }
             }
-        } );
+        } ) );
 
-    Nested.Mixable.define.call( this, compileSpec( definition ), staticProps );
+    var getDefaultProps = definition.getDefaultProps,
+        propTypes       = definition.propTypes;
+
+    if( getDefaultProps ) this.defaultProps = getDefaultProps();
+    if( propTypes ) this.propTypes = propTypes;
+
+    Nested.Mixable.define.call( this, tools.omit( definition, 'getDefaultProps', 'propTypes' ), staticProps );
 
     return this;
 }

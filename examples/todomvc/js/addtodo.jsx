@@ -1,14 +1,16 @@
 import React from 'nestedreact'
+import { define } from 'nestedtypes'
 import { Input } from 'valuelink/tags.jsx'
 
-const AddTodo = React.createClass( {
-    props : {
+@define({})
+class AddTodo extends React.Component {
+    static props = {
         onEnter : Function.value( function(){} )
-    },
+    }
 
-    state : {
+    static state = {
         desc : String
-    },
+    }
 
     render(){
         return (
@@ -17,11 +19,11 @@ const AddTodo = React.createClass( {
 
                 <Input className="new-todo" placeholder="What needs to be done?" autoFocus
                        valueLink={ this.state.getLink( 'desc' ) }
-                       onKeyDown={ this.onKeyDown }
+                       onKeyDown={ e => this.onKeyDown( e ) }
                 />
             </header>
         );
-    },
+    }
 
     onKeyDown( { keyCode } ){
         if( keyCode === 13 ){
@@ -31,6 +33,6 @@ const AddTodo = React.createClass( {
             state.desc = "";
         }
     }
-} );
+}
 
 export default AddTodo;

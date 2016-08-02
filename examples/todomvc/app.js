@@ -844,15 +844,21 @@
 		Nested.Mixable.mixTo( React.Component );
 		React.Component.define = function( protoProps, staticProps ){
 		    var staticsDefinition = tools.getChangedStatics( this, 'state', 'props', 'context', 'childContext', 'listenToProps', 'listenToState', 'pureRender' ),
-		        definition = tools.assign( staticsDefinition, protoProps || {}, {
+		        definition = compileSpec( tools.assign( staticsDefinition, protoProps || {}, {
 		            properties : {
 		                View : function(){
 		                    return this._View || ( this._View = Nested._BaseView.extend( { reactClass : component } ) );
 		                }
 		            }
-		        } );
+		        } ) );
 		
-		    Nested.Mixable.define.call( this, compileSpec( definition ), staticProps );
+		    var getDefaultProps = definition.getDefaultProps,
+		        propTypes       = definition.propTypes;
+		
+		    if( getDefaultProps ) this.defaultProps = getDefaultProps();
+		    if( propTypes ) this.propTypes = propTypes;
+		
+		    Nested.Mixable.define.call( this, tools.omit( definition, 'getDefaultProps', 'propTypes' ), staticProps );
 		
 		    return this;
 		}
@@ -39473,6 +39479,14 @@
 
 	'use strict';
 	
+	var _get = __webpack_require__(207)['default'];
+	
+	var _inherits = __webpack_require__(213)['default'];
+	
+	var _createClass = __webpack_require__(222)['default'];
+	
+	var _classCallCheck = __webpack_require__(225)['default'];
+	
 	var _interopRequireDefault = __webpack_require__(1)['default'];
 	
 	Object.defineProperty(exports, '__esModule', {
@@ -39483,50 +39497,349 @@
 	
 	var _nestedreact2 = _interopRequireDefault(_nestedreact);
 	
+	var _nestedtypes = __webpack_require__(181);
+	
 	var _valuelinkTagsJsx = __webpack_require__(187);
 	
-	var AddTodo = _nestedreact2['default'].createClass({
-	    displayName: 'AddTodo',
+	var AddTodo = (function (_React$Component) {
+	    _inherits(AddTodo, _React$Component);
 	
-	    props: {
-	        onEnter: Function.value(function () {})
-	    },
+	    function AddTodo() {
+	        _classCallCheck(this, _AddTodo);
 	
-	    state: {
-	        desc: String
-	    },
-	
-	    render: function render() {
-	        return _nestedreact2['default'].createElement(
-	            'header',
-	            { className: 'header' },
-	            _nestedreact2['default'].createElement(
-	                'h1',
-	                null,
-	                'todos'
-	            ),
-	            _nestedreact2['default'].createElement(_valuelinkTagsJsx.Input, { className: 'new-todo', placeholder: 'What needs to be done?', autoFocus: true,
-	                valueLink: this.state.getLink('desc'),
-	                onKeyDown: this.onKeyDown
-	            })
-	        );
-	    },
-	
-	    onKeyDown: function onKeyDown(_ref) {
-	        var keyCode = _ref.keyCode;
-	
-	        if (keyCode === 13) {
-	            var state = this.state;
-	            var props = this.props;
-	
-	            state.desc && props.onEnter(state.desc);
-	            state.desc = "";
-	        }
+	        _get(Object.getPrototypeOf(_AddTodo.prototype), 'constructor', this).apply(this, arguments);
 	    }
-	});
+	
+	    _createClass(AddTodo, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this = this;
+	
+	            return _nestedreact2['default'].createElement(
+	                'header',
+	                { className: 'header' },
+	                _nestedreact2['default'].createElement(
+	                    'h1',
+	                    null,
+	                    'todos'
+	                ),
+	                _nestedreact2['default'].createElement(_valuelinkTagsJsx.Input, { className: 'new-todo', placeholder: 'What needs to be done?', autoFocus: true,
+	                    valueLink: this.state.getLink('desc'),
+	                    onKeyDown: function (e) {
+	                        return _this.onKeyDown(e);
+	                    }
+	                })
+	            );
+	        }
+	    }, {
+	        key: 'onKeyDown',
+	        value: function onKeyDown(_ref) {
+	            var keyCode = _ref.keyCode;
+	
+	            if (keyCode === 13) {
+	                var state = this.state;
+	                var props = this.props;
+	
+	                state.desc && props.onEnter(state.desc);
+	                state.desc = "";
+	            }
+	        }
+	    }], [{
+	        key: 'props',
+	        value: {
+	            onEnter: Function.value(function () {})
+	        },
+	        enumerable: true
+	    }, {
+	        key: 'state',
+	        value: {
+	            desc: String
+	        },
+	        enumerable: true
+	    }]);
+	
+	    var _AddTodo = AddTodo;
+	    AddTodo = (0, _nestedtypes.define)({})(AddTodo) || AddTodo;
+	    return AddTodo;
+	})(_nestedreact2['default'].Component);
 	
 	exports['default'] = AddTodo;
 	module.exports = exports['default'];
+
+/***/ },
+/* 207 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$getOwnPropertyDescriptor = __webpack_require__(208)["default"];
+	
+	exports["default"] = function get(_x, _x2, _x3) {
+	  var _again = true;
+	
+	  _function: while (_again) {
+	    var object = _x,
+	        property = _x2,
+	        receiver = _x3;
+	    _again = false;
+	    if (object === null) object = Function.prototype;
+	
+	    var desc = _Object$getOwnPropertyDescriptor(object, property);
+	
+	    if (desc === undefined) {
+	      var parent = Object.getPrototypeOf(object);
+	
+	      if (parent === null) {
+	        return undefined;
+	      } else {
+	        _x = parent;
+	        _x2 = property;
+	        _x3 = receiver;
+	        _again = true;
+	        desc = parent = undefined;
+	        continue _function;
+	      }
+	    } else if ("value" in desc) {
+	      return desc.value;
+	    } else {
+	      var getter = desc.get;
+	
+	      if (getter === undefined) {
+	        return undefined;
+	      }
+	
+	      return getter.call(receiver);
+	    }
+	  }
+	};
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 208 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(209), __esModule: true };
+
+/***/ },
+/* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(199);
+	__webpack_require__(210);
+	module.exports = function getOwnPropertyDescriptor(it, key){
+	  return $.getDesc(it, key);
+	};
+
+/***/ },
+/* 210 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+	var toIObject = __webpack_require__(211);
+	
+	__webpack_require__(212)('getOwnPropertyDescriptor', function($getOwnPropertyDescriptor){
+	  return function getOwnPropertyDescriptor(it, key){
+	    return $getOwnPropertyDescriptor(toIObject(it), key);
+	  };
+	});
+
+/***/ },
+/* 211 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// to indexed object, toObject with fallback for non-array-like ES3 strings
+	var IObject = __webpack_require__(202)
+	  , defined = __webpack_require__(201);
+	module.exports = function(it){
+	  return IObject(defined(it));
+	};
+
+/***/ },
+/* 212 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// most Object methods by ES6 should accept primitives
+	var $export = __webpack_require__(193)
+	  , core    = __webpack_require__(195)
+	  , fails   = __webpack_require__(204);
+	module.exports = function(KEY, exec){
+	  var fn  = (core.Object || {})[KEY] || Object[KEY]
+	    , exp = {};
+	  exp[KEY] = exec(fn);
+	  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
+	};
+
+/***/ },
+/* 213 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$create = __webpack_require__(214)["default"];
+	
+	var _Object$setPrototypeOf = __webpack_require__(216)["default"];
+	
+	exports["default"] = function (subClass, superClass) {
+	  if (typeof superClass !== "function" && superClass !== null) {
+	    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+	  }
+	
+	  subClass.prototype = _Object$create(superClass && superClass.prototype, {
+	    constructor: {
+	      value: subClass,
+	      enumerable: false,
+	      writable: true,
+	      configurable: true
+	    }
+	  });
+	  if (superClass) _Object$setPrototypeOf ? _Object$setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	};
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 214 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(215), __esModule: true };
+
+/***/ },
+/* 215 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(199);
+	module.exports = function create(P, D){
+	  return $.create(P, D);
+	};
+
+/***/ },
+/* 216 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(217), __esModule: true };
+
+/***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(218);
+	module.exports = __webpack_require__(195).Object.setPrototypeOf;
+
+/***/ },
+/* 218 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.3.19 Object.setPrototypeOf(O, proto)
+	var $export = __webpack_require__(193);
+	$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(219).set});
+
+/***/ },
+/* 219 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// Works with __proto__ only. Old v8 can't work with null proto objects.
+	/* eslint-disable no-proto */
+	var getDesc  = __webpack_require__(199).getDesc
+	  , isObject = __webpack_require__(220)
+	  , anObject = __webpack_require__(221);
+	var check = function(O, proto){
+	  anObject(O);
+	  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
+	};
+	module.exports = {
+	  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+	    function(test, buggy, set){
+	      try {
+	        set = __webpack_require__(196)(Function.call, getDesc(Object.prototype, '__proto__').set, 2);
+	        set(test, []);
+	        buggy = !(test instanceof Array);
+	      } catch(e){ buggy = true; }
+	      return function setPrototypeOf(O, proto){
+	        check(O, proto);
+	        if(buggy)O.__proto__ = proto;
+	        else set(O, proto);
+	        return O;
+	      };
+	    }({}, false) : undefined),
+	  check: check
+	};
+
+/***/ },
+/* 220 */
+/***/ function(module, exports) {
+
+	module.exports = function(it){
+	  return typeof it === 'object' ? it !== null : typeof it === 'function';
+	};
+
+/***/ },
+/* 221 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var isObject = __webpack_require__(220);
+	module.exports = function(it){
+	  if(!isObject(it))throw TypeError(it + ' is not an object!');
+	  return it;
+	};
+
+/***/ },
+/* 222 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _Object$defineProperty = __webpack_require__(223)["default"];
+	
+	exports["default"] = (function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];
+	      descriptor.enumerable = descriptor.enumerable || false;
+	      descriptor.configurable = true;
+	      if ("value" in descriptor) descriptor.writable = true;
+	
+	      _Object$defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }
+	
+	  return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+	    if (staticProps) defineProperties(Constructor, staticProps);
+	    return Constructor;
+	  };
+	})();
+	
+	exports.__esModule = true;
+
+/***/ },
+/* 223 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(224), __esModule: true };
+
+/***/ },
+/* 224 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(199);
+	module.exports = function defineProperty(it, key, desc){
+	  return $.setDesc(it, key, desc);
+	};
+
+/***/ },
+/* 225 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	exports["default"] = function (instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	};
+	
+	exports.__esModule = true;
 
 /***/ }
 /******/ ]);
