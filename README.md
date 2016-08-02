@@ -1,6 +1,6 @@
 # NestedReact
 
-> Stay tuned. Version 1.0 is on the way, with the full power of ES6 and mixins. Together. And with NestedTypes 2.0 as the state management solutions, which is 2-3 times faster in all browsers and brings ES6 classes support with it.
+> Stay tuned. Version 1.0 is on the way, with the full power of ES6 classes and old good React mixins. Together. You don't have to choose. And with NestedTypes 2.0 as the state management solutions, which is 2-3 times faster in all browsers and brings ES6 classes support with it.
 
 React application architecture with [classical OO models](https://github.com/volicon/nestedtypes) in the data layer.
 
