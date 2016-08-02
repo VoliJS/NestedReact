@@ -176,25 +176,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	var ModelState = {
-	    listenToState : 'change',
 	    model         : null,
 	
-	    getInitialState : function(){
-	        this.model = this.props._keepState || new this.Model();
-	        // enable owner references in the model to access component props
-	        this.model._owner = this;
+	    _onChildrenChange : function(){
+	        forceUpdate.call( this );
+	    },
 	
+	    componentWillMount : function(){
+	        this.model = this.props._keepState || new this.Model();
 	        return this.model;
+	    },
+	
+	    componentDidMount : function(){
+	        this.model._owner = this;
 	    },
 	
 	    // reference global store to fix model's store locator
 	    getStore : function(){
 	        return this.model._defaultStore;
-	    },
-	
-	    componentDidMount : function(){
-	        var events = this.listenToState;
-	        events && this.listenTo( this.model, events, forceUpdate );
 	    },
 	
 	    componentWillUnmount : function(){
@@ -328,12 +327,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	React.Component.mixinRules({
-	    componentWillMount : 'sequence',
-	    componentDidMount : 'sequence',
-	    componentWillReceiveProps : 'sequence',
+	    componentWillMount : 'reverse',
+	    componentDidMount : 'reverse',
+	    componentWillReceiveProps : 'reverse',
 	    shouldComponentUpdate : 'some',
-	    componentWillUpdate : 'sequence',
-	    componentDidUpdate : 'sequence',
+	    componentWillUpdate : 'reverse',
+	    componentDidUpdate : 'reverse',
 	    componentWillUnmount : 'sequence',
 	});
 
