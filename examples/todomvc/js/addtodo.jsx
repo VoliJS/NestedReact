@@ -15,7 +15,7 @@ const AddTodo = React.createClass( {
             <header className="header">
                 <h1>todos</h1>
 
-                <Input className="new-todo" placeholder="What needs to be done?" autofocus
+                <Input className="new-todo" placeholder="What needs to be done?" autoFocus
                        valueLink={ this.state.getLink( 'desc' ) }
                        onKeyDown={ this.onKeyDown }
                 />

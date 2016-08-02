@@ -708,25 +708,23 @@
 		};
 		
 		var ModelState = {
-		    listenToState : 'change',
 		    model         : null,
 		
-		    getInitialState : function(){
-		        this.model = this.props._keepState || new this.Model();
-		        // enable owner references in the model to access component props
-		        this.model._owner = this;
+		    _onChildrenChange : function(){
+		        forceUpdate.call( this );
+		    },
 		
-		        return this.model;
+		    componentWillMount : function(){
+		        this.state = this.model = this.props._keepState || new this.Model();
+		    },
+		
+		    componentDidMount : function(){
+		        this.model._owner = this;
 		    },
 		
 		    // reference global store to fix model's store locator
 		    getStore : function(){
 		        return this.model._defaultStore;
-		    },
-		
-		    componentDidMount : function(){
-		        var events = this.listenToState;
-		        events && this.listenTo( this.model, events, forceUpdate );
 		    },
 		
 		    componentWillUnmount : function(){
@@ -860,12 +858,12 @@
 		}
 		
 		React.Component.mixinRules({
-		    componentWillMount : 'sequence',
-		    componentDidMount : 'sequence',
-		    componentWillReceiveProps : 'sequence',
+		    componentWillMount : 'reverse',
+		    componentDidMount : 'reverse',
+		    componentWillReceiveProps : 'reverse',
 		    shouldComponentUpdate : 'some',
-		    componentWillUpdate : 'sequence',
-		    componentDidUpdate : 'sequence',
+		    componentWillUpdate : 'reverse',
+		    componentDidUpdate : 'reverse',
 		    componentWillUnmount : 'sequence',
 		});
 	
@@ -39507,7 +39505,7 @@
 	                null,
 	                'todos'
 	            ),
-	            _nestedreact2['default'].createElement(_valuelinkTagsJsx.Input, { className: 'new-todo', placeholder: 'What needs to be done?', autofocus: true,
+	            _nestedreact2['default'].createElement(_valuelinkTagsJsx.Input, { className: 'new-todo', placeholder: 'What needs to be done?', autoFocus: true,
 	                valueLink: this.state.getLink('desc'),
 	                onKeyDown: this.onKeyDown
 	            })

@@ -183,8 +183,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	
 	    componentWillMount : function(){
-	        this.model = this.props._keepState || new this.Model();
-	        return this.model;
+	        this.state = this.model = this.props._keepState || new this.Model();
 	    },
 	
 	    componentDidMount : function(){
