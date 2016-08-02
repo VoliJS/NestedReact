@@ -13,7 +13,7 @@ var ComponentView = require( './component-view' );
 
 // export hook to override base View class used...
 NestedReact.useView = function( View ){
-    NestedReact._BaseView = ComponentView.use( View );
+    Nested._BaseView = ComponentView.use( View );
 };
 
 NestedReact.useView( Nested.View );

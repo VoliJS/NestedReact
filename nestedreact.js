@@ -69,7 +69,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	// export hook to override base View class used...
 	NestedReact.useView = function( View ){
-	    NestedReact._BaseView = ComponentView.use( View );
+	    Nested._BaseView = ComponentView.use( View );
 	};
 	
 	NestedReact.useView( Nested.View );
@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $   : { value : function( sel ){ return this.$el.find( sel ); } }
 	} );
 	
-	NestedReact.Link = __webpack_require__( 10 );
+	NestedReact.Link = __webpack_require__( 9 );
 
 
 /***/ },
@@ -203,8 +203,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	function createClass( spec ){
-	    var mixins = spec.mixins || ( spec.mixins = [] );
+	    var component = React.createClass( compileSpec( spec ) );
 	
+	    // attach lazily evaluated backbone View class
+	    Object.defineProperty( component, 'View', {
+	        get : function(){
+	            return this._View || ( this._View = Nested._BaseView.extend( { reactClass : component } ) );
+	        }
+	    } );
+	
+	    return component;
+	}
+	
+	function compileSpec( spec ){
+	    var mixins = spec.mixins || ( spec.mixins = [] );
 	
 	    // process context specs...
 	    var context = getTypeSpecs( spec, 'context' );
@@ -266,18 +278,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        mixins.push( pureRender( spec.propTypes ) );
 	    }
 	
-	    var component = React.createClass( spec );
-	
-	    // attach lazily evaluated backbone View class
-	    var NestedReact = this;
-	
-	    Object.defineProperty( component, 'View', {
-	        get : function(){
-	            return this._View || ( this._View = NestedReact._BaseView.extend( { reactClass : component } ) );
-	        }
-	    } );
-	
-	    return component;
+	    return spec;
 	}
 	
 	function getTypeSpecs( spec, name1, name2 ){
@@ -307,7 +308,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = createClass;
-
+	
+	var tools = Nested.tools;
+	
+	Nested.Mixable.mixTo( React.Component );
+	React.Component.define = function( protoProps, staticProps ){
+	    var staticsDefinition = tools.getChangedStatics( this, 'state', 'props', 'context', 'childContext', 'listenToProps', 'listenToState', 'pureRender' ),
+	        definition = tools.assign( staticsDefinition, protoProps || {}, {
+	            properties : {
+	                View : function(){
+	                    return this._View || ( this._View = Nested._BaseView.extend( { reactClass : component } ) );
+	                }
+	            }
+	        } );
+	
+	    Nested.Mixable.define.call( this, compileSpec( definition ), staticProps );
+	
+	    return this;
+	}
+	
+	React.Component.mixinRules({
+	    componentWillMount : 'sequence',
+	    componentDidMount : 'sequence',
+	    componentWillReceiveProps : 'sequence',
+	    shouldComponentUpdate : 'some',
+	    componentWillUpdate : 'sequence',
+	    componentDidUpdate : 'sequence',
+	    componentWillUnmount : 'sequence',
+	});
 
 /***/ },
 /* 5 */
@@ -357,7 +385,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        defaults,
 	        modelProto = Nested.Model.defaults( props ).prototype;
 	
-	    modelProto.forEachAttr( modelProto.__attributes, function( spec, name ){
+	    modelProto.forEachAttr( modelProto._attributes, function( spec, name ){
 	        if( name !== 'id' ){
 	            propTypes[ name ] = translateType( spec.type );
 	
@@ -506,7 +534,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var React        = __webpack_require__( 1 ),
-	    jsonNotEqual = __webpack_require__( 9 ).jsonNotEqual;
+	    jsonNotEqual = __webpack_require__( 3 ).tools.notEqual;
 	
 	module.exports = React.createClass( {
 	    displayName : 'BackboneView',
@@ -572,76 +600,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 9 */
-/***/ function(module, exports) {
-
-	// equality checking for deep JSON comparison of plain Array and Object
-	var ArrayProto = Array.prototype,
-	    ObjectProto = Object.prototype;
-	
-	exports.jsonNotEqual = jsonNotEqual;
-	function jsonNotEqual( objA, objB) {
-	    if (objA === objB) {
-	        return false;
-	    }
-	
-	    if (typeof objA !== 'object' || !objA ||
-	        typeof objB !== 'object' || !objB ) {
-	        return true;
-	    }
-	
-	    var protoA = Object.getPrototypeOf( objA ),
-	        protoB = Object.getPrototypeOf( objB );
-	
-	    if( protoA !== protoB ) return true;
-	
-	    if( protoA === ArrayProto ) return arraysNotEqual( objA, objB );
-	    if( protoA === ObjectProto ) return objectsNotEqual( objA, objB );
-	
-	    return true;
-	}
-	
-	function objectsNotEqual( objA, objB ){
-	    var keysA = Object.keys(objA);
-	    var keysB = Object.keys(objB);
-	
-	    if (keysA.length !== keysB.length) {
-	        return true;
-	    }
-	
-	    // Test for A's keys different from B.
-	    var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
-	
-	    for (var i = 0; i < keysA.length; i++) {
-	        var key = keysA[i];
-	        if ( !bHasOwnProperty( key ) || jsonNotEqual( objA[ key ], objB[ key ] )) {
-	            return true;
-	        }
-	    }
-	
-	    return false;
-	}
-	
-	function arraysNotEqual( a, b ){
-	    if( a.length !== b.length ) return true;
-	
-	    for( var i = 0; i < a.length; i++ ){
-	        if( jsonNotEqual( a[ i ], b[ i ] ) ) return true;
-	    }
-	
-	    return false;
-	}
-
-
-/***/ },
-/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Nested = __webpack_require__( 3 ),
-	    Link   = __webpack_require__( 11 ).default;
+	    Link   = __webpack_require__( 10 ).default;
 	
 	module.exports = Nested.Link = Link;
 	
-	Object.extend.attach( Link );
+	Nested.Mixable.mixTo( Link );
 	
 	/**
 	 * Link to NestedType's model attribute.
@@ -812,7 +778,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports) {
 
 	/**

@@ -85,8 +85,20 @@ var ModelState = {
 };
 
 function createClass( spec ){
-    var mixins = spec.mixins || ( spec.mixins = [] );
+    var component = React.createClass( compileSpec( spec ) );
 
+    // attach lazily evaluated backbone View class
+    Object.defineProperty( component, 'View', {
+        get : function(){
+            return this._View || ( this._View = Nested._BaseView.extend( { reactClass : component } ) );
+        }
+    } );
+
+    return component;
+}
+
+function compileSpec( spec ){
+    var mixins = spec.mixins || ( spec.mixins = [] );
 
     // process context specs...
     var context = getTypeSpecs( spec, 'context' );
@@ -148,18 +160,7 @@ function createClass( spec ){
         mixins.push( pureRender( spec.propTypes ) );
     }
 
-    var component = React.createClass( spec );
-
-    // attach lazily evaluated backbone View class
-    var NestedReact = this;
-
-    Object.defineProperty( component, 'View', {
-        get : function(){
-            return this._View || ( this._View = NestedReact._BaseView.extend( { reactClass : component } ) );
-        }
-    } );
-
-    return component;
+    return spec;
 }
 
 function getTypeSpecs( spec, name1, name2 ){
@@ -189,3 +190,31 @@ function getTypeSpecs( spec, name1, name2 ){
 }
 
 module.exports = createClass;
+
+var tools = Nested.tools;
+
+Nested.Mixable.mixTo( React.Component );
+React.Component.define = function( protoProps, staticProps ){
+    var staticsDefinition = tools.getChangedStatics( this, 'state', 'props', 'context', 'childContext', 'listenToProps', 'listenToState', 'pureRender' ),
+        definition = tools.assign( staticsDefinition, protoProps || {}, {
+            properties : {
+                View : function(){
+                    return this._View || ( this._View = Nested._BaseView.extend( { reactClass : component } ) );
+                }
+            }
+        } );
+
+    Nested.Mixable.define.call( this, compileSpec( definition ), staticProps );
+
+    return this;
+}
+
+React.Component.mixinRules({
+    componentWillMount : 'sequence',
+    componentDidMount : 'sequence',
+    componentWillReceiveProps : 'sequence',
+    shouldComponentUpdate : 'some',
+    componentWillUpdate : 'sequence',
+    componentDidUpdate : 'sequence',
+    componentWillUnmount : 'sequence',
+});

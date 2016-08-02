@@ -3,7 +3,7 @@ var Nested = require( 'nestedtypes' ),
 
 module.exports = Nested.Link = Link;
 
-Object.extend.attach( Link );
+Nested.Mixable.mixTo( Link );
 
 /**
  * Link to NestedType's model attribute.

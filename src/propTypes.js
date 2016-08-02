@@ -6,7 +6,7 @@ function parseProps( props ){
         defaults,
         modelProto = Nested.Model.defaults( props ).prototype;
 
-    modelProto.forEachAttr( modelProto.__attributes, function( spec, name ){
+    modelProto.forEachAttr( modelProto._attributes, function( spec, name ){
         if( name !== 'id' ){
             propTypes[ name ] = translateType( spec.type );
 
