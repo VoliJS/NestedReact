@@ -1,20 +1,21 @@
-import React, { PropTypes } from 'nestedreact'
+import React, { define } from 'nestedreact'
 import cx from 'classnames'
 import { Input } from 'valuelink/tags.jsx'
 
 import { ToDo } from './model'
 
-const TodoList = React.createClass( {
-    props : {
+@define
+class TodoList extends React.Component {
+    static props = {
         todos      : ToDo.Collection,
         filterDone : Boolean
-    },
+    }
 
-    state : {
+    static state = {
         editing : ToDo.from( '^props.todos' )
-    },
+    }
 
-    pureRender : true,
+    static pureRender = true
 
     render(){
         const { todos, filterDone } = this.props,
@@ -39,7 +40,7 @@ const TodoList = React.createClass( {
             </section>
         );
     }
-} );
+}
 
 export default TodoList;
 

@@ -1,17 +1,18 @@
 import 'css/app.css'
-import React from 'nestedreact'
+import React, { define } from 'nestedreact'
 import ReactDOM from 'react-dom'
 import {ToDo} from './model.js'
 import TodoList from './todolist.jsx'
 import Filter from './filter.jsx'
 import AddTodo from './addtodo.jsx'
 
-class App extends React.Component( {
+@define
+class App extends React.Component {
     // Declare component state
-    state : {
+    static state = {
         todos      : ToDo.Collection,
         filterDone : Boolean.value( null ) // null | true | false, initialized with null.
-    },
+    }
 
     componentWillMount(){
         const { state } = this,
@@ -25,7 +26,7 @@ class App extends React.Component( {
             // Save state back to the local storage
             localStorage.setItem( 'todo-mvc', JSON.stringify( state ) );
         }
-    },
+    }
 
     render(){
         const { todos, filterDone } = this.state,
@@ -54,7 +55,7 @@ class App extends React.Component( {
             </div>
         );
     }
-} );
+}
 
 ReactDOM.render( <App />, document.getElementById( 'app-mount-root' ) );
 

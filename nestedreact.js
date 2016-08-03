@@ -67,7 +67,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	NestedReact.define = Nested.define;
 	
-	var ComponentView = __webpack_require__( 9 );
+	var ComponentView = __webpack_require__( 8 );
 	
 	// export hook to override base View class used...
 	NestedReact.useView = function( View ){
@@ -77,9 +77,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	NestedReact.useView( Nested.View );
 	
 	// React component for attaching views
-	NestedReact.subview = __webpack_require__( 10 );
+	NestedReact.subview = __webpack_require__( 9 );
 	
-	var propTypes  = __webpack_require__( 8 );
+	var propTypes  = __webpack_require__( 7 );
 	NestedReact.Node = propTypes.Node.value( null );
 	NestedReact.Element = propTypes.Element.value( null );
 	
@@ -93,7 +93,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $   : { value : function( sel ){ return this.$el.find( sel ); } }
 	} );
 	
-	NestedReact.Link = __webpack_require__( 11 );
+	NestedReact.Link = __webpack_require__( 10 );
 
 
 /***/ },
@@ -178,12 +178,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {var Nested = __webpack_require__( 3 ),
-	    pureRender = __webpack_require__( 7 ),
-	    propTypes  = __webpack_require__( 8 ),
+	var Nested = __webpack_require__( 3 ),
+	    pureRender = __webpack_require__( 6 ),
+	    propTypes  = __webpack_require__( 7 ),
 	    tools = Nested.tools;
 	
-	module.export = function processSpec( spec, a_baseProto ){
+	module.exports = function processSpec( spec, a_baseProto ){
 	    var baseProto = a_baseProto || {};
 	    spec.mixins || ( spec.mixins = [] );
 	
@@ -194,6 +194,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    processListenToProps( spec, baseProto );
 	
 	    spec.mixins.push( EventsMixin );
+	
+	    return spec;
 	}
 	
 	function forceUpdate(){ this.forceUpdate(); }
@@ -284,7 +286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function processProps( spec, baseProto ){
 	    // process props spec...
-	    var props = getTypeSpecs( spec, 'props', baseSpec );
+	    var props = getTypeSpecs( spec, 'props' );
 	
 	    if( props ){
 	        spec._props = tools.defaults( props, baseProto._props || {} );
@@ -303,7 +305,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    // compile pure render mixin
 	    if( spec.propTypes && ( spec.pureRender || baseProto.pureRender ) ){
-	        mixins.push( pureRender( spec.propTypes ) );
+	        spec.mixins.push( pureRender( spec.propTypes ) );
 	    }
 	}
 	
@@ -313,11 +315,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if( listenToProps ){
 	        if( typeof listenToProps === 'string' ){
 	            spec._listenToPropsArray = listenToProps.split( /s+/ ).concat( baseProto._listenToPropsArray || [] );
-	            mixins.unshift( ListenToPropsArrayMixin );
+	            spec.mixins.unshift( ListenToPropsArrayMixin );
 	        }
 	        else{
 	            spec._listenToPropsHash = tools.defaults( listenToProps, baseProto._listenToPropsHash || {} );
-	            mixins.unshift( ListenToPropsMixin );
+	            spec.mixins.unshift( ListenToPropsMixin );
 	        }
 	
 	        delete spec.listenToProps; 
@@ -397,26 +399,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    return attributes;
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
 
 /***/ },
 /* 6 */
-/***/ function(module, exports) {
-
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-
-/***/ },
-/* 7 */
 /***/ function(module, exports) {
 
 	module.exports = function( propTypes ){
@@ -452,7 +437,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Nested = __webpack_require__( 3 ),
@@ -517,7 +502,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.parseProps = parseProps;
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React    = __webpack_require__( 1 ),
@@ -608,7 +593,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React        = __webpack_require__( 1 ),
@@ -677,11 +662,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	} );
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Nested = __webpack_require__( 3 ),
-	    Link   = __webpack_require__( 12 ).default;
+	    Link   = __webpack_require__( 11 ).default;
 	
 	module.exports = Nested.Link = Link;
 	
@@ -856,7 +841,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports) {
 
 	/**

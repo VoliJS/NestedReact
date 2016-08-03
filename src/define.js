@@ -3,7 +3,7 @@ var Nested = require( 'nestedtypes' ),
     propTypes  = require( './propTypes' ),
     tools = Nested.tools;
 
-module.export = function processSpec( spec, a_baseProto ){
+module.exports = function processSpec( spec, a_baseProto ){
     var baseProto = a_baseProto || {};
     spec.mixins || ( spec.mixins = [] );
 
@@ -14,6 +14,8 @@ module.export = function processSpec( spec, a_baseProto ){
     processListenToProps( spec, baseProto );
 
     spec.mixins.push( EventsMixin );
+
+    return spec;
 }
 
 function forceUpdate(){ this.forceUpdate(); }
@@ -104,7 +106,7 @@ var ModelStateMixin = {
 
 function processProps( spec, baseProto ){
     // process props spec...
-    var props = getTypeSpecs( spec, 'props', baseSpec );
+    var props = getTypeSpecs( spec, 'props' );
 
     if( props ){
         spec._props = tools.defaults( props, baseProto._props || {} );
@@ -123,7 +125,7 @@ function processProps( spec, baseProto ){
 
     // compile pure render mixin
     if( spec.propTypes && ( spec.pureRender || baseProto.pureRender ) ){
-        mixins.push( pureRender( spec.propTypes ) );
+        spec.mixins.push( pureRender( spec.propTypes ) );
     }
 }
 
@@ -133,11 +135,11 @@ function processListenToProps( spec, baseProto ){
     if( listenToProps ){
         if( typeof listenToProps === 'string' ){
             spec._listenToPropsArray = listenToProps.split( /s+/ ).concat( baseProto._listenToPropsArray || [] );
-            mixins.unshift( ListenToPropsArrayMixin );
+            spec.mixins.unshift( ListenToPropsArrayMixin );
         }
         else{
             spec._listenToPropsHash = tools.defaults( listenToProps, baseProto._listenToPropsHash || {} );
-            mixins.unshift( ListenToPropsMixin );
+            spec.mixins.unshift( ListenToPropsMixin );
         }
 
         delete spec.listenToProps; 
