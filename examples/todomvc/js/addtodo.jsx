@@ -2,7 +2,7 @@ import React from 'nestedreact'
 import { define } from 'nestedtypes'
 import { Input } from 'valuelink/tags.jsx'
 
-@define({})
+@define
 class AddTodo extends React.Component {
     static props = {
         onEnter : Function.value( function(){} )

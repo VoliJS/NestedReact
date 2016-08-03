@@ -6,7 +6,7 @@ import TodoList from './todolist.jsx'
 import Filter from './filter.jsx'
 import AddTodo from './addtodo.jsx'
 
-const App = React.createClass( {
+class App extends React.Component( {
     // Declare component state
     state : {
         todos      : ToDo.Collection,

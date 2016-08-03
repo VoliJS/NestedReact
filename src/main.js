@@ -9,6 +9,8 @@ var NestedReact = module.exports = Object.create( React );
 // listenToProps, listenToState, model, attributes, Model
 NestedReact.createClass = require( './createClass' );
 
+NestedReact.define = Nested.define;
+
 var ComponentView = require( './component-view' );
 
 // export hook to override base View class used...

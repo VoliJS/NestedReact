@@ -65,7 +65,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	// listenToProps, listenToState, model, attributes, Model
 	NestedReact.createClass = __webpack_require__( 4 );
 	
-	var ComponentView = __webpack_require__( 7 );
+	NestedReact.define = Nested.define;
+	
+	var ComponentView = __webpack_require__( 9 );
 	
 	// export hook to override base View class used...
 	NestedReact.useView = function( View ){
@@ -75,9 +77,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	NestedReact.useView( Nested.View );
 	
 	// React component for attaching views
-	NestedReact.subview = __webpack_require__( 8 );
+	NestedReact.subview = __webpack_require__( 10 );
 	
-	var propTypes  = __webpack_require__( 6 );
+	var propTypes  = __webpack_require__( 8 );
 	NestedReact.Node = propTypes.Node.value( null );
 	NestedReact.Element = propTypes.Element.value( null );
 	
@@ -91,7 +93,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $   : { value : function( sel ){ return this.$el.find( sel ); } }
 	} );
 	
-	NestedReact.Link = __webpack_require__( 9 );
+	NestedReact.Link = __webpack_require__( 11 );
 
 
 /***/ },
@@ -118,64 +120,144 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var React      = __webpack_require__( 1 ),
 	    Nested     = __webpack_require__( 3 ),
-	    pureRender = __webpack_require__( 5 ),
-	    propTypes  = __webpack_require__( 6 );
+	    processSpec = __webpack_require__( 5),
+	    tools = Nested.tools;
+	
+	function createClass( spec ){
+	    var component = React.createClass( processSpec( spec ) );
+	    
+	    // attach lazily evaluated backbone View class
+	    defineBackboneProxy( component );
+	
+	    return component;
+	}
+	
+	module.exports = createClass;
+	
+	Nested.Mixable.mixTo( React.Component );
+	
+	React.Component.define = function( protoProps, staticProps ){
+	    var BaseClass = tools.getBaseClass( this ),
+	        staticsDefinition = tools.getChangedStatics( this, 'state', 'props', 'autobind', 'context', 'childContext', 'listenToProps', 'pureRender' ),
+	        combinedDefinition = tools.assign( staticsDefinition, protoProps || {} );
+	
+	    definition = processSpec( combinedDefinition, this.prototype );
+	
+	    defineBackboneProxy( this );
+	
+	    if( definition.getDefaultProps ) this.defaultProps = definition.getDefaultProps();
+	    if( definition.propTypes ) this.propTypes = definition.propTypes;
+	    if( definition.contextTypes ) this.contextTypes = definition.contextTypes;
+	    if( definition.childContextTypes ) this.childsContextTypes = definition.childsContextTypes;
+	
+	    var protoDefinition = tools.omit( definition, 'getDefaultProps', 'propTypes', 'contextTypes', 'childContextTypes' );
+	    Nested.Mixable.define.call( this, protoDefinition, staticProps );
+	
+	    return this;
+	}
+	
+	React.Component.mixinRules({
+	    componentWillMount : 'reverse',
+	    componentDidMount : 'reverse',
+	    componentWillReceiveProps : 'reverse',
+	    shouldComponentUpdate : 'some',
+	    componentWillUpdate : 'reverse',
+	    componentDidUpdate : 'reverse',
+	    componentWillUnmount : 'sequence',
+	});
+	
+	function defineBackboneProxy( Component ){
+	    Object.defineProperty( Component, 'View', {
+	        get : function(){
+	            return this._View || ( this._View = Nested._BaseView.extend( { reactClass : Component } ) );
+	        }
+	    } );
+	}
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {var Nested = __webpack_require__( 3 ),
+	    pureRender = __webpack_require__( 7 ),
+	    propTypes  = __webpack_require__( 8 ),
+	    tools = Nested.tools;
+	
+	module.export = function processSpec( spec, a_baseProto ){
+	    var baseProto = a_baseProto || {};
+	    spec.mixins || ( spec.mixins = [] );
+	
+	    processContext( spec, baseProto );
+	    processAutobind( spec, baseProto );
+	    processState( spec, baseProto );
+	    processProps( spec, baseProto );
+	    processListenToProps( spec, baseProto );
+	
+	    spec.mixins.push( EventsMixin );
+	}
 	
 	function forceUpdate(){ this.forceUpdate(); }
 	
-	var Events = Object.assign( {
+	var EventsMixin = Object.assign( {
 	    componentWillUnmount : function(){
 	        this.stopListening();
 	    }
 	}, Nested.Events );
 	
-	function registerPropsListener( component, prevProps, name, events ){
-	    var prevEmitter = prevProps[ name ],
-	        emitter     = component.props[ name ];
+	/***
+	 * Autobinding
+	 */
+	function processAutobind( spec, baseProto ){
+	    if( spec.autobind ){
+	        spec._autobind = autobind.split( /s+/ ).concat( baseProto._autobind || [] );
+	        spec.mixins.push( AutoBindMixin );
+	        delete spec.autobind;
+	    }
+	}
 	
-	    if( prevEmitter !== emitter ){
-	        prevEmitter && component.stopListening( prevEmitter );
-	
-	        if( emitter ){
-	            if( typeof events === 'object' ){
-	                component.listenTo( emitter, events );
-	            }
-	            else{
-	                component.listenTo( emitter, events || emitter.triggerWhenChanged, forceUpdate );
-	            }
+	var AutoBindMixin = {
+	    componentWillMount : function(){
+	        var autobind = this._autobind;
+	        
+	        for( var i = 0; i < autobind.length; i++ ){
+	            var name = autobind[ i ];
+	            this[ name ] = this[ name ].bind( this );
 	        }
 	    }
 	}
 	
-	function regHashPropsListeners( a_prevProps ){
-	    var prevProps = a_prevProps || {},
-	        updateOn  = this.listenToProps;
+	function processContext( spec, baseProto ){
+	    // process context specs...
+	    var context = getTypeSpecs( spec, 'context' );
+	    if( context ){
+	        spec._context = tools.defaults( context, baseProto._context || {} );
+	        spec.contextTypes = propTypes.parseProps( context ).propTypes;
+	        delete spec.context;
+	    }
 	
-	    for( var prop in updateOn ){
-	        registerPropsListener( this, prevProps, prop, updateOn[ prop ] );
+	    var childContext = getTypeSpecs( spec, 'childContext' );
+	    if( childContext ){
+	        spec._childContext = tools.defaults( childContext, baseProto._childContext || {} );
+	        spec.childContextTypes = propTypes.parseProps( childContext ).propTypes;
+	        delete spec.childContext;
 	    }
 	}
 	
-	var ListenToProps = {
-	    componentDidMount  : regHashPropsListeners,
-	    componentDidUpdate : regHashPropsListeners
-	};
-	
-	function regArrayPropListeners( a_prevProps ){
-	    var prevProps = a_prevProps || {},
-	        updateOn  = this.listenToProps;
-	
-	    for( var i = 0; i < updateOn.length; i++ ){
-	        registerPropsListener( this, prevProps, updateOn[ i ] )
+	/*****************
+	 * State
+	 */
+	function processState( spec, baseProto ){
+	    // process state spec...
+	    var attributes = getTypeSpecs( spec, 'state' );
+	    if( attributes ){
+	        var BaseModel = baseProto.Model || spec.Model || Nested.Model;
+	        spec.Model    = BaseModel.extend( { defaults : attributes } );
+	        spec.mixins.push( ModelStateMixin );
+	        delete spec.state;
 	    }
 	}
 	
-	var ListenToPropsArray = {
-	    componentDidMount  : regArrayPropListeners,
-	    componentDidUpdate : regArrayPropListeners
-	};
-	
-	var ModelState = {
+	var ModelStateMixin = {
 	    model         : null,
 	
 	    _onChildrenChange : function(){
@@ -200,49 +282,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	};
 	
-	function createClass( spec ){
-	    var component = React.createClass( compileSpec( spec ) );
-	
-	    // attach lazily evaluated backbone View class
-	    Object.defineProperty( component, 'View', {
-	        get : function(){
-	            return this._View || ( this._View = Nested._BaseView.extend( { reactClass : component } ) );
-	        }
-	    } );
-	
-	    return component;
-	}
-	
-	function compileSpec( spec ){
-	    var mixins = spec.mixins || ( spec.mixins = [] );
-	
-	    // process context specs...
-	    var context = getTypeSpecs( spec, 'context' );
-	    if( context ){
-	        spec.contextTypes = propTypes.parseProps( context ).propTypes;
-	        delete spec.context;
-	    }
-	
-	    var childContext = getTypeSpecs( spec, 'childContext' );
-	    if( childContext ){
-	        spec.childContextTypes = propTypes.parseProps( childContext ).propTypes;
-	        delete spec.childContext;
-	    }
-	
-	    // process state spec...
-	    var attributes = getTypeSpecs( spec, 'attributes', 'state' );
-	    if( attributes ){
-	        var BaseModel = spec.Model || Nested.Model;
-	        spec.Model    = BaseModel.extend( { defaults : attributes } );
-	        delete spec.state;
-	    }
-	
-	    if( spec.Model ) mixins.push( ModelState );
-	
+	function processProps( spec, baseProto ){
 	    // process props spec...
-	    var props = getTypeSpecs( spec, 'props' );
+	    var props = getTypeSpecs( spec, 'props', baseSpec );
 	
 	    if( props ){
+	        spec._props = tools.defaults( props, baseProto._props || {} );
 	        var parsedProps = propTypes.parseProps( props );
 	
 	        spec.propTypes = parsedProps.propTypes;
@@ -256,35 +301,82 @@ return /******/ (function(modules) { // webpackBootstrap
 	        delete spec.props;
 	    }
 	
+	    // compile pure render mixin
+	    if( spec.propTypes && ( spec.pureRender || baseProto.pureRender ) ){
+	        mixins.push( pureRender( spec.propTypes ) );
+	    }
+	}
+	
+	function processListenToProps( spec, baseProto ){
 	    // process listenToProps spec
 	    var listenToProps = spec.listenToProps;
 	    if( listenToProps ){
 	        if( typeof listenToProps === 'string' ){
-	            spec.listenToProps = listenToProps.split( ' ' );
-	            mixins.unshift( ListenToPropsArray );
+	            spec._listenToPropsArray = listenToProps.split( /s+/ ).concat( baseProto._listenToPropsArray || [] );
+	            mixins.unshift( ListenToPropsArrayMixin );
 	        }
 	        else{
-	            mixins.unshift( ListenToProps );
+	            spec._listenToPropsHash = tools.defaults( listenToProps, baseProto._listenToPropsHash || {} );
+	            mixins.unshift( ListenToPropsMixin );
 	        }
+	
+	        delete spec.listenToProps; 
 	    }
-	
-	    // add Events capabilities
-	    mixins.push( Events );
-	
-	    // compile pure render mixin
-	    if( spec.propTypes && spec.pureRender ){
-	        mixins.push( pureRender( spec.propTypes ) );
-	    }
-	
-	    return spec;
 	}
 	
-	function getTypeSpecs( spec, name1, name2 ){
+	var ListenToPropsMixin = {
+	    componentDidMount  : regHashPropsListeners,
+	    componentDidUpdate : regHashPropsListeners
+	};
+	
+	function regHashPropsListeners( a_prevProps ){
+	    var prevProps = a_prevProps || {},
+	        updateOn  = this._listenToPropsHash;
+	
+	    for( var prop in updateOn ){
+	        registerPropsListener( this, prevProps, prop, updateOn[ prop ] );
+	    }
+	}
+	
+	var ListenToPropsArrayMixin = {
+	    componentDidMount  : regArrayPropListeners,
+	    componentDidUpdate : regArrayPropListeners
+	};
+	
+	function regArrayPropListeners( a_prevProps ){
+	    var prevProps = a_prevProps || {},
+	        updateOn  = this._listenToPropsArray;
+	
+	    for( var i = 0; i < updateOn.length; i++ ){
+	        registerPropsListener( this, prevProps, updateOn[ i ] )
+	    }
+	}
+	
+	function registerPropsListener( component, prevProps, name, events ){
+	    var prevEmitter = prevProps[ name ],
+	        emitter     = component.props[ name ];
+	
+	    if( prevEmitter !== emitter ){
+	        prevEmitter && component.stopListening( prevEmitter );
+	
+	        if( emitter ){
+	            if( typeof events === 'object' ){
+	                component.listenTo( emitter, events );
+	            }
+	            else{
+	                component.listenTo( emitter, events || emitter.triggerWhenChanged, forceUpdate );
+	            }
+	        }
+	    }
+	}
+	
+	function getTypeSpecs( spec, name ){
 	    var attributes = null;
 	
+	    // Scan through local mixin, and gather specs. Refactor it later, it's not good. At all.
 	    for( var i = spec.mixins.length - 1; i >= 0; i-- ){
 	        var mixin      = spec.mixins[ i ],
-	            mixinAttrs = mixin[ name1 ] || ( name2 && mixin[ name2 ] );
+	            mixinAttrs = mixin[ name ];
 	
 	        if( mixinAttrs ){
 	            attributes || ( attributes = {} );
@@ -292,7 +384,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }
 	
-	    var specAttrs = spec[ name1 ] || ( name2 && spec[ name2 ] );
+	    // Merge it with local data.
+	    var specAttrs = spec[ name ];
 	    if( specAttrs ){
 	        if( attributes ){
 	            Object.assign( attributes, specAttrs );
@@ -304,45 +397,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    return attributes;
 	}
-	
-	module.exports = createClass;
-	
-	var tools = Nested.tools;
-	
-	Nested.Mixable.mixTo( React.Component );
-	React.Component.define = function( protoProps, staticProps ){
-	    var staticsDefinition = tools.getChangedStatics( this, 'state', 'props', 'context', 'childContext', 'listenToProps', 'listenToState', 'pureRender' ),
-	        definition = compileSpec( tools.assign( staticsDefinition, protoProps || {}, {
-	            properties : {
-	                View : function(){
-	                    return this._View || ( this._View = Nested._BaseView.extend( { reactClass : component } ) );
-	                }
-	            }
-	        } ) );
-	
-	    var getDefaultProps = definition.getDefaultProps,
-	        propTypes       = definition.propTypes;
-	
-	    if( getDefaultProps ) this.defaultProps = getDefaultProps();
-	    if( propTypes ) this.propTypes = propTypes;
-	
-	    Nested.Mixable.define.call( this, tools.omit( definition, 'getDefaultProps', 'propTypes' ), staticProps );
-	
-	    return this;
-	}
-	
-	React.Component.mixinRules({
-	    componentWillMount : 'reverse',
-	    componentDidMount : 'reverse',
-	    componentWillReceiveProps : 'reverse',
-	    shouldComponentUpdate : 'some',
-	    componentWillUpdate : 'reverse',
-	    componentDidUpdate : 'reverse',
-	    componentWillUnmount : 'sequence',
-	});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
 
 /***/ },
-/* 5 */
+/* 6 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 7 */
 /***/ function(module, exports) {
 
 	module.exports = function( propTypes ){
@@ -378,7 +452,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 6 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Nested = __webpack_require__( 3 ),
@@ -443,7 +517,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.parseProps = parseProps;
 
 /***/ },
-/* 7 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React    = __webpack_require__( 1 ),
@@ -534,7 +608,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 8 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React        = __webpack_require__( 1 ),
@@ -603,11 +677,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	} );
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Nested = __webpack_require__( 3 ),
-	    Link   = __webpack_require__( 10 ).default;
+	    Link   = __webpack_require__( 12 ).default;
 	
 	module.exports = Nested.Link = Link;
 	
@@ -782,7 +856,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports) {
 
 	/**

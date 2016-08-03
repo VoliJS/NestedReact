@@ -54,3 +54,19 @@ you need to do following things to make convergence layer work properly:
 
 ## Comparison and Examples
 
+## API Specs
+
+listenToProps : 'p1 p2 p3'
+
+listenToProps : {
+    p1 : 'event1 event2'
+    p2 : 'event1 event2'
+}
+
+listenToProps : {
+    p1 : {
+        'event1' : function(){ ... } 
+    },
+
+    p2 : 'event1 event2'
+}

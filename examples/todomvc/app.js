@@ -23542,7 +23542,12 @@
 		}
 		exports.predefine = predefine;
 		function define(spec) {
-		    return createDecorator('define', spec);
+		    if (typeof spec === 'function') {
+		        spec.define({});
+		    }
+		    else {
+		        return createDecorator('define', spec);
+		    }
 		}
 		exports.define = define;
 		function createDecorator(name, spec) {
@@ -24475,13 +24480,6 @@
 		        enumerable: true,
 		        configurable: true
 		    });
-		    Transactional.prototype._invalidate = function (options) {
-		        var error;
-		        if (options.validate && (error = this.validationError)) {
-		            this.trigger('invalid', this, error, assign({ validationError: error }, options));
-		            return true;
-		        }
-		    };
 		    Transactional.prototype.validate = function (obj) { };
 		    Transactional.prototype.getValidationError = function (key) {
 		        var error = this.validationError;
@@ -39559,7 +39557,7 @@
 	    }]);
 	
 	    var _AddTodo = AddTodo;
-	    AddTodo = (0, _nestedtypes.define)({})(AddTodo) || AddTodo;
+	    AddTodo = (0, _nestedtypes.define)(AddTodo) || AddTodo;
 	    return AddTodo;
 	})(_nestedreact2['default'].Component);
 	
