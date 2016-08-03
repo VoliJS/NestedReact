@@ -39128,6 +39128,57 @@
 	
 	var _nestedtypes = __webpack_require__(210);
 	
+	/**
+	 * Very dangerous - Collection definition must go before Model definition.
+	 * Must include protection from passing collection == void 0.
+	 */
+	
+	var ToDoCollection = (function (_Collection) {
+		_inherits(ToDoCollection, _Collection);
+	
+		function ToDoCollection() {
+			_classCallCheck(this, _ToDoCollection);
+	
+			_get(Object.getPrototypeOf(_ToDoCollection.prototype), 'constructor', this).apply(this, arguments);
+		}
+	
+		_createClass(ToDoCollection, [{
+			key: 'clearCompleted',
+			value: function clearCompleted() {
+				this.remove(this.filter(function (todo) {
+					return todo.done;
+				}));
+			}
+		}, {
+			key: 'allDone',
+			get: function get() {
+				return this.every(function (todo) {
+					return todo.done;
+				});
+			},
+			set: function set(val) {
+				var _this = this;
+	
+				this.transaction(function () {
+					_this.each(function (todo) {
+						return todo.done = val;
+					});
+				});
+			}
+		}, {
+			key: 'activeCount',
+			get: function get() {
+				return this.filter(function (todo) {
+					return !todo.done;
+				}).length;
+			}
+		}]);
+	
+		var _ToDoCollection = ToDoCollection;
+		ToDoCollection = (0, _nestedtypes.define)(ToDoCollection) || ToDoCollection;
+		return ToDoCollection;
+	})(_nestedtypes.Collection);
+	
 	var ToDo = (function (_Model) {
 		_inherits(ToDo, _Model);
 	
@@ -39159,54 +39210,8 @@
 		ToDo = (0, _nestedtypes.define)(ToDo) || ToDo;
 		return ToDo;
 	})(_nestedtypes.Model);
-	
+
 	exports.ToDo = ToDo;
-	
-	var ToDoCollection = (function (_Collection) {
-		_inherits(ToDoCollection, _Collection);
-	
-		function ToDoCollection() {
-			_classCallCheck(this, _ToDoCollection);
-	
-			_get(Object.getPrototypeOf(_ToDoCollection.prototype), 'constructor', this).apply(this, arguments);
-		}
-	
-		_createClass(ToDoCollection, [{
-			key: 'clearCompleted',
-			value: function clearCompleted() {
-				this.remove(this.filter(function (todo) {
-					return todo.done;
-				}));
-			}
-		}, {
-			key: 'activeCount',
-			value: function activeCount() {
-				return this.filter(function (todo) {
-					return !todo.done;
-				}).length;
-			}
-		}, {
-			key: 'allDone',
-			get: function get() {
-				return this.every(function (todo) {
-					return todo.done;
-				});
-			},
-			set: function set(val) {
-				var _this = this;
-	
-				this.transaction(function () {
-					_this.each(function (todo) {
-						return todo.done = val;
-					});
-				});
-			}
-		}]);
-	
-		var _ToDoCollection = ToDoCollection;
-		ToDoCollection = (0, _nestedtypes.define)(ToDoCollection) || ToDoCollection;
-		return ToDoCollection;
-	})(_nestedtypes.Collection);
 
 /***/ },
 /* 214 */

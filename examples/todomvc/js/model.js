@@ -1,18 +1,9 @@
 import { Model, Collection, define } from 'nestedtypes'
 
-@define
-export class ToDo extends Model {
-	static collection = ToDoCollection
-	static attributes = {
-		done : Boolean,
-		desc : String
-	}
-
-	remove(){
-		this.collection.remove( this );
-	}
-}
-
+/**
+ * Very dangerous - Collection definition must go before Model definition.
+ * Must include protection from passing collection == void 0.
+ */
 @define
 class ToDoCollection extends Collection {
 	clearCompleted(){
@@ -29,7 +20,20 @@ class ToDoCollection extends Collection {
 		});
 	}
 
-	activeCount(){
+	get activeCount(){
 		return this.filter( todo => !todo.done ).length;
+	}
+}
+
+@define
+export class ToDo extends Model {
+	static collection = ToDoCollection // TBD: Collection with capital letter doesn't work.
+	static attributes = {
+		done : Boolean,
+		desc : String
+	}
+
+	remove(){
+		this.collection.remove( this );
 	}
 }
