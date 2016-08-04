@@ -25220,7 +25220,7 @@
 		transaction_1.Record.define = function (protoProps, staticProps) {
 		    if (protoProps === void 0) { protoProps = {}; }
 		    var BaseConstructor = getBaseClass(this), baseProto = BaseConstructor.prototype, staticsDefinition = object_plus_1.tools.getChangedStatics(this, 'attributes', 'collection', 'Collection'), definition = assign(staticsDefinition, protoProps);
-		    if ('Collection' in definition && definition.Collection === void 0) {
+		    if ('Collection' in this && this.Collection === void 0) {
 		        object_plus_1.tools.log.error("[Model.define] Model.Collection is undefined. It must be defined _before_ the model.", definition);
 		    }
 		    var dynamicMixin = define_1.compile(getAttributes(definition), baseProto._attributes);
@@ -39164,46 +39164,6 @@
 	
 	var _nestedtypes = __webpack_require__(210);
 	
-	var ToDo = (function (_Model) {
-		_inherits(ToDo, _Model);
-	
-		function ToDo() {
-			_classCallCheck(this, _ToDo);
-	
-			_get(Object.getPrototypeOf(_ToDo.prototype), 'constructor', this).apply(this, arguments);
-		}
-	
-		/**
-	  * Very dangerous - Collection definition must go before Model definition.
-	  * Must include protection from passing collection == void 0.
-	  */
-	
-		_createClass(ToDo, [{
-			key: 'remove',
-			value: function remove() {
-				this.collection.remove(this);
-			}
-		}], [{
-			key: 'Collection',
-			value: ToDoCollection,
-			// TBD: Collection with capital letter doesn't work.
-			enumerable: true
-		}, {
-			key: 'attributes',
-			value: {
-				done: Boolean,
-				desc: String
-			},
-			enumerable: true
-		}]);
-	
-		var _ToDo = ToDo;
-		ToDo = (0, _nestedtypes.define)(ToDo) || ToDo;
-		return ToDo;
-	})(_nestedtypes.Model);
-	
-	exports.ToDo = ToDo;
-	
 	var ToDoCollection = (function (_Collection) {
 		_inherits(ToDoCollection, _Collection);
 	
@@ -39249,6 +39209,41 @@
 		ToDoCollection = (0, _nestedtypes.define)(ToDoCollection) || ToDoCollection;
 		return ToDoCollection;
 	})(_nestedtypes.Collection);
+	
+	var ToDo = (function (_Model) {
+		_inherits(ToDo, _Model);
+	
+		function ToDo() {
+			_classCallCheck(this, _ToDo);
+	
+			_get(Object.getPrototypeOf(_ToDo.prototype), 'constructor', this).apply(this, arguments);
+		}
+	
+		_createClass(ToDo, [{
+			key: 'remove',
+			value: function remove() {
+				this.collection.remove(this);
+			}
+		}], [{
+			key: 'Collection',
+			value: ToDoCollection,
+			// TBD: Collection with capital letter doesn't work.
+			enumerable: true
+		}, {
+			key: 'attributes',
+			value: {
+				done: Boolean,
+				desc: String
+			},
+			enumerable: true
+		}]);
+	
+		var _ToDo = ToDo;
+		ToDo = (0, _nestedtypes.define)(ToDo) || ToDo;
+		return ToDo;
+	})(_nestedtypes.Model);
+
+	exports.ToDo = ToDo;
 
 /***/ },
 /* 214 */

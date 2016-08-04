@@ -31,7 +31,7 @@ var EventsMixin = Object.assign( {
  */
 function processAutobind( spec, baseProto ){
     if( spec.autobind ){
-        spec._autobind = autobind.split( /s+/ ).concat( baseProto._autobind || [] );
+        spec._autobind = spec.autobind.split( /\s+/ ).concat( baseProto._autobind || [] );
         spec.mixins.push( AutoBindMixin );
         delete spec.autobind;
     }

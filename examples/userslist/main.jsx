@@ -2,13 +2,14 @@ import './main.css'
 import ReactDOM from 'react-dom'
 
 import React from 'nestedreact'
-import { Model } from 'nestedtypes'
+import { Model, define } from 'nestedtypes'
 
 import Modal from 'react-modal'
 import {Input, isRequired, isEmail } from 'valuelink/tags'
 
-const User = Model.extend({
-    attributes : {
+@define
+class User extends Model{
+    static attributes = {
         name : String.has
                     .check( isRequired )
                     .check( x => x.indexOf( ' ' ) < 0, 'Spaces are not allowed' ),
@@ -18,17 +19,19 @@ const User = Model.extend({
                       .check( isEmail ),
 
         isActive : true
-    },
+    }
 
     remove(){ this.collection.remove( this ); }
-});
+}
 
-export const UsersList = React.createClass( {
-    state : {
+@define
+export class UsersList extends React.Component {
+    static autobind = 'addUser'
+    static state = {
         users   : User.Collection, // No comments required, isn't it?
         editing : User.from( 'users' ), // User from user collection, which is being edited.
-        adding  : User.value( null ) // New user, which is being added.
-    },
+        adding  : User.shared.value( null ) // New user, which is being added.
+    }
 
     render(){
         const { state } = this;
@@ -59,7 +62,7 @@ export const UsersList = React.createClass( {
                 </Modal>
             </div>
         );
-    },
+    }
 
     addUser( user ){
         const { state } = this;
@@ -70,7 +73,7 @@ export const UsersList = React.createClass( {
 
         state.adding = null;
     }
-} );
+}
 
 const Header = () =>(
     <div className="users-row">
@@ -94,7 +97,8 @@ const UserRow = ( { user, onEdit } ) =>(
     </div>
 );
 
-const EditUser = React.createClass( {
+@define({
+    autobind : 'onSubmit onCancel',
     props : {
         user    : User,
         onClose : Function
@@ -102,11 +106,12 @@ const EditUser = React.createClass( {
 
     state : {
         user : User
-    },
-
+    }
+})
+class EditUser extends React.Component {
     componentWillMount(){
         this.state.user = this.props.user.clone();
-    },
+    }
 
     onSubmit( e ){
         e.preventDefault();
@@ -115,11 +120,11 @@ const EditUser = React.createClass( {
 
         user.set( this.state.user.attributes );
         onClose( user );
-    },
+    }
 
     onCancel(){
         this.props.onClose();
-    },
+    }
 
     render(){
         const linked = this.state.user.linkAll( 'name', 'email', 'isActive' );
@@ -147,7 +152,7 @@ const EditUser = React.createClass( {
             </form>
         );
     }
-} );
+}
 
 const ValidatedInput = ( props ) => (
     <div>
