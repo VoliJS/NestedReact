@@ -2248,8 +2248,46 @@
 /***/ function(module, exports) {
 
 	// shim for using process in browser
-	
 	var process = module.exports = {};
+	
+	// cached from whatever global is present so that test runners that stub it
+	// don't break things.  But we need to wrap it in a try catch in case it is
+	// wrapped in strict mode code which doesn't define any globals.  It's inside a
+	// function because try/catches deoptimize in certain engines.
+	
+	var cachedSetTimeout;
+	var cachedClearTimeout;
+	
+	(function () {
+	    try {
+	        cachedSetTimeout = setTimeout;
+	    } catch (e) {
+	        cachedSetTimeout = function () {
+	            throw new Error('setTimeout is not defined');
+	        }
+	    }
+	    try {
+	        cachedClearTimeout = clearTimeout;
+	    } catch (e) {
+	        cachedClearTimeout = function () {
+	            throw new Error('clearTimeout is not defined');
+	        }
+	    }
+	} ())
+	function runTimeout(fun) {
+	    if (cachedSetTimeout === setTimeout) {
+	        return setTimeout(fun, 0);
+	    } else {
+	        return cachedSetTimeout.call(null, fun, 0);
+	    }
+	}
+	function runClearTimeout(marker) {
+	    if (cachedClearTimeout === clearTimeout) {
+	        clearTimeout(marker);
+	    } else {
+	        cachedClearTimeout.call(null, marker);
+	    }
+	}
 	var queue = [];
 	var draining = false;
 	var currentQueue;
@@ -2274,7 +2312,7 @@
 	    if (draining) {
 	        return;
 	    }
-	    var timeout = setTimeout(cleanUpNextTick);
+	    var timeout = runTimeout(cleanUpNextTick);
 	    draining = true;
 	
 	    var len = queue.length;
@@ -2291,7 +2329,7 @@
 	    }
 	    currentQueue = null;
 	    draining = false;
-	    clearTimeout(timeout);
+	    runClearTimeout(timeout);
 	}
 	
 	process.nextTick = function (fun) {
@@ -2303,7 +2341,7 @@
 	    }
 	    queue.push(new Item(fun, args));
 	    if (queue.length === 1 && !draining) {
-	        setTimeout(drainQueue, 0);
+	        runTimeout(drainQueue);
 	    }
 	};
 	
@@ -25181,7 +25219,10 @@
 		var assign = object_plus_1.tools.assign, defaults = object_plus_1.tools.defaults, omit = object_plus_1.tools.omit, getBaseClass = object_plus_1.tools.getBaseClass;
 		transaction_1.Record.define = function (protoProps, staticProps) {
 		    if (protoProps === void 0) { protoProps = {}; }
-		    var BaseConstructor = getBaseClass(this), baseProto = BaseConstructor.prototype, staticsDefinition = object_plus_1.tools.getChangedStatics(this, 'attributes', 'collection'), definition = assign(staticsDefinition, protoProps);
+		    var BaseConstructor = getBaseClass(this), baseProto = BaseConstructor.prototype, staticsDefinition = object_plus_1.tools.getChangedStatics(this, 'attributes', 'collection', 'Collection'), definition = assign(staticsDefinition, protoProps);
+		    if ('Collection' in definition && definition.Collection === void 0) {
+		        object_plus_1.tools.log.error("[Model.define] Model.Collection is undefined. It must be defined _before_ the model.", definition);
+		    }
 		    var dynamicMixin = define_1.compile(getAttributes(definition), baseProto._attributes);
 		    if (definition.properties === false) {
 		        dynamicMixin.properties = {};
@@ -25189,7 +25230,7 @@
 		    assign(dynamicMixin.properties, protoProps.properties || {});
 		    defaults(dynamicMixin, omit(definition, 'attributes', 'collection'));
 		    object_plus_1.Mixable.define.call(this, dynamicMixin, staticProps);
-		    defineCollection.call(this, definition.collection);
+		    defineCollection.call(this, definition.collection || definition.Collection);
 		    return this;
 		};
 		transaction_1.Record.predefine = function () {
@@ -25208,18 +25249,13 @@
 		    return definition;
 		}
 		function defineCollection(collection) {
-		    var BaseCollection = getBaseClass(this).Collection;
-		    var CollectionConstructor;
 		    if (typeof collection === 'function') {
-		        CollectionConstructor = collection;
+		        this.Collection = collection;
+		        this.Collection.prototype.model = this;
 		    }
 		    else {
-		        CollectionConstructor = this.Collection;
-		        if (collection)
-		            CollectionConstructor.define(collection);
+		        this.Collection.define(collection || {});
 		    }
-		    CollectionConstructor.prototype.model = this;
-		    this.Collection = CollectionConstructor;
 		}
 		Object.defineProperties(Date, {
 		    microsoft: {
@@ -39128,10 +39164,45 @@
 	
 	var _nestedtypes = __webpack_require__(210);
 	
-	/**
-	 * Very dangerous - Collection definition must go before Model definition.
-	 * Must include protection from passing collection == void 0.
-	 */
+	var ToDo = (function (_Model) {
+		_inherits(ToDo, _Model);
+	
+		function ToDo() {
+			_classCallCheck(this, _ToDo);
+	
+			_get(Object.getPrototypeOf(_ToDo.prototype), 'constructor', this).apply(this, arguments);
+		}
+	
+		/**
+	  * Very dangerous - Collection definition must go before Model definition.
+	  * Must include protection from passing collection == void 0.
+	  */
+	
+		_createClass(ToDo, [{
+			key: 'remove',
+			value: function remove() {
+				this.collection.remove(this);
+			}
+		}], [{
+			key: 'Collection',
+			value: ToDoCollection,
+			// TBD: Collection with capital letter doesn't work.
+			enumerable: true
+		}, {
+			key: 'attributes',
+			value: {
+				done: Boolean,
+				desc: String
+			},
+			enumerable: true
+		}]);
+	
+		var _ToDo = ToDo;
+		ToDo = (0, _nestedtypes.define)(ToDo) || ToDo;
+		return ToDo;
+	})(_nestedtypes.Model);
+	
+	exports.ToDo = ToDo;
 	
 	var ToDoCollection = (function (_Collection) {
 		_inherits(ToDoCollection, _Collection);
@@ -39178,41 +39249,6 @@
 		ToDoCollection = (0, _nestedtypes.define)(ToDoCollection) || ToDoCollection;
 		return ToDoCollection;
 	})(_nestedtypes.Collection);
-	
-	var ToDo = (function (_Model) {
-		_inherits(ToDo, _Model);
-	
-		function ToDo() {
-			_classCallCheck(this, _ToDo);
-	
-			_get(Object.getPrototypeOf(_ToDo.prototype), 'constructor', this).apply(this, arguments);
-		}
-	
-		_createClass(ToDo, [{
-			key: 'remove',
-			value: function remove() {
-				this.collection.remove(this);
-			}
-		}], [{
-			key: 'collection',
-			value: ToDoCollection,
-			// TBD: Collection with capital letter doesn't work.
-			enumerable: true
-		}, {
-			key: 'attributes',
-			value: {
-				done: Boolean,
-				desc: String
-			},
-			enumerable: true
-		}]);
-	
-		var _ToDo = ToDo;
-		ToDo = (0, _nestedtypes.define)(ToDo) || ToDo;
-		return ToDo;
-	})(_nestedtypes.Model);
-
-	exports.ToDo = ToDo;
 
 /***/ },
 /* 214 */
