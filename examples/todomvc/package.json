@@ -19,8 +19,8 @@
 
     "jquery": "^2.1.4",
     "underscore": "^1.8.3",
-    "nestedtypes": "^2.0.0-alpha0",
-    "nestedreact": "^1.0.1-alpha0"
+    "nestedtypes": "^2.0.0-a00",
+    "nestedreact": "^1.0.1-a00"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

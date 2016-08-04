@@ -27,7 +27,7 @@ class ToDoCollection extends Collection {
 
 @define
 export class ToDo extends Model {
-	static collection = ToDoCollection // TBD: Collection with capital letter doesn't work.
+	static Collection = ToDoCollection // TBD: Collection with capital letter doesn't work.
 	static attributes = {
 		done : Boolean,
 		desc : String
