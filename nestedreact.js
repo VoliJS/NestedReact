@@ -250,12 +250,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function processState( spec, baseProto ){
 	    // process state spec...
-	    var attributes = getTypeSpecs( spec, 'state' );
+	    var attributes = getTypeSpecs( spec, 'state' ) || getTypeSpecs( spec, 'attributes' )
 	    if( attributes || spec.Model || baseProto.Model ){
 	        var BaseModel = baseProto.Model || spec.Model || Nested.Model;
 	        spec.Model    = attributes ? BaseModel.extend( { defaults : attributes } ) : BaseModel;
 	        spec.mixins.push( ModelStateMixin );
 	        delete spec.state;
+	        delete spec.attributes;
 	    }
 	}
 	
