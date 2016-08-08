@@ -58,6 +58,9 @@
 	
 	__webpack_require__(31);
 	
+	// You should import React from nestedreact, and use it as drop-in replacement.
+	// It's 100% compatible.
+	
 	var _nestedreact = __webpack_require__(35);
 	
 	var _nestedreact2 = _interopRequireDefault(_nestedreact);
@@ -66,11 +69,18 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
+	// Import input controls, modified to support valueLink. Otherwise they behave as standard.
+	
 	var _valuelinkTags = __webpack_require__(213);
+	
+	// Import checklist model definition. Think of "model" as of an observable serializable class.
 	
 	var _model = __webpack_require__(214);
 	
+	// Local counter to help us count top-level renders.
 	var _renders = 0;
+	
+	// <- That should be places before every class definition, which uses NestedReact features.
 	
 	var App = (function (_React$Component) {
 	    _inherits(App, _React$Component);
@@ -81,8 +91,12 @@
 	        _get(Object.getPrototypeOf(_App.prototype), 'constructor', this).apply(this, arguments);
 	    }
 	
+	    // Simple pure component to render the list of checklist items.
+	    // They must _not_ be prefixed with @define. No magic here, just raw React.
+	
 	    _createClass(App, [{
 	        key: 'render',
+	        // <- It's type annotation. Constructor function designates type.
 	        value: function render() {
 	            var items = this.state.items;
 	
@@ -107,9 +121,12 @@
 	        }
 	    }], [{
 	        key: 'state',
+	
+	        // NestedReact state definition. Syntax is the same as NestedTypes model attributes spec.
+	        // In fact, this state _is_ the NestedTypes model internally.
 	        value: {
-	            items: _model.ChecklistItem.Collection
-	        },
+	            // 'items' is a collection of ChecklistItem model.
+	            items: _model.ChecklistItem.Collection },
 	        enumerable: true
 	    }]);
 	
@@ -124,42 +141,81 @@
 	        'div',
 	        { className: 'children' },
 	        items.map(function (item) {
-	            return _nestedreact2['default'].createElement(Item, { key: item.cid, model: item });
+	            return (/* <- collections have 'map' method as an array */
+	                /* models have cid - unique client id to be used in 'key' */
+	                _nestedreact2['default'].createElement(Item, { key: item.cid, model: item })
+	            );
 	        })
 	    );
 	};
 	
-	var Item = function Item(_ref2) {
-	    var model = _ref2.model;
+	// <- Don't forget @define
 	
-	    var links = model.linkAll('checked', 'name');
+	var Item = (function (_React$Component2) {
+	    _inherits(Item, _React$Component2);
 	
-	    return _nestedreact2['default'].createElement(
-	        'div',
-	        { className: 'checklist' },
-	        _nestedreact2['default'].createElement(
-	            'div',
-	            { className: 'header' },
-	            _nestedreact2['default'].createElement(_valuelinkTags.Checkbox, { checkedLink: links.checked }),
-	            _nestedreact2['default'].createElement(_valuelinkTags.Input, { valueLink: links.name }),
-	            _nestedreact2['default'].createElement(
-	                'button',
-	                { onClick: function () {
-	                        return model.remove();
-	                    } },
-	                'Delete'
-	            ),
-	            _nestedreact2['default'].createElement(
-	                'button',
-	                { onClick: function () {
-	                        return model.subitems.add({});
-	                    } },
-	                'Add children'
-	            )
-	        ),
-	        _nestedreact2['default'].createElement(List, { items: model.subitems })
-	    );
-	};
+	    function Item() {
+	        _classCallCheck(this, _Item);
+	
+	        _get(Object.getPrototypeOf(_Item.prototype), 'constructor', this).apply(this, arguments);
+	    }
+	
+	    // That's really it! Let's render it.
+	
+	    _createClass(Item, [{
+	        key: 'render',
+	        // <- that's all you should do to enable pure render optimization.
+	
+	        value: function render() {
+	            var model = this.props.model;
+	            // Two way data binding! Using our advanced value links.
+	            // First, prepare the links.
+	            var links = model.linkAll('checked', 'name');
+	
+	            return _nestedreact2['default'].createElement(
+	                'div',
+	                { className: 'checklist' },
+	                _nestedreact2['default'].createElement(
+	                    'div',
+	                    { className: 'header' },
+	                    _nestedreact2['default'].createElement(_valuelinkTags.Checkbox, { checkedLink: links.checked /* We use links instead of values... */ }),
+	                    _nestedreact2['default'].createElement(_valuelinkTags.Input, { valueLink: links.name /* ...as if they would be values */ }),
+	                    _nestedreact2['default'].createElement(
+	                        'button',
+	                        { onClick: function () {
+	                                return model.remove();
+	                            } /* custom model method to remove it from the collection */ },
+	                        'Delete'
+	                    ),
+	                    _nestedreact2['default'].createElement(
+	                        'button',
+	                        { onClick: function () {
+	                                return model.subitems.add({});
+	                            } },
+	                        'Add children'
+	                    )
+	                ),
+	                _nestedreact2['default'].createElement(List, { items: model.subitems /* Render the nested checklist */ })
+	            );
+	        }
+	    }], [{
+	        key: 'props',
+	
+	        // NestedReact props definition. Same syntax as for the 'state'.
+	        value: {
+	            model: _model.ChecklistItem // <- Type annotation, using constructor function. No default value.
+	        },
+	        enumerable: true
+	    }, {
+	        key: 'pureRender',
+	        value: true,
+	        enumerable: true
+	    }]);
+	
+	    var _Item = Item;
+	    Item = (0, _nestedreact.define)(Item) || Item;
+	    return Item;
+	})(_nestedreact2['default'].Component);
 	
 	_reactDom2['default'].render(_nestedreact2['default'].createElement(App, null), document.getElementById('app-mount-root'));
 
@@ -39502,6 +39558,7 @@
 /* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
+	// Data objects are defined in nestedtypes package.
 	'use strict';
 	
 	var _get = __webpack_require__(1)['default'];
@@ -39518,6 +39575,16 @@
 	
 	var _nestedtypes = __webpack_require__(210);
 	
+	/**
+	 * Think of the models as of the class like in statically typed languages.
+	 * Such as Java or C++. Difference here is that types are being checked and coerced _dynamically_.
+	 * And - every model is serializable and observable by default.
+	 *
+	 * This case is a bit tough, as we're going to define recursive structure. Therefore, we are
+	 * defining the standard class, adding @predefine directive, and define attributes later.
+	 * When we have the reference to the constructor types.
+	 */
+	
 	var ChecklistItem = (function (_Model) {
 	    _inherits(ChecklistItem, _Model);
 	
@@ -39527,11 +39594,18 @@
 	        _get(Object.getPrototypeOf(_ChecklistItem.prototype), 'constructor', this).apply(this, arguments);
 	    }
 	
+	    // Now, define our recursive model.
+	
 	    _createClass(ChecklistItem, [{
 	        key: 'syncSubitems',
+	
+	        // This is going to be the watcher function for 'checked' attribute.
 	        value: function syncSubitems(checked) {
 	            this.subitemsChecked = checked;
 	        }
+	
+	        // And this one - for 'subitems', which is nested checklist attribute.
+	        // Scroll it down, you'ss see the definition.
 	    }, {
 	        key: 'syncChecked',
 	        value: function syncChecked(subitems) {
@@ -39539,8 +39613,16 @@
 	                this.checked = this.subitemsChecked;
 	            }
 	        }
+	
+	        // Now. This, is the boolean calculated property, we're using for convenience.
+	        // True, whenever all subitems are selected.
 	    }, {
 	        key: 'remove',
+	
+	        // Helper method to delete model from collection, without reference to the collection.
+	        // In NestedTypes, aggregation is distinguished from references to the shared objects.
+	        // By default, all attributes and collection elements are aggregated.
+	        // And model.collection points to the owner collection (if any).
 	        value: function remove() {
 	            this.collection.remove(this);
 	        }
@@ -39551,8 +39633,13 @@
 	                return item.checked;
 	            });
 	        },
+	
+	        // And it's writable property.
 	        set: function set(checked) {
 	            if (checked !== this.subitemsChecked) {
+	                // 'updateEach' works as each, but wrap the changes in transaction.
+	                // Simply speaking, it means that just one change event will be fired from subitems,
+	                // despite the fact that there is a bulk change.
 	                this.subitems.updateEach(function (item) {
 	                    item.checked = checked;
 	                });
@@ -39566,11 +39653,21 @@
 	})(_nestedtypes.Model);
 	
 	exports.ChecklistItem = ChecklistItem;
-	
 	ChecklistItem.define({
-	    attributes: {
+	    attributes: { // <- Here's an attribute spec. Think of it as a type spec.
 	        name: String,
+	
+	        // checked - it's boolean value, which has watcher. Watcher is model's function which
+	        // is called whenever attribute value is changed.
+	        // All changes made to the model inside of the watchers won't trigger any
+	        // additional 'change' events and won't cause extra renders. They are executed in the scope
+	        // of transaction.
 	        checked: Boolean.has.watcher('syncSubitems'),
+	
+	        // Now it's interesting. subitems - is a collection of checklist item.
+	        // Collection type is automatically defined for every Model type,
+	        // and that's why we used @predefine - to give NestedTypes the change to do it.
+	        // And, it has watcher. Which will be called whenever anything inside will be changed.
 	        subitems: ChecklistItem.Collection.has.watcher('syncChecked')
 	    }
 	});
