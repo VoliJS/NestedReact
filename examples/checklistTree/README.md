@@ -7,7 +7,7 @@ This is checklist with a rule. Item is checked, if all children are checked.
 
 59 SLOC for jsx components, 28 for the model definition.
 
-This example demonstrates several features of the NestedReact state management.
+This example demonstrates unidirectional data flow with mutable state and pure render optimisation. And different features of the NestedReact state management.
 
 - Declarative definition of mutable observable state. `static state = { element : ConstructorFunction }`.
 - Two-way data binding with advanced value links. `const links = model.linkAll( 'checked', 'name' )`.
