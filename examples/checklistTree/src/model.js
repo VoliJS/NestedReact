@@ -54,6 +54,10 @@ ChecklistItem.define({
     attributes : { // <- Here's an attribute spec. Think of it as a type spec.
         name : String,
 
+        // Basic type spec form is just mentioning the constructor function.
+        // New Date class instance will be automatically created for this attribute.
+        created : Date,
+
         // checked - it's boolean value, which has watcher. Watcher is model's function which
         // is called whenever attribute value is changed.
         // All changes made to the model inside of the watchers won't trigger any

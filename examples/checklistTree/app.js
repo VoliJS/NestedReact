@@ -95,8 +95,26 @@
 	    // They must _not_ be prefixed with @define. No magic here, just raw React.
 	
 	    _createClass(App, [{
-	        key: 'render',
+	        key: 'componentWillMount',
 	        // <- It's type annotation. Constructor function designates type.
+	
+	        // Save and restore state.
+	        value: function componentWillMount() {
+	            // All state in NestedReact is serializable by default.
+	            var state = this.state;
+	            // load raw JSON from local storage
+	            var json = JSON.parse(localStorage.getItem('checklist') || "{}");
+	
+	            // Initialize state with JSON.
+	            state.set(json, { parse: true });
+	
+	            window.onunload = function () {
+	                // Save state back to the local storage
+	                localStorage.setItem('checklist', JSON.stringify(state));
+	            };
+	        }
+	    }, {
+	        key: 'render',
 	        value: function render() {
 	            var items = this.state.items;
 	
@@ -179,6 +197,11 @@
 	                    'div',
 	                    { className: 'header' },
 	                    _nestedreact2['default'].createElement(_valuelinkTags.Checkbox, { checkedLink: links.checked /* We use links instead of values... */ }),
+	                    _nestedreact2['default'].createElement(
+	                        'span',
+	                        { className: 'created' },
+	                        model.created.toLocaleTimeString()
+	                    ),
 	                    _nestedreact2['default'].createElement(_valuelinkTags.Input, { valueLink: links.name /* ...as if they would be values */ }),
 	                    _nestedreact2['default'].createElement(
 	                        'button',
@@ -704,7 +727,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".checkbox {\r\n    display: inline-block;\r\n    width: 10px;\r\n    height: 10px;\r\n    border: solid;\r\n    border-width: 1px;\r\n    margin: 3px;\r\n    vertical-align: middle;\r\n}\r\n\r\n.children {\r\n    margin-left: 1em;\r\n}\r\n\r\n.checkbox.selected {\r\n    background-color: black;\r\n}\r\n\r\ninput {\r\n    border: none;\r\n    border-bottom: solid;\r\n    border-width: 1px;\r\n    margin: 3px;\r\n}\r\n\r\ninput:focus {\r\n    outline: none;\r\n    border-width: 2px;\r\n}\r\n\r\nbutton {\r\n    border-radius: 3px;\r\n    background-color: white;\r\n}", ""]);
+	exports.push([module.id, ".checkbox {\r\n    display: inline-block;\r\n    width: 10px;\r\n    height: 10px;\r\n    border: solid;\r\n    border-width: 1px;\r\n    margin: 3px;\r\n    vertical-align: middle;\r\n}\r\n\r\n.children {\r\n    margin-left: 1em;\r\n}\r\n\r\n.checkbox.selected {\r\n    background-color: black;\r\n}\r\n\r\ninput {\r\n    border: none;\r\n    border-bottom: solid;\r\n    border-width: 1px;\r\n    margin: 3px;\r\n    margin-left : 10px;\r\n}\r\n\r\ninput:focus {\r\n    outline: none;\r\n    border-width: 2px;\r\n}\r\n\r\nbutton {\r\n    border-radius: 3px;\r\n    background-color: white;\r\n}\r\n\r\n.created {\r\n    margin : 3px;\r\n    font-size: 11px;\r\n}", ""]);
 	
 	// exports
 
@@ -39656,6 +39679,10 @@
 	ChecklistItem.define({
 	    attributes: { // <- Here's an attribute spec. Think of it as a type spec.
 	        name: String,
+	
+	        // Basic type spec form is just mentioning the constructor function.
+	        // New Date class instance will be automatically created for this attribute.
+	        created: Date,
 	
 	        // checked - it's boolean value, which has watcher. Watcher is model's function which
 	        // is called whenever attribute value is changed.

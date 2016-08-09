@@ -23,6 +23,22 @@ class App extends React.Component {
         items : ChecklistItem.Collection // <- It's type annotation. Constructor function designates type.
     };
 
+    // Save and restore state.
+    componentWillMount(){
+        // All state in NestedReact is serializable by default.
+        const { state } = this,
+              // load raw JSON from local storage
+              json = JSON.parse( localStorage.getItem( 'checklist' ) || "{}" );
+
+        // Initialize state with JSON.
+        state.set( json, { parse : true } );
+
+        window.onunload = () =>{
+            // Save state back to the local storage
+            localStorage.setItem( 'checklist', JSON.stringify( state ) );
+        }
+    }
+
     render(){
         const { items } = this.state;
 
@@ -69,6 +85,7 @@ class Item extends React.Component{
             <div className='checklist'>
                 <div className='header'>
                     <Checkbox checkedLink={ links.checked /* We use links instead of values... */ }/>
+                    <span className="created">{model.created.toLocaleTimeString()}</span>
                     <Input valueLink={ links.name /* ...as if they would be values */ } />
                     <button onClick={ () => model.remove() /* custom model method to remove it from the collection */}>
                         Delete
