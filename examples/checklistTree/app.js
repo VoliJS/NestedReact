@@ -39599,14 +39599,55 @@
 	var _nestedtypes = __webpack_require__(210);
 	
 	/**
-	 * Think of the models as of the class like in statically typed languages.
-	 * Such as Java or C++. Difference here is that types are being checked and coerced _dynamically_.
-	 * And - every model is serializable and observable by default.
+	 * Data layer is described as models and collections, which can contains each other.
+	 * Model is represented as an object in JSON, Collection - as an array of objects.
 	 *
-	 * This case is a bit tough, as we're going to define recursive structure. Therefore, we are
-	 * defining the standard class, adding @predefine directive, and define attributes later.
-	 * When we have the reference to the constructor types.
+	 * Every definition must be preceeded with @define decorator.
 	 */
+	
+	var Checklist = (function (_Model$Collection) {
+	    _inherits(Checklist, _Model$Collection);
+	
+	    function Checklist() {
+	        _classCallCheck(this, _Checklist);
+	
+	        _get(Object.getPrototypeOf(_Checklist.prototype), 'constructor', this).apply(this, arguments);
+	    }
+	
+	    /**
+	     * Think of the models as of the class like in statically typed languages.
+	     * Such as Java or C++. Difference here is that types are being checked and coerced _dynamically_.
+	     * And - every model is serializable and observable by default.
+	     */
+	
+	    _createClass(Checklist, [{
+	        key: 'checked',
+	
+	        // This is the boolean calculated property we're using for convenience.
+	        // True, whenever all subitems are selected.
+	        get: function get() {
+	            return this.every(function (item) {
+	                return item.checked;
+	            });
+	        },
+	
+	        // And it's writable property.
+	        set: function set(checked) {
+	            if (checked !== this.checked) {
+	                // 'updateEach' works as each, but wrap the changes in transaction.
+	                // Simply speaking, it means that just one change event will be fired from subitems,
+	                // despite the fact that there is a bulk change.
+	                this.updateEach(function (item) {
+	                    item.checked = checked;
+	                });
+	            }
+	        }
+	    }]);
+	
+	    var _Checklist = Checklist;
+	    Checklist = (0, _nestedtypes.define)(Checklist) || Checklist;
+	    return Checklist;
+	})(_nestedtypes.Model.Collection);
 	
 	var ChecklistItem = (function (_Model) {
 	    _inherits(ChecklistItem, _Model);
@@ -39617,87 +39658,70 @@
 	        _get(Object.getPrototypeOf(_ChecklistItem.prototype), 'constructor', this).apply(this, arguments);
 	    }
 	
-	    // Now, define our recursive model.
-	
 	    _createClass(ChecklistItem, [{
-	        key: 'syncSubitems',
+	        key: 'checkedWatcher',
 	
 	        // This is going to be the watcher function for 'checked' attribute.
-	        value: function syncSubitems(checked) {
-	            this.subitemsChecked = checked;
+	        value: function checkedWatcher(checked) {
+	            this.subitems.checked = checked;
 	        }
 	
 	        // And this one - for 'subitems', which is nested checklist attribute.
-	        // Scroll it down, you'ss see the definition.
 	    }, {
-	        key: 'syncChecked',
-	        value: function syncChecked(subitems) {
+	        key: 'subitemsWatcher',
+	        value: function subitemsWatcher(subitems) {
 	            if (subitems.length) {
-	                this.checked = this.subitemsChecked;
+	                this.checked = this.subitems.checked;
 	            }
 	        }
-	
-	        // Now. This, is the boolean calculated property, we're using for convenience.
-	        // True, whenever all subitems are selected.
-	    }, {
-	        key: 'remove',
 	
 	        // Helper method to delete model from collection, without reference to the collection.
 	        // In NestedTypes, aggregation is distinguished from references to the shared objects.
 	        // By default, all attributes and collection elements are aggregated.
 	        // And model.collection points to the owner collection (if any).
+	    }, {
+	        key: 'remove',
 	        value: function remove() {
 	            this.collection.remove(this);
 	        }
-	    }, {
-	        key: 'subitemsChecked',
-	        get: function get() {
-	            return this.subitems.every(function (item) {
-	                return item.checked;
-	            });
-	        },
+	    }], [{
+	        key: 'Collection',
 	
-	        // And it's writable property.
-	        set: function set(checked) {
-	            if (checked !== this.subitemsChecked) {
-	                // 'updateEach' works as each, but wrap the changes in transaction.
-	                // Simply speaking, it means that just one change event will be fired from subitems,
-	                // despite the fact that there is a bulk change.
-	                this.subitems.updateEach(function (item) {
-	                    item.checked = checked;
-	                });
-	            }
-	        }
+	        // Link Checklist collection with its model definition, overriding the default collection.
+	        // Once it's linked, it becomes the collection of the ChecklistItem models.
+	        // It's useful in our case as we can reference Checklist in attributes spec, creating recursive definition.
+	        value: Checklist,
+	        enumerable: true
+	    }, {
+	        key: 'attributes',
+	        value: { // <- Here's an attribute spec. Think of it as a type spec.
+	            name: String,
+	
+	            // Basic type spec form is just mentioning the constructor function.
+	            // New Date class instance will be automatically created for this attribute.
+	            created: Date,
+	
+	            // checked - it's boolean value, which has watcher. Watcher is model's function which
+	            // is called whenever attribute value is changed.
+	            // Watchers reacts on every change inside of the attribute structure, no matter how deep it happened.
+	            // All changes made to the model inside of the watcher won't trigger any
+	            // additional 'change' events and won't cause extra renders. They are executed in the scope
+	            // of transaction.
+	            checked: Boolean.has.watcher('checkedWatcher'),
+	
+	            // Now it's interesting. subitems - is a collection of checklist items.
+	            // And, it has watcher. Which will be called whenever anything inside will be changed.
+	            subitems: Checklist.has.watcher('subitemsWatcher')
+	        },
+	        enumerable: true
 	    }]);
 	
 	    var _ChecklistItem = ChecklistItem;
-	    ChecklistItem = (0, _nestedtypes.predefine)(ChecklistItem) || ChecklistItem;
+	    ChecklistItem = (0, _nestedtypes.define)(ChecklistItem) || ChecklistItem;
 	    return ChecklistItem;
 	})(_nestedtypes.Model);
-	
+
 	exports.ChecklistItem = ChecklistItem;
-	ChecklistItem.define({
-	    attributes: { // <- Here's an attribute spec. Think of it as a type spec.
-	        name: String,
-	
-	        // Basic type spec form is just mentioning the constructor function.
-	        // New Date class instance will be automatically created for this attribute.
-	        created: Date,
-	
-	        // checked - it's boolean value, which has watcher. Watcher is model's function which
-	        // is called whenever attribute value is changed.
-	        // All changes made to the model inside of the watchers won't trigger any
-	        // additional 'change' events and won't cause extra renders. They are executed in the scope
-	        // of transaction.
-	        checked: Boolean.has.watcher('syncSubitems'),
-	
-	        // Now it's interesting. subitems - is a collection of checklist item.
-	        // Collection type is automatically defined for every Model type,
-	        // and that's why we used @predefine - to give NestedTypes the change to do it.
-	        // And, it has watcher. Which will be called whenever anything inside will be changed.
-	        subitems: ChecklistItem.Collection.has.watcher('syncChecked')
-	    }
-	});
 
 /***/ }
 /******/ ]);
