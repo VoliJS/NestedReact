@@ -24,10 +24,10 @@ module.exports = function processSpec( spec, a_baseProto ){
  */
 var _queue = null, _animation;
 
-function forceUpdate(){
+function asyncUpdate(){
     if( !_animation ){
         // schedule callback
-        _animation = requestAnimationFrame( _processUpdate );
+        _animation = requestAnimationFrame( _processAsyncUpdate );
         _queue = [];
     }
 
@@ -37,7 +37,7 @@ function forceUpdate(){
     }
 }
 
-function _processUpdate(){
+function _processAsyncUpdate(){
     cancelAnimationFrame( _animation );
     _animation = null;
 
@@ -53,8 +53,14 @@ function _processUpdate(){
 
 var EventsMixin = Object.assign( {
     componentWillUnmount : function(){
+        this.off();
         this.stopListening();
-    }
+
+        // TODO: Enable it in future.
+        //if( this.state ) this.state.dispose(); // Not sure if it will work ok with current code base.
+    },
+
+    asyncUpdate : asyncUpdate
 }, Nested.Events );
 
 /***
@@ -115,7 +121,7 @@ var ModelStateMixin = {
     model         : null,
 
     _onChildrenChange : function(){
-        forceUpdate.call( this );
+        asyncUpdate.call( this );
     },
 
     componentWillMount : function(){
@@ -218,7 +224,7 @@ function registerPropsListener( component, prevProps, name, events ){
                 component.listenTo( emitter, events );
             }
             else{
-                component.listenTo( emitter, events || emitter.triggerWhenChanged, forceUpdate );
+                component.listenTo( emitter, events || emitter.triggerWhenChanged, asyncUpdate );
             }
         }
     }

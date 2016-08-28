@@ -204,10 +204,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	var _queue = null, _animation;
 	
-	function forceUpdate(){
+	function asyncUpdate(){
 	    if( !_animation ){
 	        // schedule callback
-	        _animation = requestAnimationFrame( _processUpdate );
+	        _animation = requestAnimationFrame( _processAsyncUpdate );
 	        _queue = [];
 	    }
 	
@@ -217,7 +217,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}
 	
-	function _processUpdate(){
+	function _processAsyncUpdate(){
 	    cancelAnimationFrame( _animation );
 	    _animation = null;
 	
@@ -233,8 +233,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var EventsMixin = Object.assign( {
 	    componentWillUnmount : function(){
+	        this.off();
 	        this.stopListening();
-	    }
+	
+	        // TODO: Enable it in future.
+	        //if( this.state ) this.state.dispose(); // Not sure if it will work ok with current code base.
+	    },
+	
+	    asyncUpdate : asyncUpdate
 	}, Nested.Events );
 	
 	/***
@@ -295,7 +301,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    model         : null,
 	
 	    _onChildrenChange : function(){
-	        forceUpdate.call( this );
+	        asyncUpdate.call( this );
 	    },
 	
 	    componentWillMount : function(){
@@ -398,7 +404,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                component.listenTo( emitter, events );
 	            }
 	            else{
-	                component.listenTo( emitter, events || emitter.triggerWhenChanged, forceUpdate );
+	                component.listenTo( emitter, events || emitter.triggerWhenChanged, asyncUpdate );
 	            }
 	        }
 	    }
