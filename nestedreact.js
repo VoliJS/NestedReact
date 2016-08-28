@@ -198,7 +198,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return spec;
 	}
 	
-	function forceUpdate(){ this.forceUpdate(); }
+	
+	/***
+	 * Throttled asynchronous version of forceUpdate.
+	 */
+	var _queue = null, _animation;
+	
+	function forceUpdate(){
+	    if( !_animation ){
+	        // schedule callback
+	        _animation = requestAnimationFrame( _processUpdate );
+	        _queue = [];
+	    }
+	
+	    if( !this._queuedForUpdate ){
+	        _queue.push( this );
+	        this._queuedForUpdate = true;
+	    }
+	}
+	
+	function _processUpdate(){
+	    cancelAnimationFrame( _animation );
+	    _animation = null;
+	
+	    var queue = _queue;
+	    _queue = null;
+	
+	    for( var i = 0; i < queue.length; i++ ){
+	        var component = queue[ i ];
+	        component._queuedForUpdate = false;
+	        component.forceUpdate();
+	    }
+	}
 	
 	var EventsMixin = Object.assign( {
 	    componentWillUnmount : function(){
