@@ -202,12 +202,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	/***
 	 * Throttled asynchronous version of forceUpdate.
 	 */
-	var _queue = null, _animation;
+	var _queue = null;
 	
 	function asyncUpdate(){
-	    if( !_animation ){
+	    if( !_queue ){
 	        // schedule callback
-	        _animation = requestAnimationFrame( _processAsyncUpdate );
+	        requestAnimationFrame( _processAsyncUpdate );
 	        _queue = [];
 	    }
 	
@@ -218,9 +218,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	function _processAsyncUpdate(){
-	    cancelAnimationFrame( _animation );
-	    _animation = null;
-	
 	    var queue = _queue;
 	    _queue = null;
 	
