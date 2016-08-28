@@ -226,7 +226,7 @@ function registerPropsListener( component, prevProps, name, events ){
                 component.listenTo( emitter, events );
             }
             else{
-                component.listenTo( emitter, events || emitter.triggerWhenChanged, asyncUpdate );
+                component.listenTo( emitter, events || emitter._changeEventName, asyncUpdate );
             }
         }
     }
