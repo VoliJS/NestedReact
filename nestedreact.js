@@ -223,8 +223,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    for( var i = 0; i < queue.length; i++ ){
 	        var component = queue[ i ];
-	        component._queuedForUpdate = false;
-	        component.forceUpdate();
+	        if( component._queuedForUpdate ){
+	            component._queuedForUpdate = false;
+	            component.forceUpdate();
+	        }
 	    }
 	}
 	
@@ -232,6 +234,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    componentWillUnmount : function(){
 	        this.off();
 	        this.stopListening();
+	        
+	        // Prevent asynchronous rendering if queued.
+	        this._queuedForUpdate = false;
 	
 	        // TODO: Enable it in future.
 	        //if( this.state ) this.state.dispose(); // Not sure if it will work ok with current code base.
