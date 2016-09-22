@@ -354,7 +354,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var listenToProps = spec.listenToProps;
 	    if( listenToProps ){
 	        if( typeof listenToProps === 'string' ){
-	            spec._listenToPropsArray = listenToProps.split( /s+/ ).concat( baseProto._listenToPropsArray || [] );
+	            spec._listenToPropsArray = listenToProps.split( /\s+/ ).concat( baseProto._listenToPropsArray || [] );
 	            spec.mixins.unshift( ListenToPropsArrayMixin );
 	        }
 	        else{
