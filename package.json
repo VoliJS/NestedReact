@@ -41,6 +41,8 @@
   "version": "1.0.1-b06",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
+    "all" : "npm run build && npm run deploy",
+    "deploy" : "copy .\\nestedreact.js ..\\observer-frontend\\htdocs\\node_modules\\nestedreact",
     "watch": "./node_modules/.bin/webpack --watch"
   }
 }

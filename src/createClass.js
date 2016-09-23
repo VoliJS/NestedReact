@@ -3,13 +3,35 @@ var React      = require( 'react' ),
     processSpec = require( './define'),
     tools = Nested.tools;
 
-function createClass( spec ){
-    var component = React.createClass( processSpec( spec ) );
-    
-    // attach lazily evaluated backbone View class
-    defineBackboneProxy( component );
+var reactMixinRules = {
+    componentWillMount : 'reverse',
+    componentDidMount : 'reverse',
+    componentWillReceiveProps : 'reverse',
+    shouldComponentUpdate : 'some',
+    componentWillUpdate : 'reverse',
+    componentDidUpdate : 'reverse',
+    componentWillUnmount : 'sequence',
+};
 
-    return component;
+function createClass( a_spec ){
+    var spec = processSpec( a_spec ),
+        mixins = spec.mixins || [];
+
+    delete spec.mixins;
+
+    // We have the reversed sequence for the majority of the lifecycle hooks.
+    // So, mixins lifecycle methods works first. It's important.
+    // To make it consistent with class mixins implementation, we override React mixins.
+    for( var i = 0; i < mixins.length; i++ ){
+        Nested.mergeProps( spec, mixins[ i ], reactMixinRules );
+    }
+
+    var Component = React.createClass( spec );
+
+    // attach lazily evaluated backbone View class
+    defineBackboneProxy( Component );
+
+    return Component;
 }
 
 module.exports = createClass;
@@ -36,15 +58,7 @@ React.Component.define = function( protoProps, staticProps ){
     return this;
 }
 
-React.Component.mixinRules({
-    componentWillMount : 'reverse',
-    componentDidMount : 'reverse',
-    componentWillReceiveProps : 'reverse',
-    shouldComponentUpdate : 'some',
-    componentWillUpdate : 'reverse',
-    componentDidUpdate : 'reverse',
-    componentWillUnmount : 'sequence',
-});
+React.Component.mixinRules( reactMixinRules );
 
 function defineBackboneProxy( Component ){
     Object.defineProperty( Component, 'View', {
