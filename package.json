@@ -25,7 +25,7 @@
   "peerDependencies" : {
     "react": "^15.0.0||^0.14.0" ,
     "react-dom": "^15.0.0||^0.14.0",
-    "nestedtypes": "^2.0.0-b00"
+    "nestedtypes": "^2.0.0-rc1"
   },
   "devDependencies": {
     "valuelink" : "^1.0.0",
@@ -38,7 +38,7 @@
     "nestedreact.js.map"
   ],
   "license": "MIT",
-  "version": "1.0.1-b07",
+  "version": "1.0.1-rc1",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "all" : "npm run build && npm run deploy",
