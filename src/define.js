@@ -18,36 +18,15 @@ module.exports = function processSpec( spec, a_baseProto ){
     return spec;
 }
 
-
 /***
  * Throttled asynchronous version of forceUpdate.
  */
 var _queue = null;
 
 function asyncUpdate(){
-    if( !_queue ){
-        // schedule callback
-        requestAnimationFrame( _processAsyncUpdate );
-        _queue = [];
-    }
-
-    if( !this._queuedForUpdate ){
-        _queue.push( this );
-        this._queuedForUpdate = true;
-    }
-}
-
-function _processAsyncUpdate(){
-    var queue = _queue;
-    _queue = null;
-
-    for( var i = 0; i < queue.length; i++ ){
-        var component = queue[ i ];
-        if( component._queuedForUpdate ){
-            component._queuedForUpdate = false;
-            component.forceUpdate();
-        }
-    }
+    // For some weird reason async update doesn't work. Input's state is being messed up.
+    // Just call forceUpdate for now.
+    this.forceUpdate();
 }
 
 var EventsMixin = Object.assign( {

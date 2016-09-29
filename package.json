@@ -38,7 +38,7 @@
     "nestedreact.js.map"
   ],
   "license": "MIT",
-  "version": "1.0.1-rc1",
+  "version": "1.0.1-rc2",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "all" : "npm run build && npm run deploy",
