@@ -1169,13 +1169,35 @@
 		    processSpec = __webpack_require__( 5),
 		    tools = Nested.tools;
 		
-		function createClass( spec ){
-		    var component = React.createClass( processSpec( spec ) );
-		    
-		    // attach lazily evaluated backbone View class
-		    defineBackboneProxy( component );
+		var reactMixinRules = {
+		    componentWillMount : 'reverse',
+		    componentDidMount : 'reverse',
+		    componentWillReceiveProps : 'reverse',
+		    shouldComponentUpdate : 'some',
+		    componentWillUpdate : 'reverse',
+		    componentDidUpdate : 'reverse',
+		    componentWillUnmount : 'sequence',
+		};
 		
-		    return component;
+		function createClass( a_spec ){
+		    var spec = processSpec( a_spec ),
+		        mixins = spec.mixins || [];
+		
+		    delete spec.mixins;
+		
+		    // We have the reversed sequence for the majority of the lifecycle hooks.
+		    // So, mixins lifecycle methods works first. It's important.
+		    // To make it consistent with class mixins implementation, we override React mixins.
+		    for( var i = 0; i < mixins.length; i++ ){
+		        Nested.mergeProps( spec, mixins[ i ], reactMixinRules );
+		    }
+		
+		    var Component = React.createClass( spec );
+		
+		    // attach lazily evaluated backbone View class
+		    defineBackboneProxy( Component );
+		
+		    return Component;
 		}
 		
 		module.exports = createClass;
@@ -1202,15 +1224,7 @@
 		    return this;
 		}
 		
-		React.Component.mixinRules({
-		    componentWillMount : 'reverse',
-		    componentDidMount : 'reverse',
-		    componentWillReceiveProps : 'reverse',
-		    shouldComponentUpdate : 'some',
-		    componentWillUpdate : 'reverse',
-		    componentDidUpdate : 'reverse',
-		    componentWillUnmount : 'sequence',
-		});
+		React.Component.mixinRules( reactMixinRules );
 		
 		function defineBackboneProxy( Component ){
 		    Object.defineProperty( Component, 'View', {
@@ -1244,36 +1258,15 @@
 		    return spec;
 		}
 		
-		
 		/***
 		 * Throttled asynchronous version of forceUpdate.
 		 */
 		var _queue = null;
 		
 		function asyncUpdate(){
-		    if( !_queue ){
-		        // schedule callback
-		        requestAnimationFrame( _processAsyncUpdate );
-		        _queue = [];
-		    }
-		
-		    if( !this._queuedForUpdate ){
-		        _queue.push( this );
-		        this._queuedForUpdate = true;
-		    }
-		}
-		
-		function _processAsyncUpdate(){
-		    var queue = _queue;
-		    _queue = null;
-		
-		    for( var i = 0; i < queue.length; i++ ){
-		        var component = queue[ i ];
-		        if( component._queuedForUpdate ){
-		            component._queuedForUpdate = false;
-		            component.forceUpdate();
-		        }
-		    }
+		    // For some weird reason async update doesn't work. Input's state is being messed up.
+		    // Just call forceUpdate for now.
+		    this.forceUpdate();
 		}
 		
 		var EventsMixin = Object.assign( {
@@ -1400,7 +1393,7 @@
 		    var listenToProps = spec.listenToProps;
 		    if( listenToProps ){
 		        if( typeof listenToProps === 'string' ){
-		            spec._listenToPropsArray = listenToProps.split( /s+/ ).concat( baseProto._listenToPropsArray || [] );
+		            spec._listenToPropsArray = listenToProps.split( /\s+/ ).concat( baseProto._listenToPropsArray || [] );
 		            spec.mixins.unshift( ListenToPropsArrayMixin );
 		        }
 		        else{

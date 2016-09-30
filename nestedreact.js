@@ -295,16 +295,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ModelStateMixin = {
 	    model         : null,
 	
-	    _onChildrenChange : function(){
-	        asyncUpdate.call( this );
-	    },
+	    _onChildrenChange : function(){},
 	
 	    componentWillMount : function(){
-	        this.state = this.model = this.props._keepState || new this.Model();
+	        const state = this.state = this.model = this.props._keepState || new this.Model();
+	        state._owner = this;
 	    },
 	
 	    componentDidMount : function(){
-	        this.model._owner = this;
+	        this._onChildrenChange = this.asyncUpdate;
 	    },
 	
 	    // reference global store to fix model's store locator
