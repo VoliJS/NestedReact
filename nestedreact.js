@@ -298,7 +298,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _onChildrenChange : function(){},
 	
 	    componentWillMount : function(){
-	        const state = this.state = this.model = this.props._keepState || new this.Model();
+	        var state = this.state = this.model = this.props._keepState || new this.Model();
 	        state._owner = this;
 	    },
 	
