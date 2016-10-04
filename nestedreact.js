@@ -300,19 +300,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    componentWillMount : function(){
 	        var state = this.state = this.model = this.props._keepState || new this.Model();
 	        state._owner = this;
+	        state._ownerKey = 'state';
 	    },
 	
 	    componentDidMount : function(){
+	        // Start UI updates on state changes.
 	        this._onChildrenChange = this.asyncUpdate;
 	    },
 	
 	    // reference global store to fix model's store locator
 	    getStore : function(){
-	        return this.model._defaultStore;
+	        // Attempt to get the store from the context first. Then - fallback to the state's default store.
+	        // TBD: Need to figure out a good way of managing local stores.
+	        var context = this.context;
+	        return ( context && context.store ) || this.model._defaultStore;
 	    },
 	
 	    componentWillUnmount : function(){
-	        this.model._owner = null;
+	        // Release the state model.
+	        this.model._ownerKey = this.model._owner = void 0;
 	    }
 	};
 	
