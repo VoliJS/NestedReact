@@ -109,7 +109,7 @@ var Nested = require( 'nestedtypes' );
 var link = new Nested.Link( value,  x => /* update */ } ); 
 ```
 
-Below is the brief reference for links API. Consult [Guide to Data Binding Use Cases](/docs/databinding.md) to understand how to use it.
+Below is the brief reference for links API. Consult `Guide to Data Binding Use Cases` to understand how to use it.
 
 ## Value access methods
 
