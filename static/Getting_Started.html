@@ -82,7 +82,7 @@
     <div class="Page__header">
         <h1><a href="Getting_Started.html">Getting Started</a></h1>
                 <span style="float: left; font-size: 10px; color: gray;">
-            Thursday, October 6, 2016 12:28 PM        </span>
+            Thursday, October 6, 2016 4:17 PM        </span>
                         <span style="float: right; font-size: 10px; color: gray;">
             <a href="https://github.com/Volicon/NestedReact/blob/develop/docs/00_Getting_Started.md" target="_blank">Edit on GitHub</a>
         </span>
@@ -90,30 +90,55 @@
 
 
     <div class="s-content">
-        <h2 id="page_Installation">Installation</h2>
-<p>Packed as UMD, can be installed using npm. Requires <code>nestedtypes</code>, <code>react</code>, and <code>react-dom</code> as a peer dependencies.</p>
-<p><em>NestedTypes</em> itself can be used as a drop-in <em>BackboneJS</em> replacement
-(some refactoring of models layer is still needed),
-and thus requires <code>jquery</code> and <code>underscore</code> as peer dependencies.</p>
-<p><code>npm install react react-dom nestedreact nestedtypes jquery underscore --save-dev</code></p>
-<p>See an examples in the <a href="https://github.com/Volicon/NestedReact/tree/master/examples" class="external">examples folder</a>
-for the starting boilerplate.</p>
-<h2 id="page_Optimizing_for_size">Optimizing for size</h2>
-<p>If you're not interested in legacy technologies support and would like to reduce the
-size of your app assembly, wait a bit for stripped version which is one the way.
-Meanwhile, you can:</p>
+        <p>NestedReact is the front-end framework which brings advantages of React's view layer
+to the classic MVC architecture which is familiar to the most application developers. You've got the complete solution
+covering all needs of large SPA <em>except</em> the routing (choose the one which suites you best).</p>
 <ul>
-<li>Omit jQuery. Without that Model/Collection REST endpoints and Backbone shims will stop working.</li>
-<li>Use lightweight jQuery replacements in the same way as people do with Backbone.</li>
-<li>Don't bother and enjoy. That extra legacy stuff is really the small fraction of the assembly.</li>
+<li>
+<em>Models</em> as data layer building blocks:
+<ul>
+<li>looks like plain JS classes;</li>
+<li>recursively composable (can consists of other models and collections);</li>
+<li>deeply observable (&quot;reactive&quot;);</li>
+<li>automatically serializable (any model can be instantly turned to the REST endpoint);</li>
+<li>aware of one-to-many and many-to-many relations out of the box.</li>
+</ul>
+</li>
+<li>Unified state management. No more <code>component.setState()</code>:
+<ul>
+<li>component's state is the <em>model</em> (looks like plain object, observable, serializable, etc);</li>
+<li>components observes state changes and update itself.</li>
+</ul>
+</li>
+<li>Forms handling as you expect it to be in XXIst century:
+<ul>
+<li>completely declarative;</li>
+<li>two-way data binding;</li>
+<li>form inputs validation.</li>
+</ul>
+</li>
+<li>Unidirectional data flow and pure render.
+<ul>
+<li>No tricks. No mind-blowing concepts or crazy looking code. It just works.</li>
+</ul>
+</li>
+<li>React Mixins support for ES6 classes components.</li>
+<li>Easy migration from BackboneJS, if you need it.</li>
+</ul>
+<p>NestedReact is built around NestedTypes data framework (for M), React (for V), and don't enforce any routing solution (unopinionated on C).</p>
+<p>NestedTypes is the data framework which basically does the same thing to data that React does to DOM:</p>
+<ul>
+<li>it helps you to describe object trees in declarative way;</li>
+<li>it updates existing (mutable) object trees in place applying the difference of existing objects to the JSON received from the server.</li>
+<li>it triggers change events only when there are <em>real</em> changes.</li>
 </ul>
 <h2 id="page_Basic_Usage">Basic Usage</h2>
-<p>NestedReact exports modified React namespace. So, use it as React replacement like this:</p>
-<pre><code class="language-jsx">import React from 'nestedreact'
+<p>NestedReact exports modified React namespace (original React is untouched). So, use it as React replacement like this:</p>
+<pre><code class="language-javascript">import React from 'nestedreact'
 </code></pre>
 <p>The most important thing NestedReact does is universal state management; the same technique is used for
 handling both component's local UI state, persistent data, and shared global state. In the simplest case of the local UI state,
-it looks to your as if your state just instantly became observable.</p>
+it looks to your as if your state just instantly became observable. You handle the flat state as if it would be the plain object.</p>
 <pre><code class="language-javascript">export const MyComponent = React.createClass({
 	state : {
 		count : 0
@@ -130,8 +155,8 @@ it looks to your as if your state just instantly became observable.</p>
 	}
 });
 </code></pre>
-<p>ES6 classes are also supported. Specification members becomes statics,
-and definition must be preceeded with the <code>@define</code> decorator.</p>
+<p>In case of ES6 classes components specification members becomes statics
+and definition must be preceded with the <code>@define</code> decorator.</p>
 <pre><code class="language-javascript">import React, { define } from 'nestedreact'
 
 @define
@@ -151,16 +176,50 @@ export class MyComponent extends React.Component {
 	}
 }
 </code></pre>
-<p>If you prefer not to use decorators, just invoke component's static <code>define()</code> method directly after the class definition.</p>
+<p>If you prefer to avoid decorators, just invoke component's static <code>define()</code> method directly after the class definition.</p>
 <pre><code class="language-javascript">MyComponent.define();
 </code></pre>
-<p>If you prefer not to use inline statics, you may pass specification directly to the <code>define()</code> method:</p>
+<p>If you prefer to avoid inline statics, you may pass the specification directly to the <code>define()</code> method:</p>
 <pre><code class="language-javascript">MyComponent.define({
     state : {
 		count : 0
 	}
 });
 </code></pre>
+<h2 id="page_Installation">Installation</h2>
+<p>All modern browsers and IE10+ are supported. Packed as UMD, can be installed using npm.</p>
+<p>Requires <code>nestedtypes</code>, <code>react</code>, and <code>react-dom</code> as a peer dependencies.</p>
+<p><em>NestedTypes</em> itself can be used as a drop-in <em>BackboneJS</em> replacement,
+and thus requires <code>jquery</code> and <code>underscore</code> as peer dependencies. Therefore:</p>
+<p><code>npm install react react-dom nestedreact nestedtypes jquery underscore --save-dev</code></p>
+<p>See examples in the <a href="https://github.com/Volicon/NestedReact/tree/master/examples" class="external">examples folder</a>
+for the starting boilerplate.</p>
+<h2 id="page_Optimizing_for_size">Optimizing for size</h2>
+<p>If you're not interested in legacy technologies support and would like to reduce the
+size of your app assembly, wait a bit for stripped version which is one the way.
+Meanwhile, you can:</p>
+<ul>
+<li>Omit jQuery. Without that Model/Collection REST endpoints and Backbone shims will stop working.</li>
+<li>Use lightweight jQuery replacements in the same way as people do with Backbone.</li>
+<li>Don't bother and enjoy. That extra legacy stuff is really the small fraction of the assembly.</li>
+</ul>
+<h2 id="page_Why_another_JS_framework">Why another JS framework</h2>
+<p>React was the huge advancement over client side templating solutions used
+previously for &quot;V&quot; in the majority of MVC frameworks. Unfortunately, we
+don't feel the same about the application state management architectures
+being <a href="https://facebook.github.io/flux/" class="external">advocated by Facebook</a>.</p>
+<p>As our framework clearly demonstrates, it <em>is</em> possible to implement
+unidirectional data flow with &quot;dirty&quot; mutable data.</p>
+<p>And it's not only possible, but <a href="https://medium.com/@gaperton/software-managing-the-complexity-caff5c4964cf#.dn3aq4riy" class="external">highly beneficial</a>.
+Here's <a href="http://todomvc.com/" class="external">TodoMVC</a> solution size chart for different
+frameworks and combinations of tools:</p>
+<p><img src="SLOC-comparison.jpg" alt="TodoMVC solution size comparison" /></p>
+<p>As you can see, an old-school MVC approach the majority of developers are perfectly familiar with <a href="https://github.com/Volicon/NestedReact/tree/master/examples/todomvc" class="external">allowing us to write twice less
+code</a> for the same task than all the &quot;flux&quot; stuff. So the overall result is comparable
+to Angular 2. We're in the same league now.</p>
+<p>If you take <a href="https://github.com/voronianski/flux-comparison" class="external">flux-comparison</a> example, difference will become even more spectacular.</p>
+<p><img src="flux-sloc.png" alt="flux-comparison solution size" /></p>
+<p>Here's our <a href="https://github.com/Volicon/NestedReact/tree/master/examples/flux-comparison" class="external">solution</a>. Check it out.</p>
     </div>
 
         <nav>
