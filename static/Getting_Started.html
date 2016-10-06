@@ -82,7 +82,7 @@
     <div class="Page__header">
         <h1><a href="Getting_Started.html">Getting Started</a></h1>
                 <span style="float: left; font-size: 10px; color: gray;">
-            Wednesday, October 5, 2016 5:06 PM        </span>
+            Thursday, October 6, 2016 12:28 PM        </span>
                         <span style="float: right; font-size: 10px; color: gray;">
             <a href="https://github.com/Volicon/NestedReact/blob/develop/docs/00_Getting_Started.md" target="_blank">Edit on GitHub</a>
         </span>
@@ -90,7 +90,78 @@
 
 
     <div class="s-content">
-            </div>
+        <h2 id="page_Installation">Installation</h2>
+<p>Packed as UMD, can be installed using npm. Requires <code>nestedtypes</code>, <code>react</code>, and <code>react-dom</code> as a peer dependencies.</p>
+<p><em>NestedTypes</em> itself can be used as a drop-in <em>BackboneJS</em> replacement
+(some refactoring of models layer is still needed),
+and thus requires <code>jquery</code> and <code>underscore</code> as peer dependencies.</p>
+<p><code>npm install react react-dom nestedreact nestedtypes jquery underscore --save-dev</code></p>
+<p>See an examples in the <a href="https://github.com/Volicon/NestedReact/tree/master/examples" class="external">examples folder</a>
+for the starting boilerplate.</p>
+<h2 id="page_Optimizing_for_size">Optimizing for size</h2>
+<p>If you're not interested in legacy technologies support and would like to reduce the
+size of your app assembly, wait a bit for stripped version which is one the way.
+Meanwhile, you can:</p>
+<ul>
+<li>Omit jQuery. Without that Model/Collection REST endpoints and Backbone shims will stop working.</li>
+<li>Use lightweight jQuery replacements in the same way as people do with Backbone.</li>
+<li>Don't bother and enjoy. That extra legacy stuff is really the small fraction of the assembly.</li>
+</ul>
+<h2 id="page_Basic_Usage">Basic Usage</h2>
+<p>NestedReact exports modified React namespace. So, use it as React replacement like this:</p>
+<pre><code class="language-jsx">import React from 'nestedreact'
+</code></pre>
+<p>The most important thing NestedReact does is universal state management; the same technique is used for
+handling both component's local UI state, persistent data, and shared global state. In the simplest case of the local UI state,
+it looks to your as if your state just instantly became observable.</p>
+<pre><code class="language-javascript">export const MyComponent = React.createClass({
+	state : {
+		count : 0
+	},
+
+	render(){
+	    const { state } = this;
+		
+		return (
+			&lt;div onClick={ () =&gt; state.count++ }&gt;
+				{ state.count }
+			&lt;/div&gt;
+		);
+	}
+});
+</code></pre>
+<p>ES6 classes are also supported. Specification members becomes statics,
+and definition must be preceeded with the <code>@define</code> decorator.</p>
+<pre><code class="language-javascript">import React, { define } from 'nestedreact'
+
+@define
+export class MyComponent extends React.Component {
+	static state = {
+		count : 0
+	}
+
+	render(){
+	    const { state } = this;
+		
+		return (
+			&lt;div onClick={ () =&gt; state.count++ }&gt;
+				{ state.count }
+			&lt;/div&gt;
+		);
+	}
+}
+</code></pre>
+<p>If you prefer not to use decorators, just invoke component's static <code>define()</code> method directly after the class definition.</p>
+<pre><code class="language-javascript">MyComponent.define();
+</code></pre>
+<p>If you prefer not to use inline statics, you may pass specification directly to the <code>define()</code> method:</p>
+<pre><code class="language-javascript">MyComponent.define({
+    state : {
+		count : 0
+	}
+});
+</code></pre>
+    </div>
 
         <nav>
         <ul class="Pager">
