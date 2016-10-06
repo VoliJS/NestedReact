@@ -1,10 +1,9 @@
 <p class="lead">
 	<strong>NestedReact</strong> bridges the gap between React and traditional MVC frameworks,
-	combining all the benefits of unidirectional data flow with two-way data binding and familiar OO state management.
+	combining two-way data binding and familiar OO state management with all the benefits of true unidirectional data flow.
 </p>
 
 <hr/>
-<h3>Features</h3>
 <br/>
 <div class=row>
 <div class=col-third>
