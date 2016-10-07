@@ -41,7 +41,7 @@
         <h2>React state management made simple</h2>    </div>
 
     <div class="HomepageImage container">
-        <img class="homepage-image img-responsive" src="SLOC-comparison.jpg" alt="NestedReact">    </div>
+            </div>
 
     <div class="HomepageButtons">
         <div class="container">
@@ -58,29 +58,47 @@
 	<strong>NestedReact</strong> bridges the gap between React and traditional MVC frameworks,
 	combining two-way data binding and familiar OO state management with all the benefits of true unidirectional data flow.
 </p>
+<p class="lead">
+    It's MVC framework taking <a src="https://facebook.github.io/react/">React</a> for "V" and <a href="https://github.com/Volicon/NestedTypes">NestedTypes</a> for "M", while being unopinionated on "C". 
+</p>
 <hr/>
 <br/>
 <div class=row>
 <div class=col-third>
-<h4 id="page_Unidirectional_data_flow">Unidirectional data flow</h4>
+<h4 id="page_NestedTypes_for_M">NestedTypes for &quot;M&quot;</h4>
+<p>Does to your data the same as React does to the DOM.</p>
 <ul>
-<li>Traditional OO data layer</li>
-<li>Same technique for managing application and UI local state</li>
+<li>Observable (reactive) data structures</li>
+<li>Automatic serialization and REST</li>
+<li>Aggregation, &quot;to-one&quot;, and &quot;to-many&quot; relashionships.</li>
+<li>Type annotations and assertions</li>
+</ul>
+</div>
+<div class=col-third>
+<h4 id="page_React_for_V">React for &quot;V&quot;</h4>
+<ul>
+<li>Model instead of <code>state</code>
+</li>
+<li>Mutable models in props
+<ul>
+<li>Unidirectional Data Flow</li>
 <li>&quot;pure render&quot; optimization</li>
+<li>local updates on changes</li>
+</ul>
+</li>
+<li>Two-way data binding to state and props</li>
+<li>Declarative form validation</li>
+<li>Mixins for ES6 classes components</li>
 </ul>
 </div>
 <div class=col-third>
-<h4 id="page_Two_way_data_binding">Two-way data binding</h4>
+<h4 id="page_Choose_your_C">Choose your &quot;C&quot;</h4>
 <ul>
-<li>Value links</li>
-<li>Form validation</li>
-</ul>
-</div>
-<div class=col-third>
-<h4 id="page_Easy_migration_from_BackboneJS">Easy migration from BackboneJS</h4>
-<ul>
-<li>Use Backbone Views from React</li>
-<li>Use React components as Backbone Views</li>
+<li>
+<a href="https://github.com/ReactTraining/react-router" class="external">react-router</a>
+</li>
+<li>No router</li>
+<li>Whatever-you-like router</li>
 </ul>
 </div>
 </div>
