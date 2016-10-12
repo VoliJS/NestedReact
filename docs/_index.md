@@ -1,6 +1,6 @@
 <p class="lead">
 	<strong>NestedReact</strong> bridges the gap between React and traditional MVC frameworks,
-	combining two-way data binding and familiar OO state management with all the benefits of true unidirectional data flow.
+	combining familiar OO state management and two-way data binding with all the benefits of true unidirectional data flow.
 </p>
 
 <p class="lead">
@@ -17,23 +17,28 @@
 Does to your data the same as React does to the DOM.
  
 * Observable (reactive) data structures
+* Easy state synchronization
 * Automatic serialization and REST
 * Aggregation, "to-one", and "to-many" relashionships.
 * Type annotations and assertions
+* 10 times faster than BackboneJS.
 
 </div>
 <div class=col-third>
 
 #### React for "V"
 
-* Model instead of `state`
-* Mutable models in props
-    * Unidirectional Data Flow
-    * "pure render" optimization
-    * local updates on changes
-* Two-way data binding to state and props
-* Declarative form validation
-* Mixins for ES6 classes components
+React. Extended to play well with MVC. 
+
+* Simple technique to manage all application state
+    * Handle complex UI state with NestedTypes
+    * Unidirectional data flow
+    * Automatic "pure render" optimization 
+* Handle forms naturally
+    * Two-way data binding
+    * Declarative form validation 
+* *React mixins* with ES6 classes.
+* Cuts your code 2-5x compared to React/Redux.
 
 </div>
 <div class=col-third>

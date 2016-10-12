@@ -128,18 +128,17 @@ previously for "V" in the majority of MVC frameworks. Unfortunately, we
  don't feel the same about the application state management architectures 
  being [advocated by Facebook](https://facebook.github.io/flux/).
   
-As our framework clearly demonstrates, it _is_ possible to implement
-unidirectional data flow with "dirty" mutable data.
+As NestedReact demonstrates, the dramatical shift in paradigm is not required.
+It is possible to implement unidirectional data flow with "dirty" mutable data.
 
 And it's not only possible, but [highly beneficial](https://medium.com/@gaperton/software-managing-the-complexity-caff5c4964cf#.dn3aq4riy).
 Here's [TodoMVC](http://todomvc.com/) solution size chart for different
-frameworks and combinations of tools:
+frameworks and combinations of tools. As you can see, an old-school MVC approach the majority of developers are perfectly familiar with 
+[allowing us to write twice less code](https://github.com/Volicon/NestedReact/tree/master/examples/todomvc) 
+for the same task than all the "flux" stuff. So the overall result is comparable
+to Angular 2. We're in the same league now.
 
 ![TodoMVC solution size comparison](SLOC-comparison.jpg)
-
-As you can see, an old-school MVC approach the majority of developers are perfectly familiar with [allowing us to write twice less 
-code](https://github.com/Volicon/NestedReact/tree/master/examples/todomvc) for the same task than all the "flux" stuff. So the overall result is comparable
- to Angular 2. We're in the same league now.
  
 If you take [flux-comparison](https://github.com/voronianski/flux-comparison) example, difference will become even more spectacular.
 

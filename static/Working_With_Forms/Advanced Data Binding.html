@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
     <title>Advanced Data Binding - NestedReact</title>
-    <meta name="description" content="React state management made simple" />
+    <meta name="description" content="React. Playing well with traditional MVC." />
     <meta name="author" content="Vlad Balin">
     <meta charset="UTF-8">
     <link rel="icon" href="../themes/daux/img/favicon-navy.png" type="image/x-icon">
@@ -46,7 +46,7 @@
 
         <div class="Collapsible__content">
             <!-- Navigation -->
-            <ul class='Nav'><li class='Nav__item '><a href="../Getting_Started.html">Getting Started</a></li><li class='Nav__item  has-children'><a href="../Basics/State Management 101.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Basics</a><ul class='Nav'><li class='Nav__item '><a href="../Basics/State Management 101.html">State Management 101</a></li></ul></li><li class='Nav__item  has-children'><a href="../Handling_The_Complex_State/Advanced State Management.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Handling The Complex State</a><ul class='Nav'><li class='Nav__item '><a href="../Handling_The_Complex_State/Advanced State Management.html">Advanced State Management</a></li></ul></li><li class='Nav__item Nav__item--open has-children'><a href="../Working_With_Forms/Advanced Data Binding.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Working With Forms</a><ul class='Nav'><li class='Nav__item Nav__item--active'><a href="../Working_With_Forms/Advanced Data Binding.html">Advanced Data Binding</a></li><li class='Nav__item '><a href="../Working_With_Forms/Form Validation 101.html">Form Validation 101</a></li></ul></li><li class='Nav__item '><a href="../Optimizing_For_Performance.html">Optimizing For Performance</a></li><li class='Nav__item '><a href="../Migration_from_Backbone.html">Migration from Backbone</a></li><li class='Nav__item '><a href="../Using jQuery plugins.html">Using jQuery plugins</a></li></ul>
+            <ul class='Nav'><li class='Nav__item '><a href="../Getting_Started.html">Getting Started</a></li><li class='Nav__item  has-children'><a href="../Basics/State_Management_101.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Basics</a><ul class='Nav'><li class='Nav__item '><a href="../Basics/State_Management_101.html">State Management 101</a></li><li class='Nav__item '><a href="../Basics/Two_way_data_binding.html">Two way data binding</a></li></ul></li><li class='Nav__item  has-children'><a href="../Handling_The_Complex_State/Nested_Models_and_Collections.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Handling The Complex State</a><ul class='Nav'><li class='Nav__item '><a href="../Handling_The_Complex_State/Nested_Models_and_Collections.html">Nested Models and Collections</a></li><li class='Nav__item '><a href="../Handling_The_Complex_State/Aggregation_and_Ownership.html">Aggregation and Ownership</a></li><li class='Nav__item '><a href="../Handling_The_Complex_State/Update_Watchers_and_Transactions.html">Update Watchers and Transactions</a></li><li class='Nav__item '><a href="../Handling_The_Complex_State/Advanced State Management.html">Advanced State Management</a></li></ul></li><li class='Nav__item Nav__item--open has-children'><a href="../Working_With_Forms/Form_Validation.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Working With Forms</a><ul class='Nav'><li class='Nav__item '><a href="../Working_With_Forms/Form_Validation.html">Form Validation</a></li><li class='Nav__item Nav__item--active'><a href="../Working_With_Forms/Advanced Data Binding.html">Advanced Data Binding</a></li></ul></li><li class='Nav__item '><a href="../Optimizing_For_Performance.html">Optimizing For Performance</a></li><li class='Nav__item '><a href="../Migration_from_Backbone.html">Migration from Backbone</a></li><li class='Nav__item '><a href="../Using jQuery plugins.html">Using jQuery plugins</a></li></ul>
 
             <div class="Links">
                                     <hr/>
@@ -80,7 +80,7 @@
                 <article class="Page">
 
     <div class="Page__header">
-        <h1><a href="../Working_With_Forms/Advanced Data Binding.html">Working With Forms</a> <svg class="Page__header--separator" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 477.175 477.175"><path d="M360.73 229.075l-225.1-225.1c-5.3-5.3-13.8-5.3-19.1 0s-5.3 13.8 0 19.1l215.5 215.5-215.5 215.5c-5.3 5.3-5.3 13.8 0 19.1 2.6 2.6 6.1 4 9.5 4 3.4 0 6.9-1.3 9.5-4l225.1-225.1c5.3-5.2 5.3-13.8.1-19z"/></svg> <a href="../Working_With_Forms/Advanced Data Binding.html">Advanced Data Binding</a></h1>
+        <h1><a href="../Working_With_Forms/Form_Validation.html">Working With Forms</a> <svg class="Page__header--separator" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 477.175 477.175"><path d="M360.73 229.075l-225.1-225.1c-5.3-5.3-13.8-5.3-19.1 0s-5.3 13.8 0 19.1l215.5 215.5-215.5 215.5c-5.3 5.3-5.3 13.8 0 19.1 2.6 2.6 6.1 4 9.5 4 3.4 0 6.9-1.3 9.5-4l225.1-225.1c5.3-5.2 5.3-13.8.1-19z"/></svg> <a href="../Working_With_Forms/Advanced Data Binding.html">Advanced Data Binding</a></h1>
                 <span style="float: left; font-size: 10px; color: gray;">
             Tuesday, August 2, 2016 9:44 AM        </span>
                         <span style="float: right; font-size: 10px; color: gray;">
@@ -286,7 +286,7 @@ const InputGroup = ({ model /* instanceof MyModel */ }) =&gt; (
 
         <nav>
         <ul class="Pager">
-            <li class=Pager--prev><a href="../Handling_The_Complex_State/Advanced State Management.html">Previous</a></li>            <li class=Pager--next><a href="../Working_With_Forms/Form Validation 101.html">Next</a></li>        </ul>
+            <li class=Pager--prev><a href="../Working_With_Forms/Form_Validation.html">Previous</a></li>            <li class=Pager--next><a href="../Optimizing_For_Performance.html">Next</a></li>        </ul>
     </nav>
     </article>
 

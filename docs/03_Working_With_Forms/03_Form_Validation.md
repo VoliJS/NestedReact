@@ -1,11 +1,8 @@
-### Forms validation
 
-#### Ad-hoc validation in render
 
-#### Validation in models
 
-## Link validation
 
+## How it works
 Links carry additional `validationError` field for validation purposes (to be used inside of custom UI controls). It's populated automatically for links created from models and collection,
 utilizing `nestedtypes` validation mechanics. Therefore, if model attribute has any `check` attached, its link will carry its `validationError` object.
    

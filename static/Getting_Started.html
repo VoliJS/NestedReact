@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
     <title>Getting Started - NestedReact</title>
-    <meta name="description" content="React state management made simple" />
+    <meta name="description" content="React. Playing well with traditional MVC." />
     <meta name="author" content="Vlad Balin">
     <meta charset="UTF-8">
     <link rel="icon" href="themes/daux/img/favicon-navy.png" type="image/x-icon">
@@ -46,7 +46,7 @@
 
         <div class="Collapsible__content">
             <!-- Navigation -->
-            <ul class='Nav'><li class='Nav__item Nav__item--active'><a href="Getting_Started.html">Getting Started</a></li><li class='Nav__item  has-children'><a href="Basics/State Management 101.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Basics</a><ul class='Nav'><li class='Nav__item '><a href="Basics/State Management 101.html">State Management 101</a></li></ul></li><li class='Nav__item  has-children'><a href="Handling_The_Complex_State/Advanced State Management.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Handling The Complex State</a><ul class='Nav'><li class='Nav__item '><a href="Handling_The_Complex_State/Advanced State Management.html">Advanced State Management</a></li></ul></li><li class='Nav__item  has-children'><a href="Working_With_Forms/Advanced Data Binding.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Working With Forms</a><ul class='Nav'><li class='Nav__item '><a href="Working_With_Forms/Advanced Data Binding.html">Advanced Data Binding</a></li><li class='Nav__item '><a href="Working_With_Forms/Form Validation 101.html">Form Validation 101</a></li></ul></li><li class='Nav__item '><a href="Optimizing_For_Performance.html">Optimizing For Performance</a></li><li class='Nav__item '><a href="Migration_from_Backbone.html">Migration from Backbone</a></li><li class='Nav__item '><a href="Using jQuery plugins.html">Using jQuery plugins</a></li></ul>
+            <ul class='Nav'><li class='Nav__item Nav__item--active'><a href="Getting_Started.html">Getting Started</a></li><li class='Nav__item  has-children'><a href="Basics/State_Management_101.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Basics</a><ul class='Nav'><li class='Nav__item '><a href="Basics/State_Management_101.html">State Management 101</a></li><li class='Nav__item '><a href="Basics/Two_way_data_binding.html">Two way data binding</a></li></ul></li><li class='Nav__item  has-children'><a href="Handling_The_Complex_State/Nested_Models_and_Collections.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Handling The Complex State</a><ul class='Nav'><li class='Nav__item '><a href="Handling_The_Complex_State/Nested_Models_and_Collections.html">Nested Models and Collections</a></li><li class='Nav__item '><a href="Handling_The_Complex_State/Aggregation_and_Ownership.html">Aggregation and Ownership</a></li><li class='Nav__item '><a href="Handling_The_Complex_State/Update_Watchers_and_Transactions.html">Update Watchers and Transactions</a></li><li class='Nav__item '><a href="Handling_The_Complex_State/Advanced State Management.html">Advanced State Management</a></li></ul></li><li class='Nav__item  has-children'><a href="Working_With_Forms/Form_Validation.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Working With Forms</a><ul class='Nav'><li class='Nav__item '><a href="Working_With_Forms/Form_Validation.html">Form Validation</a></li><li class='Nav__item '><a href="Working_With_Forms/Advanced Data Binding.html">Advanced Data Binding</a></li></ul></li><li class='Nav__item '><a href="Optimizing_For_Performance.html">Optimizing For Performance</a></li><li class='Nav__item '><a href="Migration_from_Backbone.html">Migration from Backbone</a></li><li class='Nav__item '><a href="Using jQuery plugins.html">Using jQuery plugins</a></li></ul>
 
             <div class="Links">
                                     <hr/>
@@ -82,7 +82,7 @@
     <div class="Page__header">
         <h1><a href="Getting_Started.html">Getting Started</a></h1>
                 <span style="float: left; font-size: 10px; color: gray;">
-            Thursday, October 6, 2016 4:17 PM        </span>
+            Tuesday, October 11, 2016 2:43 PM        </span>
                         <span style="float: right; font-size: 10px; color: gray;">
             <a href="https://github.com/Volicon/NestedReact/blob/develop/docs/00_Getting_Started.md" target="_blank">Edit on GitHub</a>
         </span>
@@ -208,15 +208,15 @@ Meanwhile, you can:</p>
 previously for &quot;V&quot; in the majority of MVC frameworks. Unfortunately, we
 don't feel the same about the application state management architectures
 being <a href="https://facebook.github.io/flux/" class="external">advocated by Facebook</a>.</p>
-<p>As our framework clearly demonstrates, it <em>is</em> possible to implement
-unidirectional data flow with &quot;dirty&quot; mutable data.</p>
+<p>As NestedReact demonstrates, the dramatical shift in paradigm is not required.
+It is possible to implement unidirectional data flow with &quot;dirty&quot; mutable data.</p>
 <p>And it's not only possible, but <a href="https://medium.com/@gaperton/software-managing-the-complexity-caff5c4964cf#.dn3aq4riy" class="external">highly beneficial</a>.
 Here's <a href="http://todomvc.com/" class="external">TodoMVC</a> solution size chart for different
-frameworks and combinations of tools:</p>
-<p><img src="SLOC-comparison.jpg" alt="TodoMVC solution size comparison" /></p>
-<p>As you can see, an old-school MVC approach the majority of developers are perfectly familiar with <a href="https://github.com/Volicon/NestedReact/tree/master/examples/todomvc" class="external">allowing us to write twice less
-code</a> for the same task than all the &quot;flux&quot; stuff. So the overall result is comparable
+frameworks and combinations of tools. As you can see, an old-school MVC approach the majority of developers are perfectly familiar with
+<a href="https://github.com/Volicon/NestedReact/tree/master/examples/todomvc" class="external">allowing us to write twice less code</a>
+for the same task than all the &quot;flux&quot; stuff. So the overall result is comparable
 to Angular 2. We're in the same league now.</p>
+<p><img src="SLOC-comparison.jpg" alt="TodoMVC solution size comparison" /></p>
 <p>If you take <a href="https://github.com/voronianski/flux-comparison" class="external">flux-comparison</a> example, difference will become even more spectacular.</p>
 <p><img src="flux-sloc.png" alt="flux-comparison solution size" /></p>
 <p>Here's our <a href="https://github.com/Volicon/NestedReact/tree/master/examples/flux-comparison" class="external">solution</a>. Check it out.</p>
@@ -224,7 +224,7 @@ to Angular 2. We're in the same league now.</p>
 
         <nav>
         <ul class="Pager">
-            <li class=Pager--prev><a href="index.html">Previous</a></li>            <li class=Pager--next><a href="Basics/State Management 101.html">Next</a></li>        </ul>
+            <li class=Pager--prev><a href="index.html">Previous</a></li>            <li class=Pager--next><a href="Basics/State_Management_101.html">Next</a></li>        </ul>
     </nav>
     </article>
 

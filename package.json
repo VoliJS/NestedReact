@@ -35,10 +35,12 @@
   },
   "files": [
     "nestedreact.js",
-    "nestedreact.js.map"
+    "nestedreact.js.map",
+    "tags.js",
+    "tags.jsx"
   ],
   "license": "MIT",
-  "version": "1.0.1-rc5",
+  "version": "1.0.1-rc6",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "all" : "npm run build && npm run deploy",
