@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>       <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>          <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>          <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <title>Ownership and Shared References - NestedReact</title>
+    <meta name="description" content="React. Playing well with traditional MVC." />
+    <meta name="author" content="Vlad Balin">
+    <meta charset="UTF-8">
+    <link rel="icon" href="../themes/daux/img/favicon-navy.png" type="image/x-icon">
+    <!-- Mobile -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700&subset=latin,cyrillic-ext,cyrillic' rel='stylesheet' type='text/css'>
+    <!-- CSS -->
+    <link href='../themes/daux/css/theme-navy.min.css' rel='stylesheet' type='text/css'>
+            <!-- Tipue Search -->
+        <link href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body class="with-float">
+    
+<header class="Navbar hidden-print">
+    <a class="Navbar__brand" href="../index.html">NestedReact</a>
+
+    <div class="Search">
+        <svg class="Search__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 451 451"><path d="M447.05 428l-109.6-109.6c29.4-33.8 47.2-77.9 47.2-126.1C384.65 86.2 298.35 0 192.35 0 86.25 0 .05 86.3.05 192.3s86.3 192.3 192.3 192.3c48.2 0 92.3-17.8 126.1-47.2L428.05 447c2.6 2.6 6.1 4 9.5 4s6.9-1.3 9.5-4c5.2-5.2 5.2-13.8 0-19zM26.95 192.3c0-91.2 74.2-165.3 165.3-165.3 91.2 0 165.3 74.2 165.3 165.3s-74.1 165.4-165.3 165.4c-91.1 0-165.3-74.2-165.3-165.4z"/></svg>
+        <input type="search" id="tipue_search_input" class="Search__field" placeholder="Search..." autocomplete="on" results=25 autosave=text_search>
+    </div>
+</header>
+<div class="Columns content">
+    <aside class="Columns__left Collapsible">
+        <div class="Collapsible__container">
+            <button type="button" class="Button Collapsible__trigger">
+                <span class="Collapsible__trigger--bar"></span>
+                <span class="Collapsible__trigger--bar"></span>
+                <span class="Collapsible__trigger--bar"></span>
+            </button>
+        </div>
+
+        <div class="Collapsible__content">
+            <!-- Navigation -->
+            <ul class='Nav'><li class='Nav__item '><a href="../Getting_Started.html">Getting Started</a></li><li class='Nav__item  has-children'><a href="../Basics/State_Management_101.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Basics</a><ul class='Nav'><li class='Nav__item '><a href="../Basics/State_Management_101.html">State Management 101</a></li><li class='Nav__item '><a href="../Basics/Two_way_data_binding.html">Two way data binding</a></li></ul></li><li class='Nav__item Nav__item--open has-children'><a href="../Handling_The_Complex_State/Dirty_Top_And_Pure_Bottom .html" class="folder"><i class="Nav__arrow">&nbsp;</i>Handling The Complex State</a><ul class='Nav'><li class='Nav__item '><a href="../Handling_The_Complex_State/Dirty_Top_And_Pure_Bottom .html">Dirty Top And Pure Bottom </a></li><li class='Nav__item '><a href="../Handling_The_Complex_State/State_and_Props_Type_Annotations.html">State and Props Type Annotations</a></li><li class='Nav__item '><a href="../Handling_The_Complex_State/Update_Watchers_and_Transactions.html">Update Watchers and Transactions</a></li><li class='Nav__item Nav__item--active'><a href="../Handling_The_Complex_State/Ownership_and_Shared_References.html">Ownership and Shared References</a></li></ul></li><li class='Nav__item  has-children'><a href="../Working_With_Forms/Form_Validation.html" class="folder"><i class="Nav__arrow">&nbsp;</i>Working With Forms</a><ul class='Nav'><li class='Nav__item '><a href="../Working_With_Forms/Form_Validation.html">Form Validation</a></li><li class='Nav__item '><a href="../Working_With_Forms/Advanced Data Binding.html">Advanced Data Binding</a></li></ul></li><li class='Nav__item '><a href="../Optimizing_For_Performance.html">Optimizing For Performance</a></li><li class='Nav__item '><a href="../Migration_from_Backbone.html">Migration from Backbone</a></li><li class='Nav__item '><a href="../Using jQuery plugins.html">Using jQuery plugins</a></li></ul>
+
+            <div class="Links">
+                                    <hr/>
+                                            <a href="https://github.com/Volicon/NestedReact/issues" target="_blank">Help/Support/Bugs</a>
+                        <br />
+                                            <a href="http://volicon.com" target="_blank">Made by Volicon (a Verizon company)</a>
+                        <br />
+                                    
+                                    <div class="CodeToggler">
+                        <hr/>
+                                                    <span class="CodeToggler__text">Code blocks</span>
+                            <div class="ButtonGroup" role="group">
+                                <button class="Button Button--default Button--small CodeToggler__button CodeToggler__button--hide">No</button>
+                                <button class="Button Button--default Button--small CodeToggler__button CodeToggler__button--below">Below</button>
+                                <button class="Button Button--default Button--small CodeToggler__button CodeToggler__button--float">Inline</button>
+                            </div>
+                                            </div>
+                
+                                    <hr/>
+                    <div class="Twitter">
+                                                    <iframe allowtransparency="true" frameborder="0" scrolling="no" style="width:162px; height:20px;" src="https://platform.twitter.com/widgets/follow_button.html?screen_name=gaperton&amp;show_count=false"></iframe>
+                            <br />
+                            <br />
+                                            </div>
+                            </div>
+        </div>
+    </aside>
+    <div class="Columns__right Columns__right--float">
+        <div class="Columns__right__content">
+            <div class="doc_content">
+                <article class="Page">
+
+    <div class="Page__header">
+        <h1><a href="../Handling_The_Complex_State/Dirty_Top_And_Pure_Bottom .html">Handling The Complex State</a> <svg class="Page__header--separator" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 477.175 477.175"><path d="M360.73 229.075l-225.1-225.1c-5.3-5.3-13.8-5.3-19.1 0s-5.3 13.8 0 19.1l215.5 215.5-215.5 215.5c-5.3 5.3-5.3 13.8 0 19.1 2.6 2.6 6.1 4 9.5 4 3.4 0 6.9-1.3 9.5-4l225.1-225.1c5.3-5.2 5.3-13.8.1-19z"/></svg> <a href="../Handling_The_Complex_State/Ownership_and_Shared_References.html">Ownership and Shared References</a></h1>
+                <span style="float: left; font-size: 10px; color: gray;">
+            Thursday, October 13, 2016 4:42 PM        </span>
+                        <span style="float: right; font-size: 10px; color: gray;">
+            <a href="https://github.com/Volicon/NestedReact/blob/develop/docs/02_Handling_The_Complex_State\04_Ownership_and_Shared_References.md" target="_blank">Edit on GitHub</a>
+        </span>
+            </div>
+
+
+    <div class="s-content">
+        <p>Simple form of the type annotation for the nested model/collection
+assumes that the attribute is <em>aggregated</em>. Which means,
+it an integral part of model, so when the model is...</p>
+<ul>
+<li>...created with <code>new</code>, aggregated members are created too.</li>
+<li>...cloned with <code>model.clone()</code>, aggregated members are cloned.</li>
+<li>...disposed with <code>model.dispose()</code>, aggregated members are disposed.</li>
+</ul>
+<p>Aggregation (and its strong form - composition) implies that there
+are one and only one &quot;owner&quot; for the aggregated object.</p>
+<p>That's, however, is not the thing what we always want.</p>
+<h2 id="page_Example_stateful_select_list">Example: stateful select list</h2>
+<p>We want to create the component which would display the list of items
+and allow us to select one of them. For the purpose of the example,
+it would be completely <em>stateful</em> and self-dependent component.</p>
+<p>How its state would look like? Obviously, it should hold the collection.
+And the selected element. The code would look like this, and it would be
+almost correct.</p>
+<pre><code class="language-javascript">import React, { define } from 'nestedreact'
+import Item from './item'
+
+class SelectList extends React.Component {
+    static state = {
+        items : Item.Collection,
+        selected : Item
+    }
+    
+    componentWillMount(){
+        // some IO returning the promise to load the state... Not really important.
+            .done( json =&gt; this.state.set( json, { parse : true } ); 
+    }
+    
+    render(){
+        const { state } = this;
+        return (
+            &lt;div&gt;
+                { state.items.map( item =&gt; (
+                    &lt;div key={ item.cid }
+                         className={ item === state.selected ? 'selected' : '' }
+                         onClick={ () =&gt; state.selected = item }
+                     &gt;                                    
+                        { item.name }                    
+                    &lt;/div&gt;
+                    )
+                ) }
+            &lt;/div&gt;
+        );
+    }
+}
+</code></pre>
+<p>There are few problems, though.</p>
+<p>First, we don't want <code>state.selected</code> to create any model. Nothing is selected
+by default (so it should be <code>null</code>).</p>
+<p>Second, <code>state.selected</code> holds the members of the <code>state.items</code> collection. Thus,
+they have an owner already. And in that exotic case if we will need to clone our state,
+<code>selected</code> should not be cloned. Rather copied by reference. And if we will try to
+dispose <code>selected</code>, it will be disposed twice.</p>
+<p>Clearly, <code>selected</code> attribute holds <em>shared</em>, not an aggregated model.
+Which we can indicate adding <code>.shared</code> modifier right after its constructor type.
+Indicating that the value of an attribute is not really belong here,
+but is borrowed from some other place.</p>
+<pre><code class="language-javascript">    static state = {
+        items : Item.Collection,
+        selected : Item.shared // null by default, don't take ownership
+    }
+</code></pre>
+<p>So, what exactly <code>.shared</code> means?</p>
+<p>Considering that the aggregation forms model/collection tree which
+elements have the single owner. <code>shared</code> attribute can hold models and
+collections taken from <em>other</em> ownership trees.</p>
+<p>Speaking simply, if aggregated attribute behaves as if it's included <em>by value</em>,
+shared attribute is included <em>&quot;by reference&quot;</em>:</p>
+<ul>
+<li>it's null by default.</li>
+<li>when the model is cloned, it's not cloned.</li>
+<li>when the model is disposed, it keeps living.</li>
+</ul>
+<h3 id="page_Example_select_from_the_global_list">Example: select from the global list</h3>
+<p>For the purpose of the example, imagine that we have the global
+collection of some items which we would like to reference in some
+component. It can be the select list of some globally available list of
+options. And we want to update the UI in case if this list is changed.</p>
+<p>Many people would argue that global <code>items</code> list shouldn't be the part
+of the local component state.</p>
+<p>Good news that in this example attribute type for
+the <code>state.items</code> is inferred as <code>Item.Collection.shared</code>. So, it
+not an aggregation, and doesn't behave as an integral part of <code>state</code>.</p>
+<p>Doing so, though, is the convenient way to ensure that component
+will be automatically updated in case if <code>items</code> will change. The
+rest of UI shouldn't. Should it?</p>
+<pre><code class="language-javascript">import React, { define } from 'nestedreact'
+import { items } from './globals'
+
+@define
+class SelectList extends React.Component {
+    static props = {
+        selectedLink : React.Link // &lt;- its value link holding the selected model
+    }
+    
+    static state = {
+        items : items // &lt;- our global list of items
+    }
+    
+    componentWillMount(){
+        // some IO returning the promise to load the state... Not really important.
+            .done( json =&gt; this.state.set( json, { parse : true } ); 
+    }
+    
+    render(){
+        const { state, props } = this;
+        return (
+            &lt;div&gt;
+                { state.items.map( item =&gt; (
+                    &lt;div key={ item.cid }
+                         className={ item === state.selected ? 'selected' : '' }
+                         onClick={ props.selectedLink.action( () =&gt; item ) }
+                     &gt;                                    
+                        { item.name }                    
+                    &lt;/div&gt;
+                    )
+                ) }
+            &lt;/div&gt;
+        );
+    }
+}
+</code></pre>
+    </div>
+
+        <nav>
+        <ul class="Pager">
+            <li class=Pager--prev><a href="../Handling_The_Complex_State/Update_Watchers_and_Transactions.html">Previous</a></li>            <li class=Pager--next><a href="../Working_With_Forms/Form_Validation.html">Next</a></li>        </ul>
+    </nav>
+    </article>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+    <!-- jQuery -->
+    <script src="../themes/daux/js/jquery-1.11.3.min.js"></script>
+
+    <!-- hightlight.js -->
+    <script src="../themes/daux/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!-- JS -->
+    
+    <script src="../themes/daux/js/daux.js"></script>
+
+            <!-- Tipue Search -->
+        <script type="text/javascript" src="../tipuesearch/tipuesearch.js"></script>
+
+        <script>
+            window.onunload = function(){}; // force $(document).ready to be called on back/forward navigation in firefox
+            $(function() {
+                tipuesearch({
+                    'base_url': '../'
+                });
+            });
+        </script>
+    
+</body>
+</html>
