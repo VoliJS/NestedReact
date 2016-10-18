@@ -731,11 +731,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    error : {
 	        get : function(){
-	            if( this._error === void 0 ){
-	                this._error = this.model.getValidationError( this.attr );
-	            }
-	
-	            return this._error;
+	            return this._error === void 0 ? this.model.getValidationError( this.attr ): this._error;
 	        },
 	
 	        set : function( x ){
