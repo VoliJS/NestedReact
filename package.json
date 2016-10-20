@@ -40,7 +40,7 @@
     "tags.jsx"
   ],
   "license": "MIT",
-  "version": "1.0.1-rc7",
+  "version": "1.0.1-rc8",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "all" : "npm run build && npm run deploy",
