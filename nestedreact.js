@@ -478,21 +478,31 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/**
+	 * props compiler.
+	 * Translates `props` spec to `propTypes` and `getDefaultProps` function.
+	 */
+	
 	var Nested = __webpack_require__( 3 ),
 	    React  = __webpack_require__( 1 );
 	
 	function parseProps( props ){
 	    var propTypes = {},
 	        defaults,
+	        // Create NestedTypes model definition to process props spec.
 	        modelProto = Nested.Model.defaults( props ).prototype;
 	
 	    modelProto.forEachAttr( modelProto._attributes, function( spec, name ){
+	        // Skip auto-generated `id` attribute.
 	        if( name !== 'id' ){
+	            // Translate props type to the propTypes guard.
 	            propTypes[ name ] = translateType( spec.type );
 	
+	            // If default value is explicitly provided...
 	            if( spec.value !== void 0 ){
+	                //...append it to getDefaultProps function.
 	                defaults || ( defaults = {} );
-	                defaults[ name ] = spec.value;
+	                defaults[ name ] = spec.convert( spec.value );
 	            }
 	        }
 	    });
