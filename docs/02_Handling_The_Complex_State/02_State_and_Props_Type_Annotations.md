@@ -43,7 +43,7 @@ class Sample extends Nested.Model {
         time : Date,
         num : 0, // same as Number or Number.value( 0 )
         str : '', // same as String or String.value( '' )
-        bool : false // same as Boolean or Boolean.value( false )
+        bool : false, // same as Boolean or Boolean.value( false )
         any : null // same as Nested.value( null ). Untyped attribute. 
     }
 }
@@ -85,6 +85,6 @@ class MyComponent extends React.Component {
         propWithDefaultValue : ''
     }
        
-    render(){ ... }
+    render(){ /*...*/ }
 }
 ```

@@ -10,7 +10,7 @@ Such a members called *aggregated members*. When the model is...
 
 And when nested models and collections are *modified*, root model holding
 React component state detects the change, and force its component to update.
-In conjunction, these features allows to to describe fairly complex
+In conjunction, these features allows you to describe fairly complex
 components using just component state.
 
 ## Example: unidirectional data flow with complex state

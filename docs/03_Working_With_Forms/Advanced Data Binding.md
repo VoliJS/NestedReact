@@ -2,7 +2,7 @@
 
 Here are the set of examples for typical `nestedreact` data binding use cases.
 
-Each section contains custom databound component, model definitions, and usage examples.
+Each section contains custom data-bound component, model definitions, and usage examples.
 
 Somewhere at the top level component(s) there must be the declaration linking model updates to UI. Either models must be (nested) members of some component's state (which will update UI even in case of deep changes), or you may link component updates to changes of models and collections passed in props. In the last case, you will need to add following line to top or middle-level component definition:
 

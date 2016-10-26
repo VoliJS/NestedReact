@@ -8,7 +8,7 @@ In this example, we have `local` state member, which is a string. On every
  
 ```javascript
 @define
-const MyComponent extends React.Component {
+class MyComponent extends React.Component {
     static props = {
         callback : Function.value( x => void 0 )    
     }
@@ -17,7 +17,7 @@ const MyComponent extends React.Component {
         local : String.has.watcher( '^props.callback' )    
     }
     
-    render(){ ... }
+    render(){ /*...*/ }
 }
 ```
 
@@ -33,7 +33,7 @@ as an argument, or the string *path* to the watcher function taken relative to t
 NestedTypes is mostly backward compatible with BackboneJS in term of [events 
 emitted by models and collections](http://backbonejs.org/#Events-catalog). 
 The difference is that mechanics of change events and updates is generalized
- on the case of nested models and collection.
+ on the case of nested models and collections.
  
 ### How model tree handles an update
 

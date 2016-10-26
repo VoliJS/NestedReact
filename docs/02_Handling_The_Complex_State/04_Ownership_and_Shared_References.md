@@ -32,7 +32,7 @@ class SelectList extends React.Component {
     }
     
     componentWillMount(){
-        // some IO returning the promise to load the state... Not really important.
+        /* some IO returning the promise to load the state... Not really important.*/
             .done( json => this.state.set( json, { parse : true } ); 
     }
     
