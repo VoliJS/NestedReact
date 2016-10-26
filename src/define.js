@@ -7,16 +7,16 @@ module.exports = function processSpec( spec, a_baseProto ){
     var baseProto = a_baseProto || {};
     spec.mixins || ( spec.mixins = [] );
 
-    processContext( spec, baseProto );
-    processAutobind( spec, baseProto );
     processState( spec, baseProto );
+    processContext( spec, baseProto );
     processProps( spec, baseProto );
     processListenToProps( spec, baseProto );
+    processAutobind( spec, baseProto );
 
     spec.mixins.push( EventsMixin );
 
     return spec;
-}
+};
 
 /***
  * Throttled asynchronous version of forceUpdate.
@@ -64,7 +64,7 @@ var AutoBindMixin = {
             this[ name ] = this[ name ].bind( this );
         }
     }
-}
+};
 
 function processContext( spec, baseProto ){
     // process context specs...
@@ -88,15 +88,32 @@ function processContext( spec, baseProto ){
  */
 function processState( spec, baseProto ){
     // process state spec...
-    var attributes = getTypeSpecs( spec, 'state' ) || getTypeSpecs( spec, 'attributes' )
+    var store = getTypeSpecs( spec, 'store' );
+    var attributes = store || getTypeSpecs( spec, 'state' ) || getTypeSpecs( spec, 'attributes' );
     if( attributes || spec.Model || baseProto.Model ){
-        var BaseModel = baseProto.Model || spec.Model || Nested.Model;
+        var BaseModel = baseProto.Model || spec.Model || ( store ? Nested.Store : Nested.Model );
         spec.Model    = attributes ? BaseModel.extend( { defaults : attributes } ) : BaseModel;
         spec.mixins.push( ModelStateMixin );
+
+        if( spec.Model.prototype instanceof Nested.Store ){
+            spec.mixins.push( StoreStateMixin );
+        }
+
         delete spec.state;
         delete spec.attributes;
+        delete spec.store;
     }
 }
+
+var StoreStateMixin = {
+    getChildContext : function(){
+        return { _store : this.state };
+    },
+
+    childContext : {
+        _store : Nested.Store
+    }
+};
 
 var ModelStateMixin = {
     model         : null,
@@ -119,7 +136,15 @@ var ModelStateMixin = {
         // Attempt to get the store from the context first. Then - fallback to the state's default store.
         // TBD: Need to figure out a good way of managing local stores.
         var context = this.context;
-        return ( context && context.store ) || this.model._defaultStore;
+        return ( context && context._store ) || this.model._defaultStore;
+    },
+
+    get : function( key ){
+        return this.getStore().get( key );
+    },
+
+    context : {
+        _store : Nested.Store
     },
 
     componentWillUnmount : function(){
