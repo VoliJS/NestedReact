@@ -1,4 +1,5 @@
 var Nested = require( 'nestedtypes' ),
+    React = require( 'react' ),
     pureRender = require( './purerender-mixin' ),
     propTypes  = require( './propTypes' ),
     tools = Nested.tools;
@@ -41,8 +42,20 @@ var EventsMixin = Object.assign( {
         //if( this.state ) this.state.dispose(); // Not sure if it will work ok with current code base.
     },
 
-    asyncUpdate : asyncUpdate
+    asyncUpdate : asyncUpdate,
+
+    wait : function( promise, render ){
+        var originalRender = this.render;
+        this.render = render || this.loading || loading;
+        promise.always( () => this.render = originalRender );
+
+        return promise;
+    }
 }, Nested.Events );
+
+function loading() {
+    return React.createElement("div", null);
+}
 
 /***
  * Autobinding
@@ -83,37 +96,98 @@ function processContext( spec, baseProto ){
     }
 }
 
+// Store spec.
+
+function processStore( spec, baseProto ){
+    var store = getTypeSpecs( spec, 'store' );
+    if( store ){
+        delete spec.store;
+
+        if( store instanceof Nested.Store ){
+            spec.mixins.push( ExternalStoreMixin );
+        }
+        else if( typeof store !== 'function' ){
+            spec.Store = store;
+            spec.mixins.push( InternalStoreMixin );
+        }
+        else{
+
+        }
+
+        spec.mixins.push( ExposeStoreMixin );
+    }
+}
+
+var ExposeStoreMixin = {
+    getChildContext : function(){
+        return { _store : this.store };
+    },
+
+    childContext : {
+        _store : Nested.Store
+    },
+
+    getStore : function(){
+        return this.store;
+    }
+};
+
+/**
+ * External store must just track the changes and trigger render.
+ */
+var ExternalStoreMixin = tools.defaults({
+    componentDidMount : function(){
+        // Start UI updates on state changes.
+        this.listenTo( this.store, 'change', this.asyncUpdate );
+    },
+
+    componentWillUnmount : function(){
+        this.stopListening( this.store );
+    }
+}, ExposeStoreMixin );
+
+var InternalStoreMixin = tools.defaults({
+    componentWillMount : function(){
+        var store = this.store = new this.Store();
+        store._owner = this;
+        store._ownerKey = 'store';
+    },
+
+    _onChildrenChange : function(){},
+
+    componentDidMount : function(){
+        // TODO: need to do it one time, state mixin does it too.
+        this._onChildrenChange = this.asyncUpdate;
+    },
+
+    // Will be called by the store when the lookup will fail.
+    get : function( key ){
+        // Ask upper store.
+        var store = this.context._store;
+        return store && store.get( key );
+    },
+
+    componentWillUnmount : function(){
+        this.store._ownerKey = this.store._owner = void 0;
+        this.store = null;
+    }
+}, ExposeStoreMixin );
+
 /*****************
  * State
  */
 function processState( spec, baseProto ){
     // process state spec...
-    var store = getTypeSpecs( spec, 'store' );
-    var attributes = store || getTypeSpecs( spec, 'state' ) || getTypeSpecs( spec, 'attributes' );
+    var attributes = getTypeSpecs( spec, 'state' ) || getTypeSpecs( spec, 'attributes' );
     if( attributes || spec.Model || baseProto.Model ){
-        var BaseModel = baseProto.Model || spec.Model || ( store ? Nested.Store : Nested.Model );
+        var BaseModel = baseProto.Model || spec.Model || Nested.Model;
         spec.Model    = attributes ? BaseModel.extend( { defaults : attributes } ) : BaseModel;
         spec.mixins.push( ModelStateMixin );
 
-        if( spec.Model.prototype instanceof Nested.Store ){
-            spec.mixins.push( StoreStateMixin );
-        }
-
         delete spec.state;
         delete spec.attributes;
-        delete spec.store;
     }
 }
-
-var StoreStateMixin = {
-    getChildContext : function(){
-        return { _store : this.state };
-    },
-
-    childContext : {
-        _store : Nested.Store
-    }
-};
 
 var ModelStateMixin = {
     model         : null,
@@ -137,10 +211,6 @@ var ModelStateMixin = {
         // TBD: Need to figure out a good way of managing local stores.
         var context = this.context;
         return ( context && context._store ) || this.model._defaultStore;
-    },
-
-    get : function( key ){
-        return this.getStore().get( key );
     },
 
     context : {
