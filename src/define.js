@@ -44,10 +44,14 @@ var EventsMixin = Object.assign( {
 
     asyncUpdate : asyncUpdate,
 
-    wait : function( promise, render ){
+    renderAfter : function( promise, render ){
         var originalRender = this.render;
         this.render = render || this.loading || loading;
-        promise.always( () => this.render = originalRender );
+
+        promise.always( () => {
+            this.render = originalRender;
+            this.asyncUpdate();
+        } );
 
         return promise;
     }
