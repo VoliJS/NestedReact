@@ -1,5 +1,35 @@
 PROPOSAL
 
+As we move to the local store architecture,
+the typical app structure looks like this:
+
+- There's the global default store, which is available across the pages.
+- There are local stores which lifecycle is tied to the root page components.
+
+There are two general approaches to handle this situation:
+
+- Dedicated component to handle store (which is then exposed through the context).
+- Facilities to handle store inside of the stateful component.
+
+```javascript
+@define
+@mixins( React.mixins.LocalStorageState )
+class MyPage extends React.RestStoreComponent {
+    static store = {
+        /* store definition */
+    }
+    
+    static state = { // references to the defined store.
+    
+    }
+    
+    render(){ // Fetches the data, delays the render. Wrap it in define.
+        this.store.xxx
+    }
+}
+```
+
+
 ## Option A. Support for declaring stores inside of the components.
 
 Make the specified store the default one for all state elements in the subtree.

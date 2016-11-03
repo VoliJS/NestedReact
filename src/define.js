@@ -27,22 +27,40 @@ var _queue = null;
 function asyncUpdate(){
     // For some weird reason async update doesn't work. Input's state is being messed up.
     // Just call forceUpdate for now.
-    this.forceUpdate();
+    this.shouldComponentUpdate === returnFalse || this._disposed || this.forceUpdate();
 }
+
+function returnFalse(){ return false; }
 
 var EventsMixin = Object.assign( {
     componentWillUnmount : function(){
         this.off();
         this.stopListening();
-        
-        // Prevent asynchronous rendering if queued.
-        this._queuedForUpdate = false;
+        this._disposed = true;
 
         // TODO: Enable it in future.
         //if( this.state ) this.state.dispose(); // Not sure if it will work ok with current code base.
     },
 
     asyncUpdate : asyncUpdate,
+
+    // Perform transactional props and state update. Nested calls are allowed.
+    // Subsequent local update is forced. Not sure it's needed.
+    transaction : function( fun ){
+        const shouldComponentUpdate = this.shouldComponentUpdate,
+              isRoot = shouldComponentUpdate !== returnFalse;
+
+        if( isRoot ){
+            this.shouldComponentUpdate = returnFalse;
+        }
+
+        fun( this.props );
+
+        if( isRoot ){
+            this.shouldComponentUpdate = shouldComponentUpdate;
+            this.asyncUpdate();
+        }
+    },
 
     renderAfter : function( promise, render ){
         var originalRender = this.render;

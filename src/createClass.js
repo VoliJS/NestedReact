@@ -49,7 +49,7 @@ React.Component.define = function( protoProps, staticProps ){
         staticsDefinition  = tools.getChangedStatics( this, 'state', 'props', 'autobind', 'context', 'childContext', 'listenToProps', 'pureRender' ),
         combinedDefinition = tools.assign( staticsDefinition, protoProps || {} );
 
-    definition = processSpec( combinedDefinition, this.prototype );
+    var definition = processSpec( combinedDefinition, this.prototype );
 
     defineBackboneProxy( this );
 
