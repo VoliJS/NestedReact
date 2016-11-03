@@ -66,6 +66,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	NestedReact.createClass = __webpack_require__( 4 );
 	
 	NestedReact.define = Nested.define;
+	NestedReact.mixins = Nested.mixins;
 	
 	var ComponentView = __webpack_require__( 8 );
 	
@@ -163,14 +164,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        staticsDefinition = tools.getChangedStatics( this, 'state', 'props', 'autobind', 'context', 'childContext', 'listenToProps', 'pureRender' ),
 	        combinedDefinition = tools.assign( staticsDefinition, protoProps || {} );
 	
-	    definition = processSpec( combinedDefinition, this.prototype );
+	    var definition = processSpec( combinedDefinition, this.prototype );
 	
 	    defineBackboneProxy( this );
 	
 	    if( definition.getDefaultProps ) this.defaultProps = definition.getDefaultProps();
 	    if( definition.propTypes ) this.propTypes = definition.propTypes;
 	    if( definition.contextTypes ) this.contextTypes = definition.contextTypes;
-	    if( definition.childContextTypes ) this.childsContextTypes = definition.childsContextTypes;
+	    if( definition.childContextTypes ) this.childContextTypes = definition.childsContextTypes;
 	
 	    var protoDefinition = tools.omit( definition, 'getDefaultProps', 'propTypes', 'contextTypes', 'childContextTypes' );
 	    Nested.Mixable.define.call( this, protoDefinition, staticProps );
