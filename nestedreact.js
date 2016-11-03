@@ -171,7 +171,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if( definition.getDefaultProps ) this.defaultProps = definition.getDefaultProps();
 	    if( definition.propTypes ) this.propTypes = definition.propTypes;
 	    if( definition.contextTypes ) this.contextTypes = definition.contextTypes;
-	    if( definition.childContextTypes ) this.childContextTypes = definition.childsContextTypes;
+	    if( definition.childContextTypes ) this.childContextTypes = definition.childContextTypes;
 	
 	    var protoDefinition = tools.omit( definition, 'getDefaultProps', 'propTypes', 'contextTypes', 'childContextTypes' );
 	    Nested.Mixable.define.call( this, protoDefinition, staticProps );

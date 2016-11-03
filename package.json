@@ -1,6 +1,6 @@
 {
   "name": "nestedreact",
-  "version": "1.0.1-rc91",
+  "version": "1.0.1-rc92",
   "main": "nestedreact.js",
   "description": "Advanced models, state management, and data binding solution for React",
   "homepage": "https://github.com/Volicon/react-backbone.glue",
