@@ -228,12 +228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    componentWillUnmount : function(){
 	        this.off();
 	        this.stopListening();
-	        
-	        // Prevent asynchronous rendering if queued.
-	        this._queuedForUpdate = false;
-	
-	        // TODO: Enable it in future.
-	        //if( this.state ) this.state.dispose(); // Not sure if it will work ok with current code base.
+	        this._disposed = true;
 	    },
 	
 	    asyncUpdate : asyncUpdate
@@ -319,7 +314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    componentWillUnmount : function(){
 	        // Release the state model.
-	        this.model._ownerKey = this.model._owner = void 0;
+	        this._preventDispose /* hack for component-view to preserve the state */ || this.model.dispose();
 	    }
 	};
 	
@@ -580,7 +575,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 	
 	        setElement : function(){
-	            this.unmountComponent();
+	            this.unmountComponent( true );
 	            return setElement.apply( this, arguments );
 	        },
 	
@@ -609,7 +604,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } );
 	        },
 	
-	        unmountComponent : function(){
+	        unmountComponent : function( keepModel ){
 	            var component = this.component;
 	
 	            if( component ){
@@ -618,6 +613,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if( component.trigger ){
 	                    this.stopListening( component );
 	                }
+	
+	                component._preventDispose = Boolean( keepModel );
 	
 	                ReactDOM.unmountComponentAtNode( this.el );
 	                this.component = null;
@@ -702,8 +699,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _dispose : function(){
 	        var view = this.view;
 	        if( view ){
-	            view.stopListening();
-	            if( view.dispose ) view.dispose();
+	            if( view.dispose ){
+	                view.dispose();
+	            }
+	            else{
+	                view.stopListening();
+	                view.off();
+	            }
+	
 	            this.refs.subview.innerHTML = "";
 	            this.view                   = null;
 	        }

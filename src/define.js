@@ -33,12 +33,7 @@ var EventsMixin = Object.assign( {
     componentWillUnmount : function(){
         this.off();
         this.stopListening();
-        
-        // Prevent asynchronous rendering if queued.
-        this._queuedForUpdate = false;
-
-        // TODO: Enable it in future.
-        //if( this.state ) this.state.dispose(); // Not sure if it will work ok with current code base.
+        this._disposed = true;
     },
 
     asyncUpdate : asyncUpdate
@@ -124,7 +119,7 @@ var ModelStateMixin = {
 
     componentWillUnmount : function(){
         // Release the state model.
-        this.model._ownerKey = this.model._owner = void 0;
+        this._preventDispose /* hack for component-view to preserve the state */ || this.model.dispose();
     }
 };
 

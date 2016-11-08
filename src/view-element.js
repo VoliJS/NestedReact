@@ -55,8 +55,14 @@ module.exports = React.createClass( {
     _dispose : function(){
         var view = this.view;
         if( view ){
-            view.stopListening();
-            if( view.dispose ) view.dispose();
+            if( view.dispose ){
+                view.dispose();
+            }
+            else{
+                view.stopListening();
+                view.off();
+            }
+
             this.refs.subview.innerHTML = "";
             this.view                   = null;
         }

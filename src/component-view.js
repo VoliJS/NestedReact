@@ -24,7 +24,7 @@ module.exports.use = function( View ){
         },
 
         setElement : function(){
-            this.unmountComponent();
+            this.unmountComponent( true );
             return setElement.apply( this, arguments );
         },
 
@@ -53,7 +53,7 @@ module.exports.use = function( View ){
             } );
         },
 
-        unmountComponent : function(){
+        unmountComponent : function( keepModel ){
             var component = this.component;
 
             if( component ){
@@ -62,6 +62,8 @@ module.exports.use = function( View ){
                 if( component.trigger ){
                     this.stopListening( component );
                 }
+
+                component._preventDispose = Boolean( keepModel );
 
                 ReactDOM.unmountComponentAtNode( this.el );
                 this.component = null;
