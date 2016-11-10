@@ -754,7 +754,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	} );
 	
-	var ModelProto = Nested.Model.prototype;
+	var ModelProto = Nested.Record.prototype;
 	
 	Object.defineProperty( ModelProto, 'links', {
 	    get : function(){
@@ -807,7 +807,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	} );
 	
-	var CollectionProto = Nested.Collection.prototype;
+	var CollectionProto = Nested.Record.Collection.prototype;
 	
 	CollectionProto.hasLink = function( model ){
 	    return new CollectionLink( this, model );

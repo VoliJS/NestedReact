@@ -35,7 +35,7 @@ ModelLink.prototype = Object.create( Link.prototype, {
     }
 } );
 
-var ModelProto = Nested.Model.prototype;
+var ModelProto = Nested.Record.prototype;
 
 Object.defineProperty( ModelProto, 'links', {
     get : function(){
@@ -88,7 +88,7 @@ CollectionLink.prototype = Object.create( Link.prototype, {
     }
 } );
 
-var CollectionProto = Nested.Collection.prototype;
+var CollectionProto = Nested.Record.Collection.prototype;
 
 CollectionProto.hasLink = function( model ){
     return new CollectionLink( this, model );
