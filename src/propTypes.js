@@ -16,7 +16,7 @@ function parseProps( props ){
         // Skip auto-generated `id` attribute.
         if( name !== 'id' ){
             // Translate props type to the propTypes guard.
-            propTypes[ name ] = translateType( spec.type );
+            propTypes[ name ] = translateType( spec.type, spec.options.isRequired );
 
             // If default value is explicitly provided...
             if( spec.value !== void 0 ){
@@ -38,7 +38,12 @@ var PropTypes = React.PropTypes;
 function Node(){}
 function Element(){}
 
-function translateType( Type ){
+function translateType( Type, isRequired ){
+    var T = _translateType( Type );
+    return isRequired ? T.isRequired : T;
+}
+
+function _translateType( Type ){
     switch( Type ){
         case Number :
         case Integer :
