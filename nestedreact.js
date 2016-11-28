@@ -161,7 +161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	React.Component.define = function( protoProps, staticProps ){
 	    var BaseClass = tools.getBaseClass( this ),
-	        staticsDefinition = tools.getChangedStatics( this, 'state', 'props', 'autobind', 'context', 'childContext', 'listenToProps', 'pureRender' ),
+	        staticsDefinition = tools.getChangedStatics( this, 'state', 'Model', 'props', 'autobind', 'context', 'childContext', 'listenToProps', 'pureRender' ),
 	        combinedDefinition = tools.assign( staticsDefinition, protoProps || {} );
 	
 	    var definition = processSpec( combinedDefinition, this.prototype );
@@ -281,7 +281,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var attributes = getTypeSpecs( spec, 'state' ) || getTypeSpecs( spec, 'attributes' )
 	    if( attributes || spec.Model || baseProto.Model ){
 	        var BaseModel = baseProto.Model || spec.Model || Nested.Model;
-	        spec.Model    = attributes ? BaseModel.extend( { defaults : attributes } ) : BaseModel;
+	        spec.Model    = attributes ? (
+	            typeof attributes === 'function' ? attributes : BaseModel.extend( { defaults : attributes } )
+	        ): BaseModel;
+	
 	        spec.mixins.push( ModelStateMixin );
 	        delete spec.state;
 	        delete spec.attributes;
