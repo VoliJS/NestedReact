@@ -10,6 +10,7 @@ var NestedReact = module.exports = Object.create( React );
 NestedReact.createClass = require( './createClass' );
 
 NestedReact.define = Nested.define;
+NestedReact.mixins = Nested.mixins;
 
 var ComponentView = require( './component-view' );
 

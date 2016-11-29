@@ -66,6 +66,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	NestedReact.createClass = __webpack_require__( 4 );
 	
 	NestedReact.define = Nested.define;
+	NestedReact.mixins = Nested.mixins;
 	
 	var ComponentView = __webpack_require__( 8 );
 	
@@ -160,17 +161,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	React.Component.define = function( protoProps, staticProps ){
 	    var BaseClass = tools.getBaseClass( this ),
-	        staticsDefinition = tools.getChangedStatics( this, 'state', 'props', 'autobind', 'context', 'childContext', 'listenToProps', 'pureRender' ),
+	        staticsDefinition = tools.getChangedStatics( this, 'state', 'Model', 'props', 'autobind', 'context', 'childContext', 'listenToProps', 'pureRender' ),
 	        combinedDefinition = tools.assign( staticsDefinition, protoProps || {} );
 	
-	    definition = processSpec( combinedDefinition, this.prototype );
+	    var definition = processSpec( combinedDefinition, this.prototype );
 	
 	    defineBackboneProxy( this );
 	
 	    if( definition.getDefaultProps ) this.defaultProps = definition.getDefaultProps();
 	    if( definition.propTypes ) this.propTypes = definition.propTypes;
 	    if( definition.contextTypes ) this.contextTypes = definition.contextTypes;
-	    if( definition.childContextTypes ) this.childsContextTypes = definition.childsContextTypes;
+	    if( definition.childContextTypes ) this.childContextTypes = definition.childContextTypes;
 	
 	    var protoDefinition = tools.omit( definition, 'getDefaultProps', 'propTypes', 'contextTypes', 'childContextTypes' );
 	    Nested.Mixable.define.call( this, protoDefinition, staticProps );
@@ -227,12 +228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    componentWillUnmount : function(){
 	        this.off();
 	        this.stopListening();
-	        
-	        // Prevent asynchronous rendering if queued.
-	        this._queuedForUpdate = false;
-	
-	        // TODO: Enable it in future.
-	        //if( this.state ) this.state.dispose(); // Not sure if it will work ok with current code base.
+	        this._disposed = true;
 	    },
 	
 	    asyncUpdate : asyncUpdate
@@ -285,7 +281,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var attributes = getTypeSpecs( spec, 'state' ) || getTypeSpecs( spec, 'attributes' )
 	    if( attributes || spec.Model || baseProto.Model ){
 	        var BaseModel = baseProto.Model || spec.Model || Nested.Model;
-	        spec.Model    = attributes ? BaseModel.extend( { defaults : attributes } ) : BaseModel;
+	        spec.Model    = attributes ? (
+	            typeof attributes === 'function' ? attributes : BaseModel.extend( { defaults : attributes } )
+	        ): BaseModel;
+	
 	        spec.mixins.push( ModelStateMixin );
 	        delete spec.state;
 	        delete spec.attributes;
@@ -318,7 +317,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    componentWillUnmount : function(){
 	        // Release the state model.
-	        this.model._ownerKey = this.model._owner = void 0;
+	        this._preventDispose /* hack for component-view to preserve the state */ || this.model.dispose();
 	    }
 	};
 	
@@ -496,7 +495,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // Skip auto-generated `id` attribute.
 	        if( name !== 'id' ){
 	            // Translate props type to the propTypes guard.
-	            propTypes[ name ] = translateType( spec.type );
+	            propTypes[ name ] = translateType( spec.type, spec.options.isRequired );
 	
 	            // If default value is explicitly provided...
 	            if( spec.value !== void 0 ){
@@ -518,7 +517,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	function Node(){}
 	function Element(){}
 	
-	function translateType( Type ){
+	function translateType( Type, isRequired ){
+	    var T = _translateType( Type );
+	    return isRequired ? T.isRequired : T;
+	}
+	
+	function _translateType( Type ){
 	    switch( Type ){
 	        case Number :
 	        case Integer :
@@ -579,7 +583,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 	
 	        setElement : function(){
-	            this.unmountComponent();
+	            this.unmountComponent( true );
 	            return setElement.apply( this, arguments );
 	        },
 	
@@ -608,7 +612,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } );
 	        },
 	
-	        unmountComponent : function(){
+	        unmountComponent : function( keepModel ){
 	            var component = this.component;
 	
 	            if( component ){
@@ -617,6 +621,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if( component.trigger ){
 	                    this.stopListening( component );
 	                }
+	
+	                component._preventDispose = Boolean( keepModel );
 	
 	                ReactDOM.unmountComponentAtNode( this.el );
 	                this.component = null;
@@ -701,8 +707,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _dispose : function(){
 	        var view = this.view;
 	        if( view ){
-	            view.stopListening();
-	            if( view.dispose ) view.dispose();
+	            if( view.dispose ){
+	                view.dispose();
+	            }
+	            else{
+	                view.stopListening();
+	                view.off();
+	            }
+	
 	            this.refs.subview.innerHTML = "";
 	            this.view                   = null;
 	        }
@@ -750,7 +762,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	} );
 	
-	var ModelProto = Nested.Model.prototype;
+	var ModelProto = Nested.Record.prototype;
 	
 	Object.defineProperty( ModelProto, 'links', {
 	    get : function(){
@@ -803,7 +815,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	} );
 	
-	var CollectionProto = Nested.Collection.prototype;
+	var CollectionProto = Nested.Record.Collection.prototype;
 	
 	CollectionProto.hasLink = function( model ){
 	    return new CollectionLink( this, model );

@@ -37,9 +37,6 @@ var EventsMixin = Object.assign( {
         this.off();
         this.stopListening();
         this._disposed = true;
-
-        // TODO: Enable it in future.
-        //if( this.state ) this.state.dispose(); // Not sure if it will work ok with current code base.
     },
 
     asyncUpdate : asyncUpdate,
@@ -203,7 +200,10 @@ function processState( spec, baseProto ){
     var attributes = getTypeSpecs( spec, 'state' ) || getTypeSpecs( spec, 'attributes' );
     if( attributes || spec.Model || baseProto.Model ){
         var BaseModel = baseProto.Model || spec.Model || Nested.Model;
-        spec.Model    = attributes ? BaseModel.extend( { defaults : attributes } ) : BaseModel;
+        spec.Model    = attributes ? (
+            typeof attributes === 'function' ? attributes : BaseModel.extend( { defaults : attributes } )
+        ): BaseModel;
+
         spec.mixins.push( ModelStateMixin );
 
         delete spec.state;
@@ -241,7 +241,7 @@ var ModelStateMixin = {
 
     componentWillUnmount : function(){
         // Release the state model.
-        this.model._ownerKey = this.model._owner = void 0;
+        this._preventDispose /* hack for component-view to preserve the state */ || this.model.dispose();
     }
 };
 

@@ -46,7 +46,7 @@ Nested.Mixable.mixTo( React.Component );
 
 React.Component.define = function( protoProps, staticProps ){
     var BaseClass          = tools.getBaseClass( this ),
-        staticsDefinition  = tools.getChangedStatics( this, 'state', 'props', 'autobind', 'context', 'childContext', 'listenToProps', 'pureRender' ),
+        staticsDefinition = tools.getChangedStatics( this, 'state', 'Model', 'props', 'autobind', 'context', 'childContext', 'listenToProps', 'pureRender' ),
         combinedDefinition = tools.assign( staticsDefinition, protoProps || {} );
 
     var definition = processSpec( combinedDefinition, this.prototype );
@@ -56,7 +56,7 @@ React.Component.define = function( protoProps, staticProps ){
     if( definition.getDefaultProps ) this.defaultProps = definition.getDefaultProps();
     if( definition.propTypes ) this.propTypes = definition.propTypes;
     if( definition.contextTypes ) this.contextTypes = definition.contextTypes;
-    if( definition.childContextTypes ) this.childsContextTypes = definition.childsContextTypes;
+    if( definition.childContextTypes ) this.childContextTypes = definition.childContextTypes;
 
     var protoDefinition = tools.omit( definition, 'getDefaultProps', 'propTypes', 'contextTypes', 'childContextTypes' );
     Nested.Mixable.define.call( this, protoDefinition, staticProps );

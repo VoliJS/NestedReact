@@ -1,5 +1,6 @@
 {
   "name": "nestedreact",
+  "version": "1.0.1-rc92",
   "main": "nestedreact.js",
   "description": "Advanced models, state management, and data binding solution for React",
   "homepage": "https://github.com/Volicon/react-backbone.glue",
@@ -40,11 +41,10 @@
     "tags.jsx"
   ],
   "license": "MIT",
-  "version": "1.0.1-rc9",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "all" : "npm run build && npm run deploy",
-    "deploy" : "copy .\\nestedreact.js ..\\observer-frontend\\htdocs\\node_modules\\nestedreact",
+    "deploy" : "copy .\\nestedreact.* ..\\observer-frontend\\htdocs\\js\\lib\\nested",
     "watch": "./node_modules/.bin/webpack --watch"
   }
 }
