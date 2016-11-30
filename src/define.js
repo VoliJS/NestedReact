@@ -63,9 +63,10 @@ var EventsMixin = Object.assign( {
         var originalRender = this.render;
         this.render = render || this.loading || loading;
 
-        promise.always( () => {
-            this.render = originalRender;
-            this.asyncUpdate();
+        var _this = this;
+        promise.always( function(){
+            _this.render = originalRender;
+            _this.asyncUpdate();
         } );
 
         return promise;
