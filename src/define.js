@@ -32,17 +32,30 @@ function asyncUpdate(){
 
 function returnFalse(){ return false; }
 
-var EventsMixin = Object.assign( {
+/**
+ * Mixin which is attached to all components.
+ */
+var EventsMixin = tools.assign( {
     componentWillUnmount : function(){
+        // Prevent memory leaks when working with events.
         this.off();
         this.stopListening();
+
+        // Mark component as disposed.
         this._disposed = true;
     },
 
     asyncUpdate : asyncUpdate,
 
-    // Perform transactional props and state update. Nested calls are allowed.
-    // Subsequent local update is forced. Not sure it's needed.
+    /**
+     * Performs transactional update for both props and state.
+     * Suppress updates during the transaction, and force update aftewards.
+     * Wrapping the sequence of changes in a transactions guarantees that
+     * React component will be updated _after_ all the changes to the
+     * both props and local state are applied.
+     *
+     * @param fun - takes
+     */
     transaction : function( fun ){
         const shouldComponentUpdate = this.shouldComponentUpdate,
               isRoot = shouldComponentUpdate !== returnFalse;
@@ -51,7 +64,7 @@ var EventsMixin = Object.assign( {
             this.shouldComponentUpdate = returnFalse;
         }
 
-        fun( this.props );
+        fun( this.props, this.state );
 
         if( isRoot ){
             this.shouldComponentUpdate = shouldComponentUpdate;
