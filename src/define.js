@@ -8,6 +8,7 @@ module.exports = function processSpec( spec, a_baseProto ){
     var baseProto = a_baseProto || {};
     spec.mixins || ( spec.mixins = [] );
 
+    processStore( spec, baseProto );
     processState( spec, baseProto );
     processContext( spec, baseProto );
     processProps( spec, baseProto );
@@ -137,27 +138,38 @@ function processStore( spec, baseProto ){
         delete spec.store;
 
         if( store instanceof Nested.Store ){
+            // Direct reference to an existing store. Put it to the prototype.
+            spec.store = store;
             spec.mixins.push( ExternalStoreMixin );
         }
-        else if( typeof store !== 'function' ){
+        else {
             spec.Store = store;
             spec.mixins.push( InternalStoreMixin );
-        }
-        else{
-
+            spec.mixins.push( UpdateOnNestedChangesMixin );
         }
 
         spec.mixins.push( ExposeStoreMixin );
     }
 }
 
+var UpdateOnNestedChangesMixin = {
+    _onChildrenChange : function(){},
+
+    componentDidMount : function(){
+        this._onChildrenChange = this.asyncUpdate;
+    }
+};
+
+/**
+ * Attached whenever the store declaration of any form is present in the component.
+ */
 var ExposeStoreMixin = {
-    getChildContext : function(){
-        return { _store : this.store };
+    childContext : {
+        _nestedStore : Nested.Store
     },
 
-    childContext : {
-        _store : Nested.Store
+    getChildContext : function(){
+        return { _nestedStore : this.store };
     },
 
     getStore : function(){
@@ -167,44 +179,35 @@ var ExposeStoreMixin = {
 
 /**
  * External store must just track the changes and trigger render.
+ * TBD: don't use it yet.
  */
-var ExternalStoreMixin = tools.defaults({
+var ExternalStoreMixin = {
     componentDidMount : function(){
         // Start UI updates on state changes.
         this.listenTo( this.store, 'change', this.asyncUpdate );
-    },
-
-    componentWillUnmount : function(){
-        this.stopListening( this.store );
     }
-}, ExposeStoreMixin );
+};
 
-var InternalStoreMixin = tools.defaults({
+var InternalStoreMixin = {
     componentWillMount : function(){
         var store = this.store = new this.Store();
         store._owner = this;
         store._ownerKey = 'store';
     },
 
-    _onChildrenChange : function(){},
-
-    componentDidMount : function(){
-        // TODO: need to do it one time, state mixin does it too.
-        this._onChildrenChange = this.asyncUpdate;
-    },
-
     // Will be called by the store when the lookup will fail.
     get : function( key ){
         // Ask upper store.
-        var store = this.context._store;
+        var store = ModelStateMixin.getStore.call( this, key );
         return store && store.get( key );
     },
 
     componentWillUnmount : function(){
         this.store._ownerKey = this.store._owner = void 0;
+        this.store.dispose();
         this.store = null;
     }
-}, ExposeStoreMixin );
+};
 
 /*****************
  * State
@@ -219,6 +222,7 @@ function processState( spec, baseProto ){
         ): BaseModel;
 
         spec.mixins.push( ModelStateMixin );
+        spec.mixins.push( UpdateOnNestedChangesMixin );
 
         delete spec.state;
         delete spec.attributes;
@@ -228,29 +232,24 @@ function processState( spec, baseProto ){
 var ModelStateMixin = {
     model         : null,
 
-    _onChildrenChange : function(){},
-
     componentWillMount : function(){
         var state = this.state = this.model = this.props._keepState || new this.Model();
         state._owner = this;
         state._ownerKey = 'state';
     },
 
-    componentDidMount : function(){
-        // Start UI updates on state changes.
-        this._onChildrenChange = this.asyncUpdate;
+    context : {
+        _nestedStore : Nested.Store
     },
 
     // reference global store to fix model's store locator
     getStore : function(){
         // Attempt to get the store from the context first. Then - fallback to the state's default store.
         // TBD: Need to figure out a good way of managing local stores.
-        var context = this.context;
-        return ( context && context._store ) || this.model._defaultStore;
-    },
+        var context, state;
 
-    context : {
-        _store : Nested.Store
+        return  ( ( context = this.context ) && context._nestedStore ) ||
+                ( ( state = this.state ) && state._defaultStore );
     },
 
     componentWillUnmount : function(){
