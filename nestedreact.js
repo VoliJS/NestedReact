@@ -251,7 +251,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param fun - takes
 	     */
 	    transaction : function( fun ){
-	        const shouldComponentUpdate = this.shouldComponentUpdate,
+	        var shouldComponentUpdate = this.shouldComponentUpdate,
 	              isRoot = shouldComponentUpdate !== returnFalse;
 	
 	        if( isRoot ){
