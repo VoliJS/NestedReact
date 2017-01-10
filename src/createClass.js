@@ -1,20 +1,26 @@
-var React      = require( 'react' ),
-    Nested     = require( 'nestedtypes' ),
-    processSpec = require( './define'),
-    tools = Nested.tools;
+var React       = require( 'react' ),
+    Nested      = require( 'nestedtypes' ),
+    processSpec = require( './define' ),
+    tools       = Nested.tools;
 
 var reactMixinRules = {
-    componentWillMount : 'reverse',
-    componentDidMount : 'reverse',
+    componentWillMount        : 'reverse',
+    componentDidMount         : 'reverse',
     componentWillReceiveProps : 'reverse',
-    shouldComponentUpdate : 'some',
-    componentWillUpdate : 'reverse',
-    componentDidUpdate : 'reverse',
-    componentWillUnmount : 'sequence',
+    shouldComponentUpdate     : 'some',
+    componentWillUpdate       : 'reverse',
+    componentDidUpdate        : 'reverse',
+    componentWillUnmount      : 'sequence',
+    state                     : 'merge',
+    store                     : 'merge',
+    props                     : 'merge',
+    context                   : 'merge',
+    childContext              : 'merge',
+    getChildContext           : 'mergeSequence'
 };
 
 function createClass( a_spec ){
-    var spec = processSpec( a_spec ),
+    var spec   = processSpec( a_spec ),
         mixins = spec.mixins || [];
 
     delete spec.mixins;
@@ -39,7 +45,7 @@ module.exports = createClass;
 Nested.Mixable.mixTo( React.Component );
 
 React.Component.define = function( protoProps, staticProps ){
-    var BaseClass = tools.getBaseClass( this ),
+    var BaseClass          = tools.getBaseClass( this ),
         staticsDefinition = tools.getChangedStatics( this, 'state', 'Model', 'props', 'autobind', 'context', 'childContext', 'listenToProps', 'pureRender' ),
         combinedDefinition = tools.assign( staticsDefinition, protoProps || {} );
 

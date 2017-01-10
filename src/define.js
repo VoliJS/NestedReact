@@ -1,4 +1,5 @@
 var Nested = require( 'nestedtypes' ),
+    React = require( 'react' ),
     pureRender = require( './purerender-mixin' ),
     propTypes  = require( './propTypes' ),
     tools = Nested.tools;
@@ -7,16 +8,17 @@ module.exports = function processSpec( spec, a_baseProto ){
     var baseProto = a_baseProto || {};
     spec.mixins || ( spec.mixins = [] );
 
-    processContext( spec, baseProto );
-    processAutobind( spec, baseProto );
+    processStore( spec, baseProto );
     processState( spec, baseProto );
+    processContext( spec, baseProto );
     processProps( spec, baseProto );
     processListenToProps( spec, baseProto );
+    processAutobind( spec, baseProto );
 
     spec.mixins.push( EventsMixin );
 
     return spec;
-}
+};
 
 /***
  * Throttled asynchronous version of forceUpdate.
@@ -69,8 +71,25 @@ var EventsMixin = tools.assign( {
             this.shouldComponentUpdate = shouldComponentUpdate;
             this.asyncUpdate();
         }
+    },
+
+    renderAfter : function( promise, render ){
+        var originalRender = this.render;
+        this.render = render || this.loading || loading;
+
+        var _this = this;
+        promise.always( function(){
+            _this.render = originalRender;
+            _this.asyncUpdate();
+        } );
+
+        return promise;
     }
 }, Nested.Events );
+
+function loading() {
+    return React.createElement("div", null);
+}
 
 /***
  * Autobinding
@@ -111,12 +130,91 @@ function processContext( spec, baseProto ){
     }
 }
 
+// Store spec.
+
+function processStore( spec, baseProto ){
+    var store = getTypeSpecs( spec, 'store' );
+    if( store ){
+        delete spec.store;
+
+        if( store instanceof Nested.Store ){
+            // Direct reference to an existing store. Put it to the prototype.
+            spec.store = store;
+            spec.mixins.push( ExternalStoreMixin );
+        }
+        else {
+            spec.Store = store;
+            spec.mixins.push( InternalStoreMixin );
+            spec.mixins.push( UpdateOnNestedChangesMixin );
+        }
+
+        spec.mixins.push( ExposeStoreMixin );
+    }
+}
+
+var UpdateOnNestedChangesMixin = {
+    _onChildrenChange : function(){},
+
+    componentDidMount : function(){
+        this._onChildrenChange = this.asyncUpdate;
+    }
+};
+
+/**
+ * Attached whenever the store declaration of any form is present in the component.
+ */
+var ExposeStoreMixin = {
+    childContext : {
+        _nestedStore : Nested.Store
+    },
+
+    getChildContext : function(){
+        return { _nestedStore : this.store };
+    },
+
+    getStore : function(){
+        return this.store;
+    }
+};
+
+/**
+ * External store must just track the changes and trigger render.
+ * TBD: don't use it yet.
+ */
+var ExternalStoreMixin = {
+    componentDidMount : function(){
+        // Start UI updates on state changes.
+        this.listenTo( this.store, 'change', this.asyncUpdate );
+    }
+};
+
+var InternalStoreMixin = {
+    componentWillMount : function(){
+        var store = this.store = new this.Store();
+        store._owner = this;
+        store._ownerKey = 'store';
+    },
+
+    // Will be called by the store when the lookup will fail.
+    get : function( key ){
+        // Ask upper store.
+        var store = ModelStateMixin.getStore.call( this, key );
+        return store && store.get( key );
+    },
+
+    componentWillUnmount : function(){
+        this.store._ownerKey = this.store._owner = void 0;
+        this.store.dispose();
+        this.store = null;
+    }
+};
+
 /*****************
  * State
  */
 function processState( spec, baseProto ){
     // process state spec...
-    var attributes = getTypeSpecs( spec, 'state' ) || getTypeSpecs( spec, 'attributes' )
+    var attributes = getTypeSpecs( spec, 'state' ) || getTypeSpecs( spec, 'attributes' );
     if( attributes || spec.Model || baseProto.Model ){
         var BaseModel = baseProto.Model || spec.Model || Nested.Model;
         spec.Model    = attributes ? (
@@ -124,6 +222,8 @@ function processState( spec, baseProto ){
         ): BaseModel;
 
         spec.mixins.push( ModelStateMixin );
+        spec.mixins.push( UpdateOnNestedChangesMixin );
+
         delete spec.state;
         delete spec.attributes;
     }
@@ -132,25 +232,24 @@ function processState( spec, baseProto ){
 var ModelStateMixin = {
     model         : null,
 
-    _onChildrenChange : function(){},
-
     componentWillMount : function(){
         var state = this.state = this.model = this.props._keepState || new this.Model();
         state._owner = this;
         state._ownerKey = 'state';
     },
 
-    componentDidMount : function(){
-        // Start UI updates on state changes.
-        this._onChildrenChange = this.asyncUpdate;
+    context : {
+        _nestedStore : Nested.Store
     },
 
     // reference global store to fix model's store locator
     getStore : function(){
         // Attempt to get the store from the context first. Then - fallback to the state's default store.
         // TBD: Need to figure out a good way of managing local stores.
-        var context = this.context;
-        return ( context && context.store ) || this.model._defaultStore;
+        var context, state;
+
+        return  ( ( context = this.context ) && context._nestedStore ) ||
+                ( ( state = this.state ) && state._defaultStore );
     },
 
     componentWillUnmount : function(){
