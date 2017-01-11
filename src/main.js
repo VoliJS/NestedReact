@@ -29,13 +29,16 @@ NestedReact.Node = propTypes.Node.value( null );
 NestedReact.Element = propTypes.Element.value( null );
 
 // Extend react components to have backbone-style jquery accessors
-var Component     = React.createClass( { render : function(){} } ),
-    BaseComponent = Object.getPrototypeOf( Component.prototype );
-
-Object.defineProperties( BaseComponent, {
+var BackboneViewProps = {
     el  : { get : function(){ return ReactDOM.findDOMNode( this ); } },
     $el : { get : function(){ return $( this.el ); } },
     $   : { value : function( sel ){ return this.$el.find( sel ); } }
-} );
+};
+
+var Component     = React.createClass( { render : function(){} } ),
+    BaseComponent = Object.getPrototypeOf( Component.prototype );
+
+Object.defineProperties( BaseComponent, BackboneViewProps );
+Object.defineProperties( React.Component.prototype, BackboneViewProps );
 
 NestedReact.Link = require( './nested-link' );

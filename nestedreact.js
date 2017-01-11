@@ -85,14 +85,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	NestedReact.Element = propTypes.Element.value( null );
 	
 	// Extend react components to have backbone-style jquery accessors
-	var Component     = React.createClass( { render : function(){} } ),
-	    BaseComponent = Object.getPrototypeOf( Component.prototype );
-	
-	Object.defineProperties( BaseComponent, {
+	var BackboneViewProps = {
 	    el  : { get : function(){ return ReactDOM.findDOMNode( this ); } },
 	    $el : { get : function(){ return $( this.el ); } },
 	    $   : { value : function( sel ){ return this.$el.find( sel ); } }
-	} );
+	};
+	
+	var Component     = React.createClass( { render : function(){} } ),
+	    BaseComponent = Object.getPrototypeOf( Component.prototype );
+	
+	Object.defineProperties( BaseComponent, BackboneViewProps );
+	Object.defineProperties( React.Component.prototype, BackboneViewProps );
 	
 	NestedReact.Link = __webpack_require__( 10 );
 
@@ -274,9 +277,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },
 	
-	    renderAfter : function( promise, render ){
-	        var originalRender = this.render;
-	        this.render = render || this.loading || loading;
+	    deferRender : function(){
+	        var $ = Nested.$,
+	            promise = $.when.apply( $, arguments ),
+	            originalRender = this.render;
+	
+	        this.render = this.loading || defaultLoading;
 	
 	        var _this = this;
 	        promise.always( function(){
@@ -288,7 +294,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}, Nested.Events );
 	
-	function loading() {
+	function defaultLoading() {
 	    return React.createElement("div", null);
 	}
 	

@@ -73,9 +73,12 @@ var EventsMixin = tools.assign( {
         }
     },
 
-    renderAfter : function( promise, render ){
-        var originalRender = this.render;
-        this.render = render || this.loading || loading;
+    deferRender : function(){
+        var $ = Nested.$,
+            promise = $.when.apply( $, arguments ),
+            originalRender = this.render;
+
+        this.render = this.loading || defaultLoading;
 
         var _this = this;
         promise.always( function(){
@@ -87,7 +90,7 @@ var EventsMixin = tools.assign( {
     }
 }, Nested.Events );
 
-function loading() {
+function defaultLoading() {
     return React.createElement("div", null);
 }
 

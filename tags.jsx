@@ -212,19 +212,3 @@ export const Checkbox = ( { className = 'checkbox', checkedLink, children } ) =>
         { children }
     </div>
 );
-
-@define
-export class Wait extends React.Component {
-    static listenToProps = {
-        'for' : 'request sync'
-    }
-
-    render(){
-        if( this.props.for.hasPendingIO() ){
-            const { loading, className } = this.props;
-            return loading ? loading() : <div className={ className || 'loading' }/>;
-        }
-
-        return this.props.children;
-    }
-}
