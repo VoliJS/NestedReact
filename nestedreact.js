@@ -929,8 +929,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	ModelProto.linkAll = function(){
 	    var links = this.links;
 	
-	    for( var i = 0; i < arguments.length; i++ ){
-	        cacheLink( links, this, arguments[ i ] );
+	    if( arguments.length ){
+	        for( var i = 0; i < arguments.length; i++ ){
+	            cacheLink( links, this, arguments[ i ] );
+	        }
+	    }
+	    else{
+	        var attributes = this.attributes;
+	
+	        for( var key in attributes ){
+	            attributes[ key ] === void 0 || cacheLink( links, this, key );
+	        }
 	    }
 	
 	    return links;

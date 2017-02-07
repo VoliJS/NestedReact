@@ -47,7 +47,7 @@
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "all" : "npm run build && npm run deploy",
-    "deploy" : "copy .\\nestedreact.* ..\\observer-frontend\\htdocs\\js\\lib\\nested",
+    "deploy" : "cp ./nestedreact.* ../observer-frontend/htdocs/js/lib/nested",
     "watch": "./node_modules/.bin/webpack --watch"
   }
 }
