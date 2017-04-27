@@ -29,12 +29,11 @@
     "nestedtypes": "^2.0.0-rc1"
   },
   "devDependencies": {
-    "valuelink" : "^1.0.0",
     "jquery": "^2.1.4",
     "underscore": "^1.8.3",
     "webpack": "^1.12.2",
-    "react": "^15.0.0||^0.14.0" ,
-    "react-dom": "^15.0.0||^0.14.0",
+    "react": "^15.0.0" ,
+    "react-dom": "^15.0.0",
     "nestedtypes": "^2.0.0-rc1"
   },
   "files": [
