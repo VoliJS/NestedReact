@@ -1,5 +1,7 @@
+import React from './react-mvx'
+export default React;
 export * from './react-mvx'
-import * as React from './react-mvx'
+
 import ReactDOM from 'react-dom'
 import { $, View } from 'type-r'
 

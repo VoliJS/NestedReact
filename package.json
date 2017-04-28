@@ -1,7 +1,8 @@
 {
   "name": "nestedreact",
   "version": "1.0.1-rc92",
-  "main": "nestedreact.js",
+  "main": "dist/index.js",
+  "lib": "lib/index.js",
   "description": "Advanced models, state management, and data binding solution for React",
   "homepage": "https://github.com/Volicon/react-backbone.glue",
   "keywords": [
@@ -46,8 +47,7 @@
     "webpack": "*"
   },
   "files": [
-    "nestedreact.js",
-    "nestedreact.js.map",
+    "dist","lib","src",
     "tags.js",
     "tags.jsx"
   ],
@@ -56,6 +56,6 @@
     "build": "npm run pull && npm run compile",
     "pull": "git submodule update --remote && cp ./submodules/React-MVx/tags.* . && cp -R ./submodules/React-MVx/src/* ./src/react-mvx",
     "compile": "./node_modules/.bin/tsc && ./node_modules/.bin/webpack -p",
-    "deploy": "cp -R ./dist/* ./examples/*/node_modules/NestedReact"
+    "deploy": "cp -R ./dist ./examples/*/node_modules/nestedreact"
   }
 }
