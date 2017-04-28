@@ -236,7 +236,7 @@ var ModelStateMixin = {
     model         : null,
 
     componentWillMount : function(){
-        var state = this.state = this.model = this.props._keepState || new this.Model();
+        var state = this.state = this.model = this.props.__keepState || new this.Model();
         state._owner = this;
         state._ownerKey = 'state';
     },

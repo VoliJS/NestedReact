@@ -66,10 +66,3 @@ React.Component.define = function( protoProps, staticProps ){
 
 React.Component.mixinRules( reactMixinRules );
 
-function defineBackboneProxy( Component ){
-    Object.defineProperty( Component, 'View', {
-        get : function(){
-            return this._View || ( this._View = Nested._BaseView.extend( { reactClass : Component } ) );
-        }
-    } );
-}

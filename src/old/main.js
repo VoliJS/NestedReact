@@ -14,9 +14,17 @@ NestedReact.mixins = Nested.mixins;
 
 var ComponentView = require( './component-view' );
 
+let BaseView;
+
 // export hook to override base View class used...
 NestedReact.useView = function( View ){
-    Nested._BaseView = ComponentView.use( View );
+    BaseView = ComponentView.use( View );
+
+    Object.defineProperty( Component, 'View', {
+        get(){
+            return this._View || ( this._View = _BaseView.extend( { reactClass : Component } ) );
+        }
+    } );
 };
 
 NestedReact.useView( Nested.View );

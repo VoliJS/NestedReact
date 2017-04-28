@@ -1,8 +1,8 @@
 module.exports = {
-    entry : "./src/main",
+    entry : "./lib/index",
 
     output : {
-        filename      : './nestedreact.js',
+        filename      : './dist/index.js',
         library       : "React",
         libraryTarget : 'umd'
     },
@@ -11,7 +11,7 @@ module.exports = {
 
     externals : [
         {
-            'nestedtypes' : {
+            'type-r' : {
                 commonjs  : 'nestedtypes',
                 commonjs2 : 'nestedtypes',
                 amd       : 'nestedtypes',
