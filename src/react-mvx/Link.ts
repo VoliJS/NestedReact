@@ -24,7 +24,7 @@ Record.mixins({
     },
 
     // Link to the attribute of the record's tree by symbolic path.
-    linkAtPath( path : string, options? : {} ) : RecordDeepLink {
+    linkPath( path : string, options? : {} ) : RecordDeepLink {
         return new RecordDeepLink( this, path, options )
     },
 
