@@ -1,8 +1,10 @@
+var UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
+
 module.exports = {
     entry : "./lib/index",
 
     output : {
-        filename      : './dist/index.js',
+        filename      : './dist/index.min.js',
         library       : "React",
         libraryTarget : 'umd'
     },
@@ -32,5 +34,9 @@ module.exports = {
                 root      : 'ReactDOM'
             }
         }
+    ],
+
+    plugins : [
+        new UnminifiedWebpackPlugin()
     ]
 };

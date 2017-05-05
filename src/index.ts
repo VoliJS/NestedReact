@@ -1,14 +1,19 @@
+// Re-export react-mvx
 import React from './react-mvx'
 export default React;
 export * from './react-mvx'
 
+// NestedReact backward compatibility layer
 import ReactDOM from 'react-dom'
-import { $, View, Record } from 'type-r'
+import Nested, { View, Record } from 'type-r'
+import * as NewPropTypes from 'prop-types'
 
 import subview from './view-element'
 export { subview }
 
 import use from './component-view'
+
+export const PropTypes = ( React as any ).PropTypes || NewPropTypes;
 
 let BaseView;
 
@@ -19,20 +24,14 @@ export function useView( View ){
 
 const { define } = React.Component;
 
-React.Component.define = function define( protoProps, staticProps ){
-    defineBackboneProxy( this );
+React.Component.define = function( protoProps, staticProps ){
+    this.View = BaseView.extend( { reactClass : this } );
 
     return define.call( this, protoProps, staticProps );
 }
 
 function defineBackboneProxy( Component ){
-    Object.defineProperty( Component, 'View', {
-        get(){
-            return this._View || (
-                this._View = BaseView.extend( { reactClass : Component } )
-            );
-        }
-    } );
+    
 }
 
 // Deprecated API for backward compatibility
@@ -45,7 +44,7 @@ useView( View );
 // Extend react components to have backbone-style jquery accessors
 const BackboneViewProps = {
     el  : { get : () => ReactDOM.findDOMNode( this ) },
-    $el : { get : () => $( this.el ) },
+    $el : { get : () => Nested.$( this.el ) },
     $   : { value : sel => this.$el.find( sel ) }
 };
 

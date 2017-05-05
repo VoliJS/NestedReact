@@ -86,7 +86,7 @@ export function createClass( a_spec ){
     // Gather all methods to pin them to `this` later.
     const methods = [];
     for( let key in a_spec ){
-        if( a_spec.hasOwnProperty( key ) && typeof a_spec[ key ] === 'function' ){
+        if( a_spec.hasOwnProperty( key ) && typeof a_spec[ key ] === 'function' && !( a_spec[ key ] in Component.prototype ) ){
             methods.push( key );
         }
     }
@@ -94,9 +94,9 @@ export function createClass( a_spec ){
     const Subclass = Component.extend({
         // Override constructor to autobind all the methods...
         constructor(){
-            Component.apply( this.arguments );
+            Component.apply( this, this.arguments );
 
-            for( let method in methods ){
+            for( let method of methods ){
                 this[ method ] = this[ method ].bind( this );
             }
         },
