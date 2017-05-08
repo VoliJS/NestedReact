@@ -112,8 +112,9 @@ export function createClass< P, S>( { statics, ...a_spec } : React.ComponentSpec
     }, statics );
 
     // Need to bind methods from mixins as well, so populate it here.
-    for( let key in Subclass.prototype ){
-        if( a_spec.hasOwnProperty( key ) && dontAutobind.indexOf( key ) === -1 && typeof a_spec[ key ] === 'function' && !( a_spec[ key ] in Component.prototype ) ){
+    const Proto = Subclass.prototype;
+    for( let key in Proto ){
+        if( Proto.hasOwnProperty( key ) && dontAutobind.indexOf( key ) === -1 && typeof Proto[ key ] === 'function' ){
             methods.push( key );
         }
     }
