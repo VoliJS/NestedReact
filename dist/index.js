@@ -581,7 +581,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__component_view__ = __webpack_require__(8);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PropTypes", function() { return PropTypes; });
 /* harmony export (immutable) */ __webpack_exports__["useView"] = useView;
-var _this = this;
 // Re-export react-mvx
 
 /* harmony default export */ __webpack_exports__["default"] = (__WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* default */]);
@@ -613,9 +612,9 @@ RecordProto.deepLink = RecordProto.linkPath;
 useView(__WEBPACK_IMPORTED_MODULE_2_type_r__["View"]);
 // Extend react components to have backbone-style jquery accessors
 var BackboneViewProps = {
-    el: { get: function () { return __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.findDOMNode(_this); } },
-    $el: { get: function () { return __WEBPACK_IMPORTED_MODULE_2_type_r___default.a.$(_this.el); } },
-    $: { value: function (sel) { return _this.$el.find(sel); } }
+    el: { get: function () { return __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.findDOMNode(this); } },
+    $el: { get: function () { return __WEBPACK_IMPORTED_MODULE_2_type_r___default.a.$(this.el); } },
+    $: { value: function (sel) { return this.$el.find(sel); } }
 };
 Object.defineProperties(__WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* default */].Component.prototype, BackboneViewProps);
 //# sourceMappingURL=index.js.map
@@ -725,14 +724,16 @@ Component = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"])(reactMixinRules)
 ], Component);
 
+var dontAutobind = ['state', 'store'];
 /**
  * ES5 components definition factory
  */
-function createClass(a_spec) {
+function createClass(_a) {
+    var statics = _a.statics, a_spec = __rest(_a, ["statics"]);
     // Gather all methods to pin them to `this` later.
     var methods = [];
     for (var key in a_spec) {
-        if (a_spec.hasOwnProperty(key) && typeof a_spec[key] === 'function' && !(a_spec[key] in Component.prototype)) {
+        if (a_spec.hasOwnProperty(key) && dontAutobind.indexOf(key) === -1 && typeof a_spec[key] === 'function' && !(a_spec[key] in Component.prototype)) {
             methods.push(key);
         }
     }
@@ -744,7 +745,7 @@ function createClass(a_spec) {
                 var method = methods_1[_i];
                 this[method] = this[method].bind(this);
             }
-        } }, a_spec));
+        } }, a_spec), statics);
     return Subclass;
 }
 //# sourceMappingURL=component.js.map

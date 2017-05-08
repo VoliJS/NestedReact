@@ -43,9 +43,9 @@ useView( View );
 
 // Extend react components to have backbone-style jquery accessors
 const BackboneViewProps = {
-    el  : { get : () => ReactDOM.findDOMNode( this ) },
-    $el : { get : () => Nested.$( this.el ) },
-    $   : { value : sel => this.$el.find( sel ) }
+    el  : { get : function(){ return ReactDOM.findDOMNode( this ) } },
+    $el : { get : function(){ return Nested.$( this.el ) } },
+    $   : { value : function( sel ){ return this.$el.find( sel ) } }
 };
 
 Object.defineProperties( React.Component.prototype, BackboneViewProps );
