@@ -28,7 +28,7 @@ export declare class Component<P> extends React.Component<P, Record> {
     readonly state: Record;
     readonly store?: Store;
     assignToState(x: any, key: any): void;
-    isMounted(): boolean;
+    isMounted: () => boolean;
 }
 /**
  * ES5 components definition factory

@@ -79,10 +79,16 @@ export class Component<P> extends React.Component<P, Record> {
         this.state.assignFrom({ [ key ] : x });
     }
 
-    isMounted() : boolean {
+    isMounted : () => boolean
+}
+
+// Looks like React guys _really_ want to deprecated it. But no way.
+// We will work around their attempt.
+Object.defineProperty( Component.prototype, 'isMounted', {
+    value : function isMounted(){
         return !this._disposed;
     }
-}
+})
 
 const dontAutobind = [ 'state', 'store' ];
 

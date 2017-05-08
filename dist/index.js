@@ -718,9 +718,6 @@ var Component = (function (_super) {
         this.state.assignFrom((_a = {}, _a[key] = x, _a));
         var _a;
     };
-    Component.prototype.isMounted = function () {
-        return !this._disposed;
-    };
     return Component;
 }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]));
 Component = __decorate([
@@ -728,6 +725,13 @@ Component = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"])(reactMixinRules)
 ], Component);
 
+// Looks like React guys _really_ want to deprecated it. But no way.
+// We will work around their attempt.
+Object.defineProperty(Component.prototype, 'isMounted', {
+    value: function isMounted() {
+        return !this._disposed;
+    }
+});
 var dontAutobind = ['state', 'store'];
 /**
  * ES5 components definition factory
