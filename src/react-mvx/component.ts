@@ -98,13 +98,8 @@ const dontAutobind = [ 'state', 'store' ];
 export function createClass< P, S>( { statics, ...a_spec } : React.ComponentSpec<P, S> ) : React.ClassicComponentClass<P>{
     // Gather all methods to pin them to `this` later.
     const methods = [];
-    for( let key in a_spec ){
-        if( a_spec.hasOwnProperty( key ) && dontAutobind.indexOf( key ) === -1 && typeof a_spec[ key ] === 'function' && !( a_spec[ key ] in Component.prototype ) ){
-            methods.push( key );
-        }
-    }
 
-    const Subclass = Component.extend({
+    const Subclass : any = Component.extend({
         // Override constructor to autobind all the methods...
         constructor(){
             Component.apply( this, this.arguments );
@@ -116,5 +111,12 @@ export function createClass< P, S>( { statics, ...a_spec } : React.ComponentSpec
         ...a_spec
     }, statics );
 
-    return Subclass as any;
+    // Need to bind methods from mixins as well, so populate it here.
+    for( let key in Subclass.prototype ){
+        if( a_spec.hasOwnProperty( key ) && dontAutobind.indexOf( key ) === -1 && typeof a_spec[ key ] === 'function' && !( a_spec[ key ] in Component.prototype ) ){
+            methods.push( key );
+        }
+    }
+
+    return Subclass;
 }
