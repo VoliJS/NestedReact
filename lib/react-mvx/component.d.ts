@@ -14,6 +14,7 @@ export declare class Component<P> extends React.Component<P, Record> {
     static context?: TypeSpecs;
     static childContext?: TypeSpecs;
     static pureRender?: boolean;
+    private _disposed;
     private static propTypes;
     private static defaultProps;
     private static contextTypes;
@@ -27,6 +28,7 @@ export declare class Component<P> extends React.Component<P, Record> {
     readonly state: Record;
     readonly store?: Store;
     assignToState(x: any, key: any): void;
+    isMounted(): boolean;
 }
 /**
  * ES5 components definition factory

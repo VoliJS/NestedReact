@@ -34,6 +34,7 @@ export class Component<P> extends React.Component<P, Record> {
     static childContext? : TypeSpecs
     static pureRender? : boolean
 
+    private _disposed : boolean
     private static propTypes: any;
     private static defaultProps: any;
     private static contextTypes : any;
@@ -76,6 +77,10 @@ export class Component<P> extends React.Component<P, Record> {
 
     assignToState( x, key ){
         this.state.assignFrom({ [ key ] : x });
+    }
+
+    isMounted() : boolean {
+        return !this._disposed;
     }
 }
 

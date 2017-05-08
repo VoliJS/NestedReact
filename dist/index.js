@@ -718,6 +718,9 @@ var Component = (function (_super) {
         this.state.assignFrom((_a = {}, _a[key] = x, _a));
         var _a;
     };
+    Component.prototype.isMounted = function () {
+        return !this._disposed;
+    };
     return Component;
 }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]));
 Component = __decorate([
