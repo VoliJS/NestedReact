@@ -32,7 +32,7 @@ export default class BackboneView extends React.Component< BackboneViewProps >{
     }
 
     render(){
-        return ReactDOM.div( {
+        return React.createElement( 'div', {
             ref       : this.saveRef,
             className : this.props.className
         } );

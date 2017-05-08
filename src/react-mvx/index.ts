@@ -4,7 +4,7 @@ import processSpec, { Node, Element, TypeSpecs } from './define'
 import Link from './link'
 import { Component, createClass } from './component'
 
-interface ReactMVx{
+interface ReactMVx {
     // It's ES6 module
     default : ReactMVx
     
@@ -27,7 +27,7 @@ interface ReactMVx{
 }
 
 // extend React namespace
-const ReactMVx : ReactMVx = Object.create( React );
+const ReactMVx : ReactMVx & typeof React = Object.create( React );
 
 // Make it compatible with ES6 module format.
 ReactMVx.default = ReactMVx;

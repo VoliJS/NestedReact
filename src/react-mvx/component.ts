@@ -25,7 +25,7 @@ const reactMixinRules : any = { // Can't type it precisely because of weird type
 
 @extendable
 @mixinRules( reactMixinRules )
-export abstract class Component<P> extends React.Component<P, Record> {
+export class Component<P> extends React.Component<P, Record> {
     static state? : TypeSpecs | typeof Record
     static store? : TypeSpecs | typeof Store
     static props? : TypeSpecs
@@ -84,7 +84,7 @@ const dontAutobind = [ 'state', 'store' ];
 /**
  * ES5 components definition factory
  */
-export function createClass( { statics, ...a_spec } ){
+export function createClass< P, S>( { statics, ...a_spec } : React.ComponentSpec<P, S> ) : React.ClassicComponentClass<P>{
     // Gather all methods to pin them to `this` later.
     const methods = [];
     for( let key in a_spec ){
@@ -105,5 +105,5 @@ export function createClass( { statics, ...a_spec } ){
         ...a_spec
     }, statics );
 
-    return Subclass;
+    return Subclass as any;
 }

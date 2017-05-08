@@ -6,7 +6,7 @@ import * as React from 'react';
 import { Record, Store } from 'type-r';
 import Link from './Link';
 import { TypeSpecs } from './define';
-export declare abstract class Component<P> extends React.Component<P, Record> {
+export declare class Component<P> extends React.Component<P, Record> {
     static state?: TypeSpecs | typeof Record;
     static store?: TypeSpecs | typeof Store;
     static props?: TypeSpecs;
@@ -31,7 +31,4 @@ export declare abstract class Component<P> extends React.Component<P, Record> {
 /**
  * ES5 components definition factory
  */
-export declare function createClass({statics, ...a_spec}: {
-    [x: string]: any;
-    statics: any;
-}): Component<any>;
+export declare function createClass<P, S>({statics, ...a_spec}: React.ComponentSpec<P, S>): React.ClassicComponentClass<P>;

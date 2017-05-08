@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("nestedtypes"), require("react-dom"), require("react"));
+		module.exports = factory(require("nestedtypes"), require("react"), require("react-dom"));
 	else if(typeof define === 'function' && define.amd)
-		define(["nestedtypes", "react-dom", "react"], factory);
+		define(["nestedtypes", "react", "react-dom"], factory);
 	else if(typeof exports === 'object')
-		exports["React"] = factory(require("nestedtypes"), require("react-dom"), require("react"));
+		exports["React"] = factory(require("nestedtypes"), require("react"), require("react-dom"));
 	else
-		root["React"] = factory(root["Nested"], root["ReactDOM"], root["React"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
+		root["React"] = factory(root["Nested"], root["React"], root["ReactDOM"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_5__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -87,7 +87,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_0__;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
@@ -212,7 +212,7 @@ function _translateType(Type) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
@@ -262,12 +262,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -301,6 +295,12 @@ if (false) {
   module.exports = __webpack_require__(22)();
 }
 
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
 
 /***/ }),
 /* 6 */
@@ -404,9 +404,9 @@ var UpdateOnNestedChangesMixin = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
@@ -479,10 +479,8 @@ function use(View) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__react_mvx__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -495,8 +493,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 
 
-
-var notEqual = __WEBPACK_IMPORTED_MODULE_2_type_r__["tools"].notEqual;
+var notEqual = __WEBPACK_IMPORTED_MODULE_1_type_r__["tools"].notEqual;
 var BackboneView = (function (_super) {
     __extends(BackboneView, _super);
     function BackboneView() {
@@ -515,7 +512,7 @@ var BackboneView = (function (_super) {
         return view && (typeof view.hasUnsavedChanges === 'function' ? view.hasUnsavedChanges() : view.hasUnsavedChanges);
     };
     BackboneView.prototype.render = function () {
-        return __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.div({
+        return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* default */].createElement('div', {
             ref: this.saveRef,
             className: this.props.className
         });
@@ -570,36 +567,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Link", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["g"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Component", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["h"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "assignToState", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["i"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_element__ = __webpack_require__(9);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "subview", function() { return __WEBPACK_IMPORTED_MODULE_4__view_element__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__component_view__ = __webpack_require__(8);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PropTypes", function() { return PropTypes; });
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "PropTypes", function() { return __WEBPACK_IMPORTED_MODULE_3_prop_types__; });
 /* harmony export (immutable) */ __webpack_exports__["useView"] = useView;
 // Re-export react-mvx
 
-/* harmony default export */ __webpack_exports__["default"] = (__WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* default */]);
+var NestedReact = Object.create(__WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* default */]);
+/* harmony default export */ __webpack_exports__["default"] = (NestedReact);
 
 // NestedReact backward compatibility layer
 
 
 
 
+NestedReact.subview = __WEBPACK_IMPORTED_MODULE_4__view_element__["a" /* default */];
 
 
-var PropTypes = __WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* default */].PropTypes || __WEBPACK_IMPORTED_MODULE_3_prop_types__;
+
 var BaseView;
 // export hook to override base View class used...
 function useView(View) {
     BaseView = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__component_view__["a" /* default */])(View);
 }
-var define = __WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* default */].Component.define;
-__WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* default */].Component.define = function (protoProps, staticProps) {
+var define = NestedReact.Component.define;
+NestedReact.Component.define = function (protoProps, staticProps) {
     this.View = BaseView.extend({ reactClass: this });
     return define.call(this, protoProps, staticProps);
 };
@@ -609,6 +608,8 @@ function defineBackboneProxy(Component) {
 var RecordProto = __WEBPACK_IMPORTED_MODULE_2_type_r__["Record"].prototype;
 RecordProto.getLink = RecordProto.linkAt;
 RecordProto.deepLink = RecordProto.linkPath;
+var CollectionProto = __WEBPACK_IMPORTED_MODULE_2_type_r__["Record"].Collection.prototype;
+CollectionProto.hasLink = CollectionProto.linkContains;
 useView(__WEBPACK_IMPORTED_MODULE_2_type_r__["View"]);
 // Extend react components to have backbone-style jquery accessors
 var BackboneViewProps = {
@@ -616,7 +617,7 @@ var BackboneViewProps = {
     $el: { get: function () { return __WEBPACK_IMPORTED_MODULE_2_type_r___default.a.$(this.el); } },
     $: { value: function (sel) { return this.$el.find(sel); } }
 };
-Object.defineProperties(__WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* default */].Component.prototype, BackboneViewProps);
+Object.defineProperties(NestedReact.Component.prototype, BackboneViewProps);
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -624,7 +625,7 @@ Object.defineProperties(__WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* default 
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);

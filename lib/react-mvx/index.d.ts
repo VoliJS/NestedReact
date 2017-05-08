@@ -1,3 +1,5 @@
+/// <reference types="react" />
+import * as React from 'react';
 import { define, mixins, mixinRules, ChainableAttributeSpec } from 'type-r';
 import { Node, Element } from './define';
 import Link from './link';
@@ -14,7 +16,7 @@ interface ReactMVx {
     Element: ChainableAttributeSpec;
     assignToState(key: string): any;
 }
-declare const ReactMVx: ReactMVx;
+declare const ReactMVx: ReactMVx & typeof React;
 declare const assignToState: (key: string) => (prop: any) => void;
 export default ReactMVx;
 export { createClass, define, mixins, Node, Element, Link, Component, assignToState };

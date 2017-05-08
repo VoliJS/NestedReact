@@ -11,7 +11,10 @@ export default class BackboneView extends React.Component<BackboneViewProps> {
     hasUnsavedChanges(): any;
     root: any;
     saveRef: (element: any) => void;
-    render(): any;
+    render(): React.DOMElement<{
+        ref: (element: any) => void;
+        className: string;
+    }, any>;
     componentDidMount(): void;
     componentDidUpdate(): void;
     componentWillUnmount(): void;

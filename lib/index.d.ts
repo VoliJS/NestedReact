@@ -1,7 +1,8 @@
-import React from './react-mvx';
-export default React;
+declare const NestedReact: any;
+export default NestedReact;
 export * from './react-mvx';
+import * as PropTypes from 'prop-types';
 import subview from './view-element';
 export { subview };
-export declare const PropTypes: any;
+export { PropTypes };
 export declare function useView(View: any): void;
