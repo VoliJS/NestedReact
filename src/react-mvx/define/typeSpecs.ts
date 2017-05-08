@@ -54,7 +54,7 @@ export function compileSpecs( props : TypeSpecs ){
             }
 
             // Handle listening to event maps...
-            if( options.changeHandlers ){
+            if( options.changeHandlers && options.changeHandlers.length ){
                 changeHandlers || ( changeHandlers = {} );
                 changeHandlers[ name ] = options.changeHandlers;
             }
@@ -63,10 +63,10 @@ export function compileSpecs( props : TypeSpecs ){
             if( options.changeEvents ){
                 changeHandlers || ( changeHandlers = {} );
                 const handlers = changeHandlers[ name ] || ( changeHandlers[ name ] = [] ),
-                    changeEvents = options.changeEvents === 'string' ? options.changeEvents : null;
+                    changeEvents = typeof options.changeEvents === 'string' ? options.changeEvents : null;
 
                 handlers.push( 
-                    function( prev, next, component ){
+                    function( next, prev, component ){
                         prev && component.stopListening( prev );
                         next && component.listenTo( next, changeEvents || next._changeEventName, component.asyncUpdate );
                     }
