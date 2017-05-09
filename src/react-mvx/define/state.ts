@@ -24,7 +24,7 @@ export default function process( spec, baseProto ){
 }
 
 export const StateMixin = {
-    state : null,
+    //state : null,
 
     componentWillMount(){
         // props.__keepState is used to workaround issues in Backbone intergation layer

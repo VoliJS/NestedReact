@@ -365,7 +365,7 @@ function process(spec, baseProto) {
     }
 }
 var StateMixin = {
-    state: null,
+    //state : null,
     componentWillMount: function () {
         // props.__keepState is used to workaround issues in Backbone intergation layer
         var state = this.state = this.props.__keepState || new this.State();
