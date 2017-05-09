@@ -49,17 +49,26 @@ export default function process( spec, { pureRender, _props = {}, _listenToProps
  * Fires _after_ UI is updated. Used for managing events subscriptions.
  */
 const ChangeHandlersMixin = {
-    componentDidMount  : handleChanges,
-    componentDidUpdate : handleChanges
+    componentDidMount( prev ){
+        handlePropsChanges( prev, this.props );
+    },
+
+    componentDidUpdate( prev ){
+        handlePropsChanges( prev, this.props );
+    },
+
+    componentWillUnmount(){
+        handlePropsChanges( this.props, {} );
+    }
 };
 
-function handleChanges( prev = {} ){
-    const { _changeHandlers, props } = this;
+function handlePropsChanges( prev : object, next : object ){
+    const { _changeHandlers } = this;
     
     for( let name in _changeHandlers ){
-        if( prev[ name ] !== props[ name ] ){
+        if( prev[ name ] !== next[ name ] ){
             for( let handler of _changeHandlers[ name ] ){
-                handler( props[ name ], prev[ name ], this );
+                handler( next[ name ], prev[ name ], this );
             }
         }
     }

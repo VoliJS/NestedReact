@@ -921,17 +921,23 @@ function process(spec, _a) {
  * Fires _after_ UI is updated. Used for managing events subscriptions.
  */
 var ChangeHandlersMixin = {
-    componentDidMount: handleChanges,
-    componentDidUpdate: handleChanges
+    componentDidMount: function (prev) {
+        handlePropsChanges(prev, this.props);
+    },
+    componentDidUpdate: function (prev) {
+        handlePropsChanges(prev, this.props);
+    },
+    componentWillUnmount: function () {
+        handlePropsChanges(this.props, {});
+    }
 };
-function handleChanges(prev) {
-    if (prev === void 0) { prev = {}; }
-    var _a = this, _changeHandlers = _a._changeHandlers, props = _a.props;
+function handlePropsChanges(prev, next) {
+    var _changeHandlers = this._changeHandlers;
     for (var name_1 in _changeHandlers) {
-        if (prev[name_1] !== props[name_1]) {
-            for (var _i = 0, _b = _changeHandlers[name_1]; _i < _b.length; _i++) {
-                var handler = _b[_i];
-                handler(props[name_1], prev[name_1], this);
+        if (prev[name_1] !== next[name_1]) {
+            for (var _i = 0, _a = _changeHandlers[name_1]; _i < _a.length; _i++) {
+                var handler = _a[_i];
+                handler(next[name_1], prev[name_1], this);
             }
         }
     }
@@ -1347,6 +1353,15 @@ var Link = (function () {
             _this.set(x);
         });
     };
+    Object.defineProperty(Link.prototype, "props", {
+        // <input { ...link.props } />
+        get: function () {
+            var _this = this;
+            return { value: this.value, onChange: function (e) { return _this.set(e.target.value); } };
+        },
+        enumerable: true,
+        configurable: true
+    });
     // DEPRECATED: Old React method for backward compatibility
     Link.prototype.requestChange = function (x) {
         this.set(x);
