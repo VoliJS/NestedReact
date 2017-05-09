@@ -921,8 +921,8 @@ function process(spec, _a) {
  * Fires _after_ UI is updated. Used for managing events subscriptions.
  */
 var ChangeHandlersMixin = {
-    componentDidMount: function (prev) {
-        handlePropsChanges(this, prev, this.props);
+    componentDidMount: function () {
+        handlePropsChanges(this, {}, this.props);
     },
     componentDidUpdate: function (prev) {
         handlePropsChanges(this, prev, this.props);
