@@ -50,25 +50,25 @@ export default function process( spec, { pureRender, _props = {}, _listenToProps
  */
 const ChangeHandlersMixin = {
     componentDidMount( prev ){
-        handlePropsChanges( prev, this.props );
+        handlePropsChanges( this, prev, this.props );
     },
 
     componentDidUpdate( prev ){
-        handlePropsChanges( prev, this.props );
+        handlePropsChanges( this, prev, this.props );
     },
 
     componentWillUnmount(){
-        handlePropsChanges( this.props, {} );
+        handlePropsChanges( this, this.props, {} );
     }
 };
 
-function handlePropsChanges( prev : object, next : object ){
-    const { _changeHandlers } = this;
+function handlePropsChanges( component : any, prev : object, next : object ){
+    const { _changeHandlers } = component;
     
     for( let name in _changeHandlers ){
         if( prev[ name ] !== next[ name ] ){
             for( let handler of _changeHandlers[ name ] ){
-                handler( next[ name ], prev[ name ], this );
+                handler( next[ name ], prev[ name ], component );
             }
         }
     }
