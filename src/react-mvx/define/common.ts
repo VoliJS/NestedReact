@@ -1,31 +1,13 @@
 /**
- * Process `autobind` specs, attach async event processing and transactional support.
+ * attach async event processing and transactional support.
  */
 
 import { tools, Events } from 'type-r'
 
-export default function compile( spec, { _autobind = [] } ){
-    // Attach autobind mixin...
-    if( spec.autobind ){
-        spec._autobind = spec.autobind.split( /\s+/ ).concat( _autobind );
-        spec.mixins.push( AutobindMixin );
-        delete spec.autobind;
-    }
-
+export default function compile( spec, baseProto ){
     // Attach common mixin
     spec.mixins.push( CommonMixin );
 }
-
-/***
- * Autobinding
- */
-const AutobindMixin = {
-    componentWillMount(){
-        for( let name of this._autobind ){
-            this[ name ] = this[ name ].bind( this );
-        }
-    }
-};
 
 export function asyncUpdate(){
     this.shouldComponentUpdate === returnFalse || this._disposed || this.forceUpdate();

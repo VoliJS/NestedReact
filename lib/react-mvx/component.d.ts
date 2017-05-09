@@ -10,7 +10,6 @@ export declare class Component<P> extends React.Component<P, Record> {
     static state?: TypeSpecs | typeof Record;
     static store?: TypeSpecs | typeof Store;
     static props?: TypeSpecs;
-    static autobind?: string;
     static context?: TypeSpecs;
     static childContext?: TypeSpecs;
     static pureRender?: boolean;
@@ -30,7 +29,3 @@ export declare class Component<P> extends React.Component<P, Record> {
     assignToState(x: any, key: any): void;
     isMounted: () => boolean;
 }
-/**
- * ES5 components definition factory
- */
-export declare function createClass<P, S>({statics, ...a_spec}: React.ComponentSpec<P, S>): React.ClassicComponentClass<P>;

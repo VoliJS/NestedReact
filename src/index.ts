@@ -14,8 +14,11 @@ NestedReact.subview = subview;
 export { subview }
 
 import use from './component-view'
+import createClass from './createClass'
 
-export { PropTypes };
+NestedReact.createClass = createClass;
+Object.defineProperty( NestedReact, 'PropTypes', { value : PropTypes } );
+export { PropTypes, createClass };
 
 let BaseView;
 
@@ -30,10 +33,6 @@ NestedReact.Component.define = function( protoProps, staticProps ){
     this.View = BaseView.extend( { reactClass : this } );
 
     return define.call( this, protoProps, staticProps );
-}
-
-function defineBackboneProxy( Component ){
-    
 }
 
 // Deprecated API for backward compatibility

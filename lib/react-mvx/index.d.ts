@@ -3,13 +3,12 @@ import * as React from 'react';
 import { define, mixins, mixinRules, ChainableAttributeSpec } from 'type-r';
 import { Node, Element } from './define';
 import Link from './link';
-import { Component, createClass } from './component';
+import { Component } from './component';
 interface ReactMVx {
     default: ReactMVx;
     define: typeof define;
     mixins: typeof mixins;
     mixinRules: typeof mixinRules;
-    createClass: typeof createClass;
     Component: typeof Component;
     Link: typeof Link;
     Node: ChainableAttributeSpec;
@@ -19,4 +18,4 @@ interface ReactMVx {
 declare const ReactMVx: ReactMVx & typeof React;
 declare const assignToState: (key: string) => (prop: any) => void;
 export default ReactMVx;
-export { createClass, define, mixins, Node, Element, Link, Component, assignToState };
+export { define, mixins, Node, Element, Link, Component, assignToState };

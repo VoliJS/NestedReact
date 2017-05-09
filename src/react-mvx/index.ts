@@ -2,7 +2,7 @@ import * as React from 'react'
 import { define, Record, Store, mixins, mixinRules, ChainableAttributeSpec } from 'type-r'
 import processSpec, { Node, Element, TypeSpecs } from './define'
 import Link from './link'
-import { Component, createClass } from './component'
+import { Component } from './component'
 
 interface ReactMVx {
     // It's ES6 module
@@ -14,7 +14,6 @@ interface ReactMVx {
     mixinRules : typeof mixinRules
 
     // Overriden components
-    createClass : typeof createClass
     Component : typeof Component
 
     // additional ReactMVx types
@@ -32,7 +31,6 @@ const ReactMVx : ReactMVx & typeof React = Object.create( React );
 // Make it compatible with ES6 module format.
 ReactMVx.default = ReactMVx;
 // listenToProps, listenToState, model, attributes, Model
-ReactMVx.createClass = createClass;
 ReactMVx.define = define;
 ReactMVx.mixins = mixins;
 
@@ -48,4 +46,4 @@ const assignToState = ReactMVx.assignToState = key => {
 }
 
 export default ReactMVx;
-export { createClass, define, mixins, Node, Element, Link, Component, assignToState }
+export { define, mixins, Node, Element, Link, Component, assignToState }

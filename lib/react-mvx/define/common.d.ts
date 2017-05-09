@@ -1,4 +1,2 @@
-export default function compile(spec: any, {_autobind}: {
-    _autobind?: undefined[];
-}): void;
+export default function compile(spec: any, baseProto: any): void;
 export declare function asyncUpdate(): void;
