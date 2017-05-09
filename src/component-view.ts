@@ -60,7 +60,7 @@ export default function use( View ){
             var component = this.component;
 
             if( component ){
-                this.prevState = component.model;
+                this.prevState = component.state;
 
                 if( component.trigger ){
                     this.stopListening( component );
@@ -82,7 +82,7 @@ export default function use( View ){
     Object.defineProperty( ComponentView.prototype, 'model', {
         get(){
             this.component || this.render();
-            return this.component && this.component.model;
+            return this.component && this.component.state;
         }
     } );
 

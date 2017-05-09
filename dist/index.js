@@ -387,7 +387,7 @@ var StateMixin = {
     componentWillUnmount: function () {
         var state = this.state;
         state._owner = state._ownerKey = void 0;
-        state.dispose();
+        this._preventDispose /* hack for component-view to preserve the state */ || state.dispose();
         this.state = void 0;
     }
 };
@@ -449,7 +449,7 @@ function use(View) {
         unmountComponent: function (keepModel) {
             var component = this.component;
             if (component) {
-                this.prevState = component.model;
+                this.prevState = component.state;
                 if (component.trigger) {
                     this.stopListening(component);
                 }
@@ -466,7 +466,7 @@ function use(View) {
     Object.defineProperty(ComponentView.prototype, 'model', {
         get: function () {
             this.component || this.render();
-            return this.component && this.component.model;
+            return this.component && this.component.state;
         }
     });
     return ComponentView;
