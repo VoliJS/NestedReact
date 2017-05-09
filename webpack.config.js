@@ -1,8 +1,10 @@
+var UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
+
 module.exports = {
-    entry : "./src/main",
+    entry : "./lib/index",
 
     output : {
-        filename      : './nestedreact.js',
+        filename      : './dist/index.min.js',
         library       : "React",
         libraryTarget : 'umd'
     },
@@ -11,7 +13,7 @@ module.exports = {
 
     externals : [
         {
-            'nestedtypes' : {
+            'type-r' : {
                 commonjs  : 'nestedtypes',
                 commonjs2 : 'nestedtypes',
                 amd       : 'nestedtypes',
@@ -32,5 +34,9 @@ module.exports = {
                 root      : 'ReactDOM'
             }
         }
+    ],
+
+    plugins : [
+        new UnminifiedWebpackPlugin()
     ]
 };

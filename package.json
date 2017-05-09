@@ -1,7 +1,8 @@
 {
   "name": "nestedreact",
   "version": "1.0.1-rc92",
-  "main": "nestedreact.js",
+  "main": "dist/index.js",
+  "lib": "lib/index.js",
   "description": "Advanced models, state management, and data binding solution for React",
   "homepage": "https://github.com/Volicon/react-backbone.glue",
   "keywords": [
@@ -21,33 +22,43 @@
   },
   "author": "Vlad Balin <https://github.com/gaperton>",
   "contributors": [],
-  "dependencies": {
-  },
-  "peerDependencies" : {
-    "react": "^15.0.0||^0.14.0" ,
-    "react-dom": "^15.0.0||^0.14.0",
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "*",
+    "prop-types": "*",
+    "react-dom": "*",
+    "jquery": "*",
+    "underscore": "*",
     "nestedtypes": "^2.0.0-rc1"
   },
   "devDependencies": {
-    "valuelink" : "^1.0.0",
-    "jquery": "^2.1.4",
-    "underscore": "^1.8.3",
-    "webpack": "^1.12.2",
-    "react": "^15.0.0||^0.14.0" ,
-    "react-dom": "^15.0.0||^0.14.0",
-    "nestedtypes": "^2.0.0-rc1"
+    "@types/jquery": "^2.0.41",
+    "@types/prop-types": "*",
+    "@types/react": "*",
+    "jquery": "*",
+    "nestedtypes": "^2.0.0-rc",
+    "prop-types": "*",
+    "react": "*",
+    "react-dom": "*",
+    "source-map-loader": "*",
+    "ts-loader": "*",
+    "typescript": "*",
+    "underscore": "*",
+    "unminified-webpack-plugin": "^1.2.0",
+    "webpack": "*"
   },
   "files": [
-    "nestedreact.js",
-    "nestedreact.js.map",
+    "dist",
+    "lib",
+    "src",
     "tags.js",
     "tags.jsx"
   ],
   "license": "MIT",
   "scripts": {
-    "build": "./node_modules/.bin/webpack",
-    "all" : "npm run build && npm run deploy",
-    "deploy" : "cp ./nestedreact.* ../observer-frontend/htdocs/js/lib/nested",
-    "watch": "./node_modules/.bin/webpack --watch"
+    "build": "npm run pull && npm run compile",
+    "pull": "git submodule update --remote && cp ./submodules/React-MVx/tags.* . && cp -R ./submodules/React-MVx/src/* ./src/react-mvx",
+    "compile": "./node_modules/.bin/tsc && ./node_modules/.bin/webpack -p",
+    "deploy": "cp -R ./dist ./examples/*/node_modules/nestedreact"
   }
 }

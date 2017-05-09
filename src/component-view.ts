@@ -1,29 +1,32 @@
-var React    = require( 'react' ),
-    ReactDOM = require( 'react-dom' );
+import * as React from 'react'
+import ReactDOM from 'react-dom'
+import { tools } from 'type-r'
 
-function fastAssign( dest, source ){
-    for( var name in source ) {
-        dest[ name ] = source[ name ];
+declare global {
+    interface Window {
+        Page : {
+            forceResize();
+        }
     }
-
-    return dest;
 }
 
-module.exports.use = function( View ){
-    var dispose    = View.prototype.dispose || function(){},
-        setElement = View.prototype.setElement;
+window.Page || ( window.Page = { forceResize(){} } );
 
-    var ComponentView = View.extend( {
+export default function use( View ){
+    const dispose    = View.prototype.dispose || function(){},
+        { setElement } = View.prototype;
+
+    const ComponentView = View.extend( {
         reactClass : null,
         props      : {},
         element    : null,
 
-        initialize : function( props ){
+        initialize( props ){
             // memorise arguments to pass to React
             this.options = props || {};
         },
 
-        setElement : function(){
+        setElement(){
             this.unmountComponent( true );
             return setElement.apply( this, arguments );
         },
@@ -32,19 +35,19 @@ module.exports.use = function( View ){
         component : null,
         prevState : null,
         
-        resize : function(){
-            Page.forceResize();
+        resize(){
+            window.Page.forceResize();
         },
 
-        render : function(){
-            var options   = this.prevState ? fastAssign( { _keepState : this.prevState }, this.options ) : this.options,
+        render(){
+            const options   = this.prevState ? tools.fastAssign( { __keepState : this.prevState }, this.options ) : this.options,
                 element   = React.createElement( this.reactClass, options ),
                 component = ReactDOM.render( element, this.el );
 
             this.component || this.mountComponent( component );
         },
 
-        mountComponent : function( component ){
+        mountComponent( component ){
             this.component = component;
             this.prevState = null;
 
@@ -53,11 +56,11 @@ module.exports.use = function( View ){
             } );
         },
 
-        unmountComponent : function( keepModel ){
+        unmountComponent( keepModel ){
             var component = this.component;
 
             if( component ){
-                this.prevState = component.model;
+                this.prevState = component.state;
 
                 if( component.trigger ){
                     this.stopListening( component );
@@ -70,18 +73,18 @@ module.exports.use = function( View ){
             }
         },
 
-        dispose : function(){
+        dispose(){
             this.unmountComponent();
             return dispose.apply( this, arguments );
         }
     } );
 
     Object.defineProperty( ComponentView.prototype, 'model', {
-        get : function(){
+        get(){
             this.component || this.render();
-            return this.component && this.component.model;
+            return this.component && this.component.state;
         }
     } );
 
     return ComponentView;
-};
+}
