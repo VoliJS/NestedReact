@@ -45,7 +45,7 @@ export const StateMixin = {
         // TBD: Need to figure out a good way of managing local stores.
         let context, state;
 
-        return  ( ( context = this.context ) && context._archetypeStore ) ||
+        return  ( ( context = this.context ) && context._nestedStore ) ||
                 ( ( state = this.state ) && state._defaultStore );
     },
 
