@@ -46,7 +46,10 @@ const CommonMixin = tools.assign( {
             this.shouldComponentUpdate = returnFalse;
         }
 
-        fun( this.props, this.state );
+        const { state, store } = this,
+              withStore = store ? state => store.transaction( () => fun( state ) ) : fun;
+        
+        state ? state.transaction( withStore ) : withStore( state );
 
         if( isRoot ){
             this.shouldComponentUpdate = shouldComponentUpdate;
@@ -54,3 +57,4 @@ const CommonMixin = tools.assign( {
         }
     }
 }, Events );
+

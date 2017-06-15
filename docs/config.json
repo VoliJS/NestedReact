@@ -1,6 +1,6 @@
 {
     "title": "NestedReact",
-    "tagline": "React. Playing well with traditional MVC.",
+    "tagline": "BackboneJS compatibility layer for the React-MVx",
     "author": "Vlad Balin",
     "image": "",
     "ignore": {

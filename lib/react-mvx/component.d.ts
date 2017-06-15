@@ -23,6 +23,8 @@ export declare class Component<P> extends React.Component<P, Record> {
     linkAll(...keys: string[]): {
         [key: string]: Link<any>;
     };
+    linkPath(path: string): Link<any>;
+    readonly links: any;
     static define(protoProps: any, staticProps: any): typeof Component;
     readonly state: Record;
     readonly store?: Store;

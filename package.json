@@ -42,7 +42,7 @@
     "react-dom": "*",
     "source-map-loader": "*",
     "ts-loader": "*",
-    "typescript": "*",
+    "typescript": "<2.4.0",
     "underscore": "*",
     "unminified-webpack-plugin": "^1.2.0",
     "webpack": "*"

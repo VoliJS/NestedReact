@@ -746,8 +746,19 @@ var Component = (function (_super) {
     };
     Component.prototype.linkAll = function () {
         // Quick and dirty hack to suppres type error - refactor later.
-        return this.state.linkAll.apply(this, arguments);
+        var state = this.state;
+        return state.linkAll.apply(state, arguments);
     };
+    Component.prototype.linkPath = function (path) {
+        return this.state.linkPath(path);
+    };
+    Object.defineProperty(Component.prototype, "links", {
+        get: function () {
+            return this.state._links;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Component.define = function (protoProps, staticProps) {
         var BaseClass = __WEBPACK_IMPORTED_MODULE_1_type_r__["tools"].getBaseClass(this), staticsDefinition = __WEBPACK_IMPORTED_MODULE_1_type_r__["tools"].getChangedStatics(this, 'state', 'store', 'props', 'context', 'childContext', 'pureRender'), combinedDefinition = __WEBPACK_IMPORTED_MODULE_1_type_r__["tools"].assign(staticsDefinition, protoProps || {});
         var definition = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__define__["c" /* default */])(combinedDefinition, this.prototype);
@@ -829,7 +840,8 @@ var CommonMixin = __WEBPACK_IMPORTED_MODULE_0_type_r__["tools"].assign({
         if (isRoot) {
             this.shouldComponentUpdate = returnFalse;
         }
-        fun(this.props, this.state);
+        var _a = this, state = _a.state, store = _a.store, withStore = store ? function (state) { return store.transaction(function () { return fun(state); }); } : fun;
+        state ? state.transaction(withStore) : withStore(state);
         if (isRoot) {
             this.shouldComponentUpdate = shouldComponentUpdate;
             this.asyncUpdate();
@@ -1362,7 +1374,13 @@ var Link = (function () {
         // <input { ...link.props } />
         get: function () {
             var _this = this;
-            return { value: this.value, onChange: function (e) { return _this.set(e.target.value); } };
+            return typeof this.value === 'boolean' ? {
+                checked: this.value,
+                onChange: function (e) { return _this.set(Boolean(e.target.checked)); }
+            } : {
+                value: this.value,
+                onChange: function (e) { return _this.set(e.target.value); }
+            };
         },
         enumerable: true,
         configurable: true
@@ -1675,11 +1693,14 @@ module.exports = invariant;
 
 var emptyFunction = __webpack_require__(21);
 var invariant = __webpack_require__(22);
+var ReactPropTypesSecret = __webpack_require__(24);
 
 module.exports = function() {
-  // Important!
-  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
-  function shim() {
+  function shim(props, propName, componentName, location, propFullName, secret) {
+    if (secret === ReactPropTypesSecret) {
+      // It is still safe when called from React.
+      return;
+    }
     invariant(
       false,
       'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
@@ -1691,6 +1712,8 @@ module.exports = function() {
   function getShim() {
     return shim;
   };
+  // Important!
+  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
   var ReactPropTypes = {
     array: shim,
     bool: shim,
@@ -1716,6 +1739,27 @@ module.exports = function() {
 
   return ReactPropTypes;
 };
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+
+
+var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+module.exports = ReactPropTypesSecret;
 
 
 /***/ })
