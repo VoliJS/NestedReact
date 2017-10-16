@@ -1,12 +1,13 @@
 /// <reference types="react" />
 /**
- * React components
+ * React-Type-R component base class. Overrides React component.
  */
 import * as React from 'react';
-import { Record, Store } from 'type-r';
+import { Record, Store, CallbacksByEvents, Messenger } from 'type-r';
 import Link from './Link';
-import { TypeSpecs } from './define';
-export declare class Component<P> extends React.Component<P, Record> {
+import onDefine, { TypeSpecs } from './define';
+export declare class Component<P, S extends Record = Record> extends React.Component<P, S> {
+    cid: string;
     static state?: TypeSpecs | typeof Record;
     static store?: TypeSpecs | typeof Store;
     static props?: TypeSpecs;
@@ -25,9 +26,29 @@ export declare class Component<P> extends React.Component<P, Record> {
     };
     linkPath(path: string): Link<any>;
     readonly links: any;
-    static define(protoProps: any, staticProps: any): typeof Component;
-    readonly state: Record;
+    static onDefine: typeof onDefine;
+    readonly state: S;
     readonly store?: Store;
-    assignToState(x: any, key: any): void;
+    constructor(props?: any, context?: any);
+    _initializeState(): void;
+    assignToState(x: any, key: string): void;
     isMounted: () => boolean;
+    on: (events: string | CallbacksByEvents, callback, context?) => this;
+    once: (events: string | CallbacksByEvents, callback, context?) => this;
+    off: (events?: string | CallbacksByEvents, callback?, context?) => this;
+    trigger: (name: string, a?, b?, c?, d?, e?) => this;
+    stopListening: (source?: Messenger, a?: string | CallbacksByEvents, b?: Function) => this;
+    listenTo: (source: Messenger, a: string | CallbacksByEvents, b?: Function) => this;
+    listenToOnce: (source: Messenger, a: string | CallbacksByEvents, b?: Function) => this;
+    dispose: () => void;
+    componentWillUnmount(): void;
+    /**
+     * Performs transactional update for both props and state.
+     * Suppress updates during the transaction, and force update aftewards.
+     * Wrapping the sequence of changes in a transactions guarantees that
+     * React component will be updated _after_ all the changes to the
+     * both props and local state are applied.
+     */
+    transaction(fun: (state?: Record) => void): void;
+    asyncUpdate(): void;
 }

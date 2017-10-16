@@ -1,21 +1,22 @@
+import { ComponentClass } from './common'
+import { Messenger } from 'type-r'
 
-import processStore from './store'
-import processState from './state'
-import processContext from './context'
-import processCommons from './common'
-import processProps from './props'
+import onDefineStore, { StoreDefinition, StoreProto } from './store'
+import onDefineState, { StateDefinition, StateProto } from './state'
+import onDefineContext, { ContextDefinition, ContextProto } from './context'
+import onDefineProps, { PropsDefinition, PropsProto } from './props'
 
-export default function process( spec, baseProto = {} ){
+export interface ComponentDefinition extends StoreDefinition, StateDefinition, ContextDefinition, PropsDefinition {}
+export interface ComponentProto extends StoreProto, StateProto, ContextProto, PropsProto {}
+
+export default function onDefine( this : ComponentClass<ComponentProto>, definition : ComponentDefinition, BaseClass : ComponentClass<ComponentProto> ){
     // Initialize mixins placeholder...
-    spec.mixins || ( spec.mixins = [] );
+    onDefineStore.call( this, definition, BaseClass );
+    onDefineState.call( this, definition, BaseClass );
+    onDefineContext.call( this, definition, BaseClass );
+    onDefineProps.call( this, definition, BaseClass );
 
-    processStore( spec, baseProto );
-    processState( spec, baseProto );
-    processContext( spec, baseProto );
-    processProps( spec, baseProto );
-    processCommons( spec, baseProto );
-
-    return spec;
+    Messenger.onDefine.call( this, definition, BaseClass );
 };
 
 export { Node, Element, TypeSpecs } from './typeSpecs'

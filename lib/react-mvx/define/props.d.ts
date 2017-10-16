@@ -4,12 +4,16 @@
  * - pure render mixin
  */
 import { TypeSpecs } from './typeSpecs';
-export interface PropsMetadata {
+import { ComponentClass } from './common';
+export interface PropsDefinition {
+    pureRender?: boolean;
+    props: TypeSpecs;
+}
+export interface PropsProto {
     pureRender?: boolean;
     _props?: TypeSpecs;
-    _listenToPropsArray?: string[];
-    _listenToPropsHash?: {
-        [propName: string]: Object | string;
-    };
+    _watchers?: any;
+    _changeHandlers?: any;
+    PropsChangeTokens?: any;
 }
-export default function process(spec: any, {pureRender, _props, _listenToPropsArray, _listenToPropsHash}: PropsMetadata): void;
+export default function onDefine(this: ComponentClass<PropsProto>, {props, pureRender}: PropsDefinition, BaseClass: ComponentClass<PropsProto>): void;

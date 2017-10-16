@@ -1,25 +1,44 @@
-import { collectSpecs } from './typeSpecs'
-import { Store } from 'type-r'
+import { define, Store } from 'type-r'
 import { StateMixin, UpdateOnNestedChangesMixin } from './state'
+import { ComponentClass } from './common'
 
-export default function process( spec, baseProto ){
-    const store = collectSpecs( spec, 'store' );
+export interface StoreDefinition {
+    store? : typeof Store | Store | object
+    Store? : typeof Store
+}
 
-    if( store ){
-        delete spec.store;
+export interface StoreProto {
+    store? : Store
+    Store? : typeof Store
+}
 
-        if( store instanceof Store ){
-            // Direct reference to an existing store. Put it to the prototype.
-            spec.store = store;
-            spec.mixins.push( ExternalStoreMixin );
+export default function onDefine( this : ComponentClass<StoreProto>, definition : StoreDefinition, BaseClass : ComponentClass<StoreProto> ){
+    let { store, Store : StoreClass } = definition;
+
+    if( store && store instanceof Store ){
+        // Direct reference to an existing store. Put it to the prototype.
+        this.prototype.store = store;
+        this.mixins.merge([ ExternalStoreMixin, ExposeStoreMixin ]);
+    }
+    else if( store || definition.Store ) {
+        if( typeof store === 'function' ){
+            StoreClass = store;
+            store = void 0;
         }
-        else {
-            spec.Store = store;
-            spec.mixins.push( InternalStoreMixin );
-            spec.mixins.push( UpdateOnNestedChangesMixin );
+
+        if( store ){
+            const BaseClass = StoreClass || this.prototype.Store || Store;
+            @define class InternalStore extends BaseClass {
+                static attrbutes = store;
+            };
+
+            this.prototype.Store = InternalStore;
+        }
+        else if( StoreClass ){
+            this.prototype.Store = StoreClass;
         }
 
-        spec.mixins.push( ExposeStoreMixin );
+        this.mixins.merge([ InternalStoreMixin, UpdateOnNestedChangesMixin, ExposeStoreMixin ]);
     }
 }
 

@@ -1,19 +1,30 @@
-import { compileSpecs, collectSpecs } from './typeSpecs'
+import { compileSpecs, TypeSpecs } from './typeSpecs'
+import { tools } from 'type-r'
+import { ComponentClass } from './common'
 
-export default function process( spec, { _context = {}, _childContext = {} } ){
-    // process context specs...
-    const context = collectSpecs( spec, 'context' );
+export interface ContextDefinition {
+    context : TypeSpecs
+    childContext : TypeSpecs
+}
+
+export interface ContextProto {
+    _context : TypeSpecs
+    _childContext : TypeSpecs
+}
+
+export default function onDefine( this : ComponentClass<ContextProto>, { context, childContext } : ContextDefinition, BaseClass : ComponentClass<ContextProto> ){
+    const { prototype } = this;
+
     if( context ){
-        spec._context = { ..._context, ...context };
-        spec.contextTypes = compileSpecs( context ).propTypes;
-        delete spec.context;
+        // Merge in inherited members...
+        prototype._context = tools.defaults( context, BaseClass.prototype._context || {} );
+
+        // Compile to propTypes...
+        this.contextTypes = compileSpecs( context ).propTypes;
     }
 
-    // and child context specs...
-    const childContext = collectSpecs( spec, 'childContext' );
     if( childContext ){
-        spec._childContext = { ..._childContext, ...childContext };
-        spec.childContextTypes = compileSpecs( childContext ).propTypes;
-        delete spec.childContext;
+        prototype._childContext = tools.defaults( childContext, BaseClass.prototype._childContext );
+        this.childContextTypes = compileSpecs( childContext ).propTypes;
     }
 }

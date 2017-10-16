@@ -1,36 +1,9 @@
 import * as PropTypes from 'prop-types'
-import { Record, tools } from 'type-r'
+import { Record, tools, AnyType, ChangeHandler } from 'type-r'
+import { ComponentProto } from './common'
 
 export interface TypeSpecs {
-    [ name : string ] : Object | Function
-}
-
-export function collectSpecs( spec, name : string ) : TypeSpecs {
-    var attributes = null;
-
-    // Scan through local mixin, and gather specs. Refactor it later, it's not good. At all.
-    for( var i = spec.mixins.length - 1; i >= 0; i-- ){
-        var mixin      = spec.mixins[ i ],
-            mixinAttrs = mixin[ name ];
-
-        if( mixinAttrs ){
-            attributes || ( attributes = {} );
-            tools.assign( attributes, mixinAttrs );
-        }
-    }
-
-    // Merge it with local data.
-    var specAttrs = spec[ name ];
-    if( specAttrs ){
-        if( attributes ){
-            tools.assign( attributes, specAttrs );
-        }
-        else{
-            attributes = specAttrs;
-        }
-    }
-
-    return attributes;
+    [ name : string ] : object | Function
 }
 
 export function compileSpecs( props : TypeSpecs ){
@@ -38,9 +11,11 @@ export function compileSpecs( props : TypeSpecs ){
         // Create NestedTypes model definition to process props spec.
         modelProto = Record.defaults( props ).prototype;
 
-    let defaults, watchers, changeHandlers;
+    let defaults,
+        watchers : { [ name : string ] : PropWatcher },
+        changeHandlers : { [ name : string ] : ChangeHandler[] };
 
-    modelProto.forEachAttr( modelProto._attributes, ( spec, name : string ) => {
+    modelProto.forEachAttr( modelProto._attributes, ( spec : AnyType, name : string ) => {
         // Skip auto-generated `id` attribute.
         if( name !== 'id' ){
             const { value, type, options } = spec;
@@ -66,7 +41,7 @@ export function compileSpecs( props : TypeSpecs ){
                     changeEvents = typeof options.changeEvents === 'string' ? options.changeEvents : null;
 
                 handlers.push( 
-                    function( next, prev, component ){
+                    function( next, prev, component : any ){
                         prev && component.stopListening( prev );
                         next && component.listenTo( next, changeEvents || next._changeEventName, component.asyncUpdate );
                     }
@@ -77,7 +52,7 @@ export function compileSpecs( props : TypeSpecs ){
             if( value !== void 0 ){
                 //...append it to getDefaultProps function.
                 defaults || ( defaults = {} );
-                defaults[ name ] = spec.convert( value );
+                defaults[ name ] = spec.convert( value, void 0, null, {} );
             }
         }
     });
@@ -85,7 +60,9 @@ export function compileSpecs( props : TypeSpecs ){
     return { propTypes, defaults, watchers, changeHandlers };
 }
 
-function toLocalWatcher( ref ){
+type PropWatcher = ( this : ComponentProto, propValue : any, propName : string ) => void
+
+function toLocalWatcher( ref ) : PropWatcher {
     return typeof ref === 'function' ? ref : function( value, name ){
         this[ ref ] && this[ ref ]( value, name );
     }

@@ -38,7 +38,7 @@ ReactMVx.Node = Node.value( null );
 ReactMVx.Element = Element.value( null );
 ReactMVx.Link = Link;
 
-ReactMVx.Component = Component;
+ReactMVx.Component = Component as any;
 const assignToState = ReactMVx.assignToState = key => {
     return function( prop ){
         this.state.assignFrom({ [ key ] : prop && prop instanceof Link ? prop.value : prop });

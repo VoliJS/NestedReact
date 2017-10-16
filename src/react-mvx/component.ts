@@ -1,31 +1,42 @@
 /**
- * React components
+ * React-Type-R component base class. Overrides React component.
  */
 
 import * as React from 'react'
-import { Record, Store, extendable, mergeProps, mixinRules, tools, Mixable } from 'type-r'
+import { Record, Store, CallbacksByEvents, mixinRules, define, mixins, definitions, tools, Messenger } from 'type-r'
 import Link from './Link'
-import processSpec, { TypeSpecs } from './define'
+import onDefine, { TypeSpecs } from './define'
 
-const reactMixinRules : any = { // Can't type it precisely because of weird type problem in NestedReact and NestedTypes
-    componentWillMount        : 'reverse',
-    componentDidMount         : 'reverse',
-    componentWillReceiveProps : 'reverse',
-    shouldComponentUpdate     : 'some',
-    componentWillUpdate       : 'reverse',
-    componentDidUpdate        : 'reverse',
-    componentWillUnmount      : 'sequence',
-    state                     : 'merge',
-    store                     : 'merge',
-    props                     : 'merge',
-    context                   : 'merge',
-    childContext              : 'merge',
-    getChildContext           : 'mergeSequence'
-};
+@define
+@definitions({
+    // Definitions to be extracted from mixins and statics and passed to `onDefine()`
+    state                     : mixinRules.merge,
+    State                     : mixinRules.value,
+    store                     : mixinRules.merge,
+    Store                     : mixinRules.value,
+    props                     : mixinRules.merge,
+    context                   : mixinRules.merge,
+    childContext              : mixinRules.merge,
+    pureRender                : mixinRules.protoValue
+})
+@mixinRules( {
+    // Apply old-school React mixin rules.
+    componentWillMount        : mixinRules.classLast,
+    componentDidMount         : mixinRules.classLast,
+    componentWillReceiveProps : mixinRules.classLast,
+    componentWillUpdate       : mixinRules.classLast,
+    componentDidUpdate        : mixinRules.classLast,
+    componentWillUnmount      : mixinRules.classFirst,
 
-@extendable
-@mixinRules( reactMixinRules )
-export class Component<P> extends React.Component<P, Record> {
+    // And a bit more to fix inheritance quirks.
+    shouldComponentUpdate     : mixinRules.some,
+    getChildContext           : mixinRules.defaults
+} )
+// Component can send and receive events...
+@mixins( Messenger )
+export class Component<P, S extends Record = Record > extends React.Component<P, S> {
+    cid : string
+
     static state? : TypeSpecs | typeof Record
     static store? : TypeSpecs | typeof Store
     static props? : TypeSpecs
@@ -61,36 +72,77 @@ export class Component<P> extends React.Component<P, Record> {
         return ( this.state as any )._links;
     }
 
-    static define( protoProps, staticProps ){
-        var BaseClass          = tools.getBaseClass( this ),
-            staticsDefinition = tools.getChangedStatics( this, 'state', 'store', 'props', 'context', 'childContext', 'pureRender' ),
-            combinedDefinition = tools.assign( staticsDefinition, protoProps || {} );
+    static onDefine = onDefine;
 
-        var definition = processSpec( combinedDefinition, this.prototype );
-
-        const { getDefaultProps, propTypes, contextTypes, childContextTypes, ...protoDefinition } = definition;
-
-        if( getDefaultProps ) this.defaultProps = definition.getDefaultProps();
-        if( propTypes ) this.propTypes = propTypes;
-        if( contextTypes ) this.contextTypes = contextTypes;
-        if( childContextTypes ) this.childContextTypes = childContextTypes;
-
-        Mixable.define.call( this, protoDefinition, staticProps );
-
-        return this;
-    }
-
-    readonly state : Record
+    readonly state : S
     readonly store? : Store
 
-    assignToState( x, key ){
+    constructor( props?, context? ){
+        super( props, context );
+        this._initializeState();
+    }
+
+    _initializeState(){
+        ( this as any ).state = null;
+    }
+
+    assignToState( x, key : string ){
         this.state.assignFrom({ [ key ] : x });
     }
 
     isMounted : () => boolean
+
+    // Messenger methods...
+    on : ( events : string | CallbacksByEvents, callback, context? ) => this
+    once : ( events : string | CallbacksByEvents, callback, context? ) => this
+    off : ( events? : string | CallbacksByEvents, callback?, context? ) => this
+    trigger      : (name : string, a?, b?, c?, d?, e? ) => this
+
+    stopListening : ( source? : Messenger, a? : string | CallbacksByEvents, b? : Function ) => this
+    listenTo : ( source : Messenger, a : string | CallbacksByEvents, b? : Function ) => this
+    listenToOnce : ( source : Messenger, a : string | CallbacksByEvents, b? : Function ) => this
+
+    dispose : () => void
+
+    componentWillUnmount(){
+        this.dispose();
+    }
+
+    /**
+     * Performs transactional update for both props and state.
+     * Suppress updates during the transaction, and force update aftewards.
+     * Wrapping the sequence of changes in a transactions guarantees that
+     * React component will be updated _after_ all the changes to the
+     * both props and local state are applied.
+     */
+    transaction( fun : ( state? : Record ) => void ){
+        var shouldComponentUpdate = this.shouldComponentUpdate,
+            isRoot = shouldComponentUpdate !== returnFalse;
+
+        if( isRoot ){
+            this.shouldComponentUpdate = returnFalse;
+        }
+
+        const { state, store } = this,
+              withStore = store ? state => store.transaction( () => fun( state ) ) : fun;
+        
+        state ? state.transaction( withStore ) : withStore( state );
+
+        if( isRoot ){
+            this.shouldComponentUpdate = shouldComponentUpdate;
+            this.asyncUpdate();
+        }
+    }
+
+    // Safe version of the forceUpdate suitable for asynchronous callbacks.
+    asyncUpdate(){
+        this.shouldComponentUpdate === returnFalse || this._disposed || this.forceUpdate();
+    }
 }
 
-// Looks like React guys _really_ want to deprecated it. But no way.
+function returnFalse(){ return false; }
+
+// Looks like React guys _really_ want to deprecate it. But no way.
 // We will work around their attempt.
 Object.defineProperty( Component.prototype, 'isMounted', {
     value : function isMounted(){

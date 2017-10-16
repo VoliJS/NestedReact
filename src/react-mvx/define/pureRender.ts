@@ -1,30 +1,33 @@
-export default function createPureRenderMixin( props ){
-    const ctorBody      = [ 'var v; this._s = s && s._changeToken' ],
-        isChangedBody = [ 'var v; return ( s && s._changeToken !== t._s )' ];
+export function createChangeTokensConstructor( props ) {
+    const propNames = Object.keys( props );
 
-    for( let name in props ){
-        const propExpr = `( ( v = p.${ name }) && v._changeToken ) || v`;
-        ctorBody.push( `this.${ name }= ${ propExpr }`);
-        isChangedBody.push( `t.${ name } !== (${ propExpr })` );
-    }
+    const PropsChangeTokens = new Function( 'p', 's', `
+        var v;
+        this._s = s && s._changeToken;
+        ${ propNames.map( name => `
+            this.${ name } = ( ( v = p.${ name }) && v._changeToken ) || v;
+        `).join( '' )}
+    `);
+    
+    PropsChangeTokens.prototype._hasChanges = new Function( 'p', 's', `
+        var v;
+        return ( s && s._changeToken !== this._s ) ${ propNames.map( name => ` ||
+            this.${ name } !== ( ( ( v = p.${ name }) && v._changeToken ) || v )
+        `).join( '' )};
+    `);    
 
-    const ChangeTokens : any = new Function( 'p', 's', ctorBody.join( ';' ) ),
-          isChanged    = new Function( 't', 'p', 's', isChangedBody.join( '||' ) );
-
-    ChangeTokens.prototype = null;
-
-    return {
-        _changeTokens : null,
-
-        shouldComponentUpdate( nextProps ){
-            return isChanged( this._changeTokens, nextProps, this.state );
-        },
-
-        componentDidMount(){
-            this._changeTokens = new ChangeTokens( this.props, this.state );
-        },
-        componentDidUpdate(){
-            this._changeTokens = new ChangeTokens( this.props, this.state );
-        }
-    }
+    return PropsChangeTokens;
 };
+
+export const PureRenderMixin = {
+    shouldComponentUpdate( nextProps ){
+        return this._propsChangeTokens._hasChanges( nextProps );
+    },
+
+    componentDidMount : updateChangeTokens,
+    componentDidUpdate : updateChangeTokens
+}
+
+function updateChangeTokens(){
+    this._propsChangeTokens = new this.PropsChangeTokens( this.props, this.state );
+}
