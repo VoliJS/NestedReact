@@ -27,12 +27,12 @@ export function useView( View ){
     BaseView = use( View );
 }
 
-const { define } = NestedReact.Component;
+const { onDefine } = NestedReact.Component;
 
-NestedReact.Component.define = function( protoProps, staticProps ){
+NestedReact.Component.onDefine = function( definitions, BaseClass ){
     this.View = BaseView.extend( { reactClass : this } );
 
-    return define.call( this, protoProps, staticProps );
+    return onDefine.call( this, definitions, BaseClass );
 }
 
 // Deprecated API for backward compatibility

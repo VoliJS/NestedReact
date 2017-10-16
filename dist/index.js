@@ -447,10 +447,10 @@ var BaseView;
 function useView(View) {
     BaseView = Object(__WEBPACK_IMPORTED_MODULE_5__component_view__["a" /* default */])(View);
 }
-var define = NestedReact.Component.define;
-NestedReact.Component.define = function (protoProps, staticProps) {
+var onDefine = NestedReact.Component.onDefine;
+NestedReact.Component.onDefine = function (definitions, BaseClass) {
     this.View = BaseView.extend({ reactClass: this });
-    return define.call(this, protoProps, staticProps);
+    return onDefine.call(this, definitions, BaseClass);
 };
 // Deprecated API for backward compatibility
 var RecordProto = __WEBPACK_IMPORTED_MODULE_2_type_r__["Record"].prototype;
