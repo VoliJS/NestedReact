@@ -1,3 +1,4 @@
+import { ChangeHandler } from 'type-r';
 import { ComponentProto } from './common';
 export interface TypeSpecs {
     [name: string]: object | Function;
@@ -9,7 +10,7 @@ export declare function compileSpecs(props: TypeSpecs): {
         [name: string]: (this: ComponentProto, propValue: any, propName: string) => void;
     };
     changeHandlers: {
-        [name: string]: any[];
+        [name: string]: ChangeHandler[];
     };
 };
 export declare class Node {
