@@ -1,11 +1,11 @@
 /// <reference types="react" />
-import React from './react-mvx';
+import { Component } from './react-mvx';
 export interface BackboneViewProps {
     View: any;
     options: object;
     className?: string;
 }
-export default class BackboneView extends React.Component<BackboneViewProps> {
+export default class BackboneView extends Component<BackboneViewProps, null> {
     shouldComponentUpdate(next: any): boolean;
     view: any;
     hasUnsavedChanges(): any;

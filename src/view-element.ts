@@ -1,4 +1,4 @@
-import React, { define } from './react-mvx'
+import React, { define, Component } from './react-mvx'
 import ReactDOM from 'react-dom'
 import { tools } from 'type-r'
 
@@ -10,7 +10,7 @@ export interface BackboneViewProps{
     className? : string
 }
 
-export default class BackboneView extends React.Component< BackboneViewProps >{
+export default class BackboneView extends Component< BackboneViewProps, null >{
     shouldComponentUpdate( next ){
         var props = this.props;
         return next.View !== props.View || notEqual( next.options, props.options );
@@ -73,7 +73,7 @@ export default class BackboneView extends React.Component< BackboneViewProps >{
             }
 
             this.root.innerHTML = "";
-            this.view                   = null;
+            this.view  = null;
         }
     }
 }
