@@ -17,7 +17,7 @@ export default function createClass< P, S>( { statics, ...a_spec } : React.Compo
     const Subclass : any = Component.extend({
         // Override constructor to autobind all the methods...
         constructor(){
-            Component.apply( this, this.arguments );
+            Component.apply( this, arguments );
 
             for( let method of methods ){
                 this[ method ] = this[ method ].bind( this );

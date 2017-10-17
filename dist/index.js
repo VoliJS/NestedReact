@@ -1717,7 +1717,7 @@ function createClass(_a) {
     var Subclass = __WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* Component */].extend(__assign({ 
         // Override constructor to autobind all the methods...
         constructor: function () {
-            __WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* Component */].apply(this, this.arguments);
+            __WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* Component */].apply(this, arguments);
             for (var _i = 0, methods_1 = methods; _i < methods_1.length; _i++) {
                 var method = methods_1[_i];
                 this[method] = this[method].bind(this);
