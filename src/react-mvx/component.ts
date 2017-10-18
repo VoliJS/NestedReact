@@ -5,9 +5,11 @@
 import * as React from 'react'
 import { Record, Store, CallbacksByEvents, mixinRules, define, mixins, definitions, tools, Messenger } from 'type-r'
 import Link from './Link'
-import onDefine, { TypeSpecs } from './define'
+import onDefine, { TypeSpecs, EmptyPropsChangeTokensCtor } from './define'
 
-@define
+@define({
+    PropsChangeTokens : EmptyPropsChangeTokensCtor
+})
 @definitions({
     // Definitions to be extracted from mixins and statics and passed to `onDefine()`
     state                     : mixinRules.merge,
@@ -49,6 +51,8 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
     private static defaultProps: any;
     private static contextTypes : any;
     private static childContextTypes : any;
+
+    private PropsChangeTokens : Function
     
     static extend : ( spec : object, statics? : object ) => Component< any >
 

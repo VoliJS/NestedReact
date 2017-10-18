@@ -19,6 +19,8 @@ export function createChangeTokensConstructor( props ) {
     return PropsChangeTokens;
 };
 
+export const EmptyPropsChangeTokensCtor = createChangeTokensConstructor({});
+
 export const PureRenderMixin = {
     shouldComponentUpdate( nextProps ){
         return this._propsChangeTokens._hasChanges( nextProps );

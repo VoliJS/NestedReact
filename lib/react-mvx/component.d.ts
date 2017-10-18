@@ -19,6 +19,7 @@ export declare class Component<P, S extends Record = Record> extends React.Compo
     private static defaultProps;
     private static contextTypes;
     private static childContextTypes;
+    private PropsChangeTokens;
     static extend: (spec: object, statics?: object) => Component<any>;
     linkAt(key: string): Link<any>;
     linkAll(...keys: string[]): {
