@@ -26,7 +26,6 @@ class User extends Model{
 
 @define
 export class UsersList extends React.Component {
-    static autobind = 'addUser'
     static state = {
         users   : User.Collection, // No comments required, isn't it?
         editing : User.from( 'users' ), // User from user collection, which is being edited.
@@ -64,7 +63,7 @@ export class UsersList extends React.Component {
         );
     }
 
-    addUser( user ){
+    addUser = ( user ) => {
         const { state } = this;
 
         if( user ){
@@ -98,7 +97,6 @@ const UserRow = ( { user, onEdit } ) =>(
 );
 
 @define({
-    autobind : 'onSubmit onCancel',
     props : {
         user    : User,
         onClose : Function
@@ -109,11 +107,12 @@ const UserRow = ( { user, onEdit } ) =>(
     }
 })
 class EditUser extends React.Component {
+
     componentWillMount(){
         this.state.user = this.props.user.clone();
     }
 
-    onSubmit( e ){
+    onSubmit = ( e ) => {
         e.preventDefault();
 
         const { user, onClose } = this.props;
@@ -122,7 +121,7 @@ class EditUser extends React.Component {
         onClose( user );
     }
 
-    onCancel(){
+    onCancel = () => {
         this.props.onClose();
     }
 

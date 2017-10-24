@@ -1,6 +1,6 @@
 {
   "name": "nestedreact",
-  "version": "1.0.1-rc93",
+  "version": "1.0.1-rc94",
   "main": "dist/index.js",
   "lib": "lib/index.js",
   "description": "Advanced models, state management, and data binding solution for React",
@@ -42,6 +42,9 @@
     "react-dom": "^16.0.0",
     "source-map-loader": "^0.2.2",
     "ts-loader": "^3.0.2",
+    "rollup": "^0.50.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify": "^2.0.1",
     "typescript": "<2.4.0",
     "underscore": "*",
     "unminified-webpack-plugin": "^1.4.1",
@@ -58,7 +61,10 @@
   "scripts": {
     "build": "npm run pull && npm run compile",
     "pull": "git submodule update --remote && cp ./submodules/React-MVx/tags.* . && cp -R ./submodules/React-MVx/src/* ./src/react-mvx",
-    "compile": "./node_modules/.bin/tsc && ./node_modules/.bin/webpack -p",
-    "deploy": "cp -R ./dist ./examples/*/node_modules/nestedreact"
+    "compile0": "./node_modules/.bin/tsc && ./node_modules/.bin/webpack -p",
+    "compile": "./node_modules/.bin/tsc && ./node_modules/.bin/rollup --config && ./node_modules/.bin/rollup --config ./rollup.config.minify.js",
+    "deploy": "cp -R ./dist ./examples/*/node_modules/nestedreact",
+    "deploy:example": "bash -c 'target=$0/node_modules/nestedreact  &&  mkdir -p $target  &&  cp -R ./dist/ $target &&  cp ./dist/index.min.js.map $target && (unlink $target/package.json || true) && cp ./tags.js* $target'",
+    "deploy:examples": "for exmpl in `ls -d ./examples/*`; do npm run deploy:example $exmpl; done"
   }
 }
