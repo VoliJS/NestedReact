@@ -1,4 +1,5 @@
 import resolve from 'rollup-plugin-node-resolve';
+import replace from 'rollup-plugin-replace';
 
 export default {
     input : 'lib/index.js',
@@ -10,18 +11,22 @@ export default {
         exports: 'named',
         globals: {
             react: 'React',
-            'type-r': 'Nested',
+            'nestedtypes': 'Nested',
             'react-dom': 'ReactDOM',
             'prop-types': 'PropTypes'
         }
     },
     plugins: [
-        resolve(), //for support of `import X from "directory"` rather than verbose `import X from "directory/index"`
+        resolve(),
+        replace({ //workaround for webpack `externals` configuration
+            exclude: 'node_modules/**',
+            'type-r': 'nestedtypes'
+        })
     ],
     sourcemap: true,
     external: [
         'react',
-        'type-r',
+        'nestedtypes',
         'react-dom',
         'prop-types'
     ]

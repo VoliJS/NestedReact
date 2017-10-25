@@ -1,6 +1,6 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('type-r'), require('prop-types'), require('react-dom')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'react', 'type-r', 'prop-types', 'react-dom'], factory) :
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('nestedtypes'), require('prop-types'), require('react-dom')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'react', 'nestedtypes', 'prop-types', 'react-dom'], factory) :
 	(factory((global.ReactMVx = {}),global.React,global.Nested,global.PropTypes,global.ReactDOM));
 }(this, (function (exports,React,Nested,PropTypes,ReactDOM) { 'use strict';
 

@@ -36951,7 +36951,7 @@ module.exports = function() {
 
 (function (global, factory) {
 	 true ? factory(exports, __webpack_require__(7), __webpack_require__(33), __webpack_require__(15), __webpack_require__(19)) :
-	typeof define === 'function' && define.amd ? define(['exports', 'react', 'type-r', 'prop-types', 'react-dom'], factory) :
+	typeof define === 'function' && define.amd ? define(['exports', 'react', 'nestedtypes', 'prop-types', 'react-dom'], factory) :
 	(factory((global.ReactMVx = {}),global.React,global.Nested,global.PropTypes,global.ReactDOM));
 }(this, (function (exports,React,Nested,PropTypes,ReactDOM) { 'use strict';
 

@@ -11,10 +11,7 @@ module.exports = {
     devtool : 'source-map',
 
     resolve : {
-        modules : [ 'node_modules', 'js' ],
-        alias : {
-            'type-r' : 'nestedtypes'
-        }
+        modules : [ 'node_modules', 'js' ]
     },
 
     plugins : [
