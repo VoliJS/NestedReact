@@ -2,7 +2,7 @@
     "compilerOptions": {
         "alwaysStrict": true,
         "moduleResolution": "node",
-        "importHelpers": false,
+        "importHelpers": true,
         "noEmitHelpers": false,
         "outDir": "lib",
         "declaration": true,

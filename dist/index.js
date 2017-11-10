@@ -7,7 +7,7 @@
 		exports["React"] = factory(require("nestedtypes"), require("react"), require("react-dom"));
 	else
 		root["React"] = factory(root["Nested"], root["React"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_8__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_9__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -84,14 +84,204 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_0__;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (immutable) */ __webpack_exports__["c"] = __extends;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __assign; });
+/* harmony export (immutable) */ __webpack_exports__["d"] = __rest;
+/* harmony export (immutable) */ __webpack_exports__["b"] = __decorate;
+/* unused harmony export __param */
+/* unused harmony export __metadata */
+/* unused harmony export __awaiter */
+/* unused harmony export __generator */
+/* unused harmony export __exportStar */
+/* unused harmony export __values */
+/* unused harmony export __read */
+/* unused harmony export __spread */
+/* unused harmony export __await */
+/* unused harmony export __asyncGenerator */
+/* unused harmony export __asyncDelegator */
+/* unused harmony export __asyncValues */
+/* unused harmony export __makeTemplateObject */
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = Object.assign || function __assign(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+    }
+    return t;
+}
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+function __exportStar(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+
+function __values(o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
+function __await(v) {
+    return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);  }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+    var i, p;
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { if (o[n]) i[n] = function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; }; }
+}
+
+function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator];
+    return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
+}
+
+function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return assignToState; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__define__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__link__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__component__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__define__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__link__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__component__ = __webpack_require__(21);
 /* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1_type_r__, "define")) __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_1_type_r__["define"]; });
 /* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1_type_r__, "mixins")) __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_1_type_r__["mixins"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_2__define__["c"]; });
@@ -125,20 +315,20 @@ var assignToState = ReactMVx.assignToState = function (key) {
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["c"] = compileSpecs;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Node; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Element; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
@@ -233,21 +423,21 @@ function _translateType(Type) {
 //# sourceMappingURL=typeSpecs.js.map
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["d"] = onDefine;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_type_r__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__context__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__props__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__typeSpecs__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__context__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__props__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__typeSpecs__ = __webpack_require__(4);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_5__typeSpecs__["b"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_5__typeSpecs__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pureRender__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pureRender__ = __webpack_require__(8);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_6__pureRender__["a"]; });
 
 
@@ -268,31 +458,17 @@ function onDefine(definition, BaseClass) {
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["c"] = process;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return StateMixin; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return UpdateOnNestedChangesMixin; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_type_r__);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
+
 /*****************
  * State
  */
@@ -305,17 +481,17 @@ function process(definition, BaseComponentClass) {
         state = void 0;
     }
     if (state) {
-        var BaseClass = State || prototype.State || __WEBPACK_IMPORTED_MODULE_0_type_r__["Record"];
+        var BaseClass = State || prototype.State || __WEBPACK_IMPORTED_MODULE_1_type_r__["Record"];
         var ComponentState = (function (_super) {
-            __extends(ComponentState, _super);
+            __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](ComponentState, _super);
             function ComponentState() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
             return ComponentState;
         }(BaseClass));
         ComponentState.attributes = state;
-        ComponentState = __decorate([
-            __WEBPACK_IMPORTED_MODULE_0_type_r__["define"]
+        ComponentState = __WEBPACK_IMPORTED_MODULE_0_tslib__["b" /* __decorate */]([
+            __WEBPACK_IMPORTED_MODULE_1_type_r__["define"]
         ], ComponentState);
         prototype.State = ComponentState;
     }
@@ -336,7 +512,7 @@ var StateMixin = {
         state._ownerKey = 'state';
     },
     context: {
-        _nestedStore: __WEBPACK_IMPORTED_MODULE_0_type_r__["Store"]
+        _nestedStore: __WEBPACK_IMPORTED_MODULE_1_type_r__["Store"]
     },
     // reference global store to fix model's store locator
     getStore: function () {
@@ -362,7 +538,7 @@ var UpdateOnNestedChangesMixin = {
 //# sourceMappingURL=state.js.map
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -391,12 +567,12 @@ if (false) {
 } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(12)();
+  module.exports = __webpack_require__(13)();
 }
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -424,19 +600,19 @@ function updateChangeTokens() {
 //# sourceMappingURL=pureRender.js.map
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_9__;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["useView"] = useView;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__react_mvx__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__react_mvx__ = __webpack_require__(2);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "define", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["g"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "mixins", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["h"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Node", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["d"]; });
@@ -444,16 +620,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Link", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["c"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Component", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["a"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "assignToState", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["e"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_element__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_element__ = __webpack_require__(22);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "subview", function() { return __WEBPACK_IMPORTED_MODULE_4__view_element__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__component_view__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__createClass__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__component_view__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__createClass__ = __webpack_require__(24);
 /* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "PropTypes", function() { return __WEBPACK_IMPORTED_MODULE_3_prop_types__; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createClass", function() { return __WEBPACK_IMPORTED_MODULE_6__createClass__["a"]; });
 // Re-export react-mvx
@@ -470,7 +646,7 @@ NestedReact.subview = __WEBPACK_IMPORTED_MODULE_4__view_element__["a" /* default
 
 
 
-NestedReact.createClass = __WEBPACK_IMPORTED_MODULE_6__createClass__["a" /* default */];
+Object.defineProperty(NestedReact, 'createClass', { value: __WEBPACK_IMPORTED_MODULE_6__createClass__["a" /* default */] });
 Object.defineProperty(NestedReact, 'PropTypes', { value: __WEBPACK_IMPORTED_MODULE_3_prop_types__ });
 
 var BaseView;
@@ -500,35 +676,21 @@ Object.defineProperties(NestedReact.Component.prototype, BackboneViewProps);
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = onDefine;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__state__ = __webpack_require__(5);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(6);
+
 
 
 function onDefine(definition, BaseClass) {
     var store = definition.store, StoreClass = definition.Store;
-    if (store && store instanceof __WEBPACK_IMPORTED_MODULE_0_type_r__["Store"]) {
+    if (store && store instanceof __WEBPACK_IMPORTED_MODULE_1_type_r__["Store"]) {
         // Direct reference to an existing store. Put it to the prototype.
         this.prototype.store = store;
         this.mixins.merge([ExternalStoreMixin, ExposeStoreMixin]);
@@ -539,17 +701,17 @@ function onDefine(definition, BaseClass) {
             store = void 0;
         }
         if (store) {
-            var BaseClass_1 = StoreClass || this.prototype.Store || __WEBPACK_IMPORTED_MODULE_0_type_r__["Store"];
+            var BaseClass_1 = StoreClass || this.prototype.Store || __WEBPACK_IMPORTED_MODULE_1_type_r__["Store"];
             var InternalStore = (function (_super) {
-                __extends(InternalStore, _super);
+                __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](InternalStore, _super);
                 function InternalStore() {
                     return _super !== null && _super.apply(this, arguments) || this;
                 }
                 return InternalStore;
             }(BaseClass_1));
             InternalStore.attrbutes = store;
-            InternalStore = __decorate([
-                __WEBPACK_IMPORTED_MODULE_0_type_r__["define"]
+            InternalStore = __WEBPACK_IMPORTED_MODULE_0_tslib__["b" /* __decorate */]([
+                __WEBPACK_IMPORTED_MODULE_1_type_r__["define"]
             ], InternalStore);
             ;
             this.prototype.Store = InternalStore;
@@ -557,7 +719,7 @@ function onDefine(definition, BaseClass) {
         else if (StoreClass) {
             this.prototype.Store = StoreClass;
         }
-        this.mixins.merge([InternalStoreMixin, __WEBPACK_IMPORTED_MODULE_1__state__["b" /* UpdateOnNestedChangesMixin */], ExposeStoreMixin]);
+        this.mixins.merge([InternalStoreMixin, __WEBPACK_IMPORTED_MODULE_2__state__["b" /* UpdateOnNestedChangesMixin */], ExposeStoreMixin]);
     }
 }
 /**
@@ -565,7 +727,7 @@ function onDefine(definition, BaseClass) {
  */
 var ExposeStoreMixin = {
     childContext: {
-        _nestedStore: __WEBPACK_IMPORTED_MODULE_0_type_r__["Store"]
+        _nestedStore: __WEBPACK_IMPORTED_MODULE_1_type_r__["Store"]
     },
     getChildContext: function () {
         return { _nestedStore: this.store };
@@ -576,7 +738,7 @@ var ExposeStoreMixin = {
     // Will be called by the store when the lookup will fail.
     get: function (key) {
         // Ask upper store.
-        var store = __WEBPACK_IMPORTED_MODULE_1__state__["a" /* StateMixin */].getStore.call(this, key);
+        var store = __WEBPACK_IMPORTED_MODULE_2__state__["a" /* StateMixin */].getStore.call(this, key);
         return store && store.get(key);
     }
 };
@@ -605,12 +767,12 @@ var InternalStoreMixin = {
 //# sourceMappingURL=store.js.map
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = onDefine;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__typeSpecs__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__typeSpecs__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
 
@@ -632,7 +794,7 @@ function onDefine(_a, BaseClass) {
 //# sourceMappingURL=context.js.map
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -645,9 +807,9 @@ function onDefine(_a, BaseClass) {
 
 
 
-var emptyFunction = __webpack_require__(13);
-var invariant = __webpack_require__(14);
-var ReactPropTypesSecret = __webpack_require__(15);
+var emptyFunction = __webpack_require__(14);
+var invariant = __webpack_require__(15);
+var ReactPropTypesSecret = __webpack_require__(16);
 
 module.exports = function() {
   function shim(props, propName, componentName, location, propFullName, secret) {
@@ -697,7 +859,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -739,7 +901,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 module.exports = emptyFunction;
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -798,7 +960,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -817,13 +979,13 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = onDefine;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__typeSpecs__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pureRender__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__typeSpecs__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pureRender__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
 /**
@@ -910,35 +1072,27 @@ var WatchersMixin = {
 //# sourceMappingURL=props.js.map
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__valuelink_link__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__valuelink_link__ = __webpack_require__(19);
 /**
  * Import ValueLink library
  * Define value links binding mixins to the Record and Collection
  */
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
 
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_1__valuelink_link__["a" /* Link */]);
-__WEBPACK_IMPORTED_MODULE_0_type_r__["Mixable"].mixins.populate(__WEBPACK_IMPORTED_MODULE_1__valuelink_link__["a" /* Link */]);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_2__valuelink_link__["a" /* Link */]);
+__WEBPACK_IMPORTED_MODULE_1_type_r__["Mixable"].mixins.populate(__WEBPACK_IMPORTED_MODULE_2__valuelink_link__["a" /* Link */]);
 /**
  * Record
  */
-__WEBPACK_IMPORTED_MODULE_0_type_r__["MixinsState"].get(__WEBPACK_IMPORTED_MODULE_0_type_r__["Record"]).merge([{
+__WEBPACK_IMPORTED_MODULE_1_type_r__["MixinsState"].get(__WEBPACK_IMPORTED_MODULE_1_type_r__["Record"]).merge([{
         // Link to the record's attribute by its key.
         linkAt: function (key) {
             return cacheLink(getLinksCache(this), this, key);
@@ -970,7 +1124,7 @@ __WEBPACK_IMPORTED_MODULE_0_type_r__["MixinsState"].get(__WEBPACK_IMPORTED_MODUL
  * Links are cached in the records
  */
 var RecordLink = (function (_super) {
-    __extends(RecordLink, _super);
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](RecordLink, _super);
     function RecordLink(record, attr, value) {
         var _this = _super.call(this, value) || this;
         _this.record = record;
@@ -993,9 +1147,9 @@ var RecordLink = (function (_super) {
         configurable: true
     });
     return RecordLink;
-}(__WEBPACK_IMPORTED_MODULE_1__valuelink_link__["a" /* Link */]));
+}(__WEBPACK_IMPORTED_MODULE_2__valuelink_link__["a" /* Link */]));
 var RecordDeepLink = (function (_super) {
-    __extends(RecordDeepLink, _super);
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](RecordDeepLink, _super);
     function RecordDeepLink(record, path, options) {
         var _this = _super.call(this, record.deepGet(path)) || this;
         _this.record = record;
@@ -1027,7 +1181,7 @@ var RecordDeepLink = (function (_super) {
         this.record.deepSet(this.path, x, this.options);
     };
     return RecordDeepLink;
-}(__WEBPACK_IMPORTED_MODULE_1__valuelink_link__["a" /* Link */]));
+}(__WEBPACK_IMPORTED_MODULE_2__valuelink_link__["a" /* Link */]));
 function getLinksCache(record) {
     return record._links || (record._links = new record.AttributesCopy({}));
 }
@@ -1039,7 +1193,7 @@ function cacheLink(links, record, key) {
 /***********************************
  * Collection
  */
-__WEBPACK_IMPORTED_MODULE_0_type_r__["MixinsState"].get(__WEBPACK_IMPORTED_MODULE_0_type_r__["Record"].Collection).merge([{
+__WEBPACK_IMPORTED_MODULE_1_type_r__["MixinsState"].get(__WEBPACK_IMPORTED_MODULE_1_type_r__["Record"].Collection).merge([{
         // Boolean link to the record's presence in the collection
         linkContains: function (record) {
             return new CollectionLink(this, record);
@@ -1047,7 +1201,7 @@ __WEBPACK_IMPORTED_MODULE_0_type_r__["MixinsState"].get(__WEBPACK_IMPORTED_MODUL
         // Link to collection's property
         linkAt: function (prop) {
             var _this = this;
-            return __WEBPACK_IMPORTED_MODULE_1__valuelink_link__["a" /* Link */].value(this[prop], function (x) { return _this[prop] = x; });
+            return __WEBPACK_IMPORTED_MODULE_2__valuelink_link__["a" /* Link */].value(this[prop], function (x) { return _this[prop] = x; });
         }
     }]);
 /**
@@ -1056,7 +1210,7 @@ __WEBPACK_IMPORTED_MODULE_0_type_r__["MixinsState"].get(__WEBPACK_IMPORTED_MODUL
  * Safe implementation of _changeToken.
  */
 var CollectionLink = (function (_super) {
-    __extends(CollectionLink, _super);
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](CollectionLink, _super);
     function CollectionLink(collection, record) {
         var _this = _super.call(this, Boolean(collection._byId[record.cid])) || this;
         _this.collection = collection;
@@ -1067,11 +1221,11 @@ var CollectionLink = (function (_super) {
         this.collection.toggle(this.record, x);
     };
     return CollectionLink;
-}(__WEBPACK_IMPORTED_MODULE_1__valuelink_link__["a" /* Link */]));
+}(__WEBPACK_IMPORTED_MODULE_2__valuelink_link__["a" /* Link */]));
 //# sourceMappingURL=link.js.map
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1082,17 +1236,9 @@ var CollectionLink = (function (_super) {
 /* unused harmony export EnabledLink */
 /* unused harmony export ContainsLink */
 /* unused harmony export LinkAt */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers__ = __webpack_require__(19);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers__ = __webpack_require__(20);
+
 /**
  * Advanced React links for purely functional two-way data binding
  *
@@ -1170,25 +1316,25 @@ var Link = (function () {
         return new ContainsLink(this, element);
     };
     Link.prototype.push = function () {
-        var array = __WEBPACK_IMPORTED_MODULE_0__helpers__["a" /* arrayHelpers */].clone(this.value);
+        var array = __WEBPACK_IMPORTED_MODULE_1__helpers__["a" /* arrayHelpers */].clone(this.value);
         Array.prototype.push.apply(array, arguments);
         this.set(array);
     };
     Link.prototype.unshift = function () {
-        var array = __WEBPACK_IMPORTED_MODULE_0__helpers__["a" /* arrayHelpers */].clone(this.value);
+        var array = __WEBPACK_IMPORTED_MODULE_1__helpers__["a" /* arrayHelpers */].clone(this.value);
         Array.prototype.unshift.apply(array, arguments);
         this.set(array);
     };
     Link.prototype.splice = function () {
-        var array = __WEBPACK_IMPORTED_MODULE_0__helpers__["a" /* arrayHelpers */].clone(this.value);
+        var array = __WEBPACK_IMPORTED_MODULE_1__helpers__["a" /* arrayHelpers */].clone(this.value);
         Array.prototype.splice.apply(array, arguments);
         this.set(array);
     };
     Link.prototype.map = function (iterator) {
-        return Object(__WEBPACK_IMPORTED_MODULE_0__helpers__["b" /* helpers */])(this.value).map(this, iterator);
+        return Object(__WEBPACK_IMPORTED_MODULE_1__helpers__["b" /* helpers */])(this.value).map(this, iterator);
     };
     Link.prototype.removeAt = function (key) {
-        var value = this.value, _ = Object(__WEBPACK_IMPORTED_MODULE_0__helpers__["b" /* helpers */])(value);
+        var value = this.value, _ = Object(__WEBPACK_IMPORTED_MODULE_1__helpers__["b" /* helpers */])(value);
         this.set(_.remove(_.clone(value), key));
     };
     Link.prototype.at = function (key) {
@@ -1196,7 +1342,7 @@ var Link = (function () {
     };
     Link.prototype.clone = function () {
         var value = this.value;
-        return Object(__WEBPACK_IMPORTED_MODULE_0__helpers__["b" /* helpers */])(value).clone(value);
+        return Object(__WEBPACK_IMPORTED_MODULE_1__helpers__["b" /* helpers */])(value).clone(value);
     };
     Link.prototype.pick = function () {
         var links = {};
@@ -1219,7 +1365,7 @@ var Link = (function () {
 }());
 
 var CustomLink = (function (_super) {
-    __extends(CustomLink, _super);
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](CustomLink, _super);
     function CustomLink(value, set) {
         var _this = _super.call(this, value) || this;
         _this.set = set;
@@ -1230,7 +1376,7 @@ var CustomLink = (function (_super) {
 }(Link));
 
 var CloneLink = (function (_super) {
-    __extends(CloneLink, _super);
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](CloneLink, _super);
     function CloneLink(parent, set) {
         var _this = _super.call(this, parent.value) || this;
         _this.set = set;
@@ -1244,7 +1390,7 @@ var CloneLink = (function (_super) {
 }(Link));
 
 var EqualsLink = (function (_super) {
-    __extends(EqualsLink, _super);
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](EqualsLink, _super);
     function EqualsLink(parent, truthyValue) {
         var _this = _super.call(this, parent.value === truthyValue) || this;
         _this.parent = parent;
@@ -1258,7 +1404,7 @@ var EqualsLink = (function (_super) {
 }(Link));
 
 var EnabledLink = (function (_super) {
-    __extends(EnabledLink, _super);
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](EnabledLink, _super);
     function EnabledLink(parent, defaultValue) {
         var _this = _super.call(this, parent.value != null) || this;
         _this.parent = parent;
@@ -1272,7 +1418,7 @@ var EnabledLink = (function (_super) {
 }(Link));
 
 var ContainsLink = (function (_super) {
-    __extends(ContainsLink, _super);
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](ContainsLink, _super);
     function ContainsLink(parent, element) {
         var _this = _super.call(this, parent.value.indexOf(element) >= 0) || this;
         _this.parent = parent;
@@ -1296,7 +1442,7 @@ var defaultError = 'Invalid value';
  * Performs purely functional update of the parent, shallow copying its value on `set`.
  */
 var LinkAt = (function (_super) {
-    __extends(LinkAt, _super);
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](LinkAt, _super);
     function LinkAt(parent, key) {
         var _this = _super.call(this, parent.value[key]) || this;
         _this.parent = parent;
@@ -1323,7 +1469,7 @@ var LinkAt = (function (_super) {
 //# sourceMappingURL=link.js.map
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1394,40 +1540,26 @@ var arrayHelpers = {
 //# sourceMappingURL=helpers.js.map
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Component; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__define__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__define__ = __webpack_require__(5);
 /**
  * React-Type-R component base class. Overrides React component.
  */
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
+
 
 
 
 var Component = (function (_super) {
-    __extends(Component, _super);
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](Component, _super);
     function Component(props, context) {
         var _this = _super.call(this, props, context) || this;
         _this._initializeState();
@@ -1486,38 +1618,38 @@ var Component = (function (_super) {
         this.shouldComponentUpdate === returnFalse || this._disposed || this.forceUpdate();
     };
     return Component;
-}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]));
-Component.onDefine = __WEBPACK_IMPORTED_MODULE_2__define__["d" /* default */];
-Component = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1_type_r__["define"])({
-        PropsChangeTokens: __WEBPACK_IMPORTED_MODULE_2__define__["b" /* EmptyPropsChangeTokensCtor */]
+}(__WEBPACK_IMPORTED_MODULE_1_react__["Component"]));
+Component.onDefine = __WEBPACK_IMPORTED_MODULE_3__define__["d" /* default */];
+Component = __WEBPACK_IMPORTED_MODULE_0_tslib__["b" /* __decorate */]([
+    Object(__WEBPACK_IMPORTED_MODULE_2_type_r__["define"])({
+        PropsChangeTokens: __WEBPACK_IMPORTED_MODULE_3__define__["b" /* EmptyPropsChangeTokensCtor */]
     }),
-    Object(__WEBPACK_IMPORTED_MODULE_1_type_r__["definitions"])({
+    Object(__WEBPACK_IMPORTED_MODULE_2_type_r__["definitions"])({
         // Definitions to be extracted from mixins and statics and passed to `onDefine()`
-        state: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].merge,
-        State: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].value,
-        store: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].merge,
-        Store: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].value,
-        props: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].merge,
-        context: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].merge,
-        childContext: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].merge,
-        pureRender: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].protoValue
+        state: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].merge,
+        State: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].value,
+        store: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].merge,
+        Store: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].value,
+        props: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].merge,
+        context: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].merge,
+        childContext: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].merge,
+        pureRender: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].protoValue
     }),
-    Object(__WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"])({
+    Object(__WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"])({
         // Apply old-school React mixin rules.
-        componentWillMount: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].classLast,
-        componentDidMount: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].classLast,
-        componentWillReceiveProps: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].classLast,
-        componentWillUpdate: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].classLast,
-        componentDidUpdate: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].classLast,
-        componentWillUnmount: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].classFirst,
+        componentWillMount: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].classLast,
+        componentDidMount: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].classLast,
+        componentWillReceiveProps: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].classLast,
+        componentWillUpdate: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].classLast,
+        componentDidUpdate: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].classLast,
+        componentWillUnmount: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].classFirst,
         // And a bit more to fix inheritance quirks.
-        shouldComponentUpdate: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].some,
-        getChildContext: __WEBPACK_IMPORTED_MODULE_1_type_r__["mixinRules"].defaults
+        shouldComponentUpdate: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].some,
+        getChildContext: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].defaults
     })
     // Component can send and receive events...
     ,
-    Object(__WEBPACK_IMPORTED_MODULE_1_type_r__["mixins"])(__WEBPACK_IMPORTED_MODULE_1_type_r__["Messenger"])
+    Object(__WEBPACK_IMPORTED_MODULE_2_type_r__["mixins"])(__WEBPACK_IMPORTED_MODULE_2_type_r__["Messenger"])
 ], Component);
 
 function returnFalse() { return false; }
@@ -1531,28 +1663,20 @@ Object.defineProperty(Component.prototype, 'isMounted', {
 //# sourceMappingURL=component.js.map
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__react_mvx__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__react_mvx__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
 
 
-var notEqual = __WEBPACK_IMPORTED_MODULE_1_type_r__["tools"].notEqual;
+
+var notEqual = __WEBPACK_IMPORTED_MODULE_2_type_r__["tools"].notEqual;
 var BackboneView = (function (_super) {
-    __extends(BackboneView, _super);
+    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](BackboneView, _super);
     function BackboneView() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.saveRef = function (element) {
@@ -1569,7 +1693,7 @@ var BackboneView = (function (_super) {
         return view && (typeof view.hasUnsavedChanges === 'function' ? view.hasUnsavedChanges() : view.hasUnsavedChanges);
     };
     BackboneView.prototype.render = function () {
-        return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["f" /* default */].createElement('div', {
+        return __WEBPACK_IMPORTED_MODULE_1__react_mvx__["f" /* default */].createElement('div', {
             ref: this.saveRef,
             className: this.props.className
         });
@@ -1605,19 +1729,19 @@ var BackboneView = (function (_super) {
         }
     };
     return BackboneView;
-}(__WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* Component */]));
+}(__WEBPACK_IMPORTED_MODULE_1__react_mvx__["a" /* Component */]));
 /* harmony default export */ __webpack_exports__["a"] = (BackboneView);
 //# sourceMappingURL=view-element.js.map
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = use;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
@@ -1684,29 +1808,14 @@ function use(View) {
 //# sourceMappingURL=component-view.js.map
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = createClass;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__react_mvx__ = __webpack_require__(1);
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
-    return t;
-};
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__react_mvx__ = __webpack_require__(2);
+
 
 var dontAutobind = [
     'State', 'Store', 'constructor',
@@ -1718,13 +1827,13 @@ var dontAutobind = [
  * ES5 components definition factory
  */
 function createClass(_a) {
-    var statics = _a.statics, a_spec = __rest(_a, ["statics"]);
+    var statics = _a.statics, a_spec = __WEBPACK_IMPORTED_MODULE_0_tslib__["d" /* __rest */](_a, ["statics"]);
     // Gather all methods to pin them to `this` later.
     var methods = [];
-    var Subclass = __WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* Component */].extend(__assign({ 
+    var Subclass = __WEBPACK_IMPORTED_MODULE_1__react_mvx__["a" /* Component */].extend(__WEBPACK_IMPORTED_MODULE_0_tslib__["a" /* __assign */]({ 
         // Override constructor to autobind all the methods...
         constructor: function () {
-            __WEBPACK_IMPORTED_MODULE_0__react_mvx__["a" /* Component */].apply(this, arguments);
+            __WEBPACK_IMPORTED_MODULE_1__react_mvx__["a" /* Component */].apply(this, arguments);
             for (var _i = 0, methods_1 = methods; _i < methods_1.length; _i++) {
                 var method = methods_1[_i];
                 this[method] = this[method].bind(this);

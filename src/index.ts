@@ -16,7 +16,7 @@ export { subview }
 import use from './component-view'
 import createClass from './createClass'
 
-NestedReact.createClass = createClass;
+Object.defineProperty( NestedReact, 'createClass', { value : createClass} );
 Object.defineProperty( NestedReact, 'PropTypes', { value : PropTypes } );
 export { PropTypes, createClass };
 
