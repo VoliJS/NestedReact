@@ -31,14 +31,14 @@
     "react-dom": "*",
     "jquery": "*",
     "underscore": "*",
-    "nestedtypes": "*"
+    "nestedtypes": "^2.1.0-rc00"
   },
   "devDependencies": {
     "@types/jquery": "^2.0.48",
     "@types/prop-types": "^15.5.2",
     "@types/react": "^16.0.22",
     "jquery": "*",
-    "nestedtypes": "^2.1.0-beta.0",
+    "nestedtypes": "^2.1.0-rc00",
     "prop-types": "^15.6.0",
     "react": "^16.1.0",
     "react-dom": "^16.1.0",
@@ -48,6 +48,9 @@
     "underscore": "*",
     "unminified-webpack-plugin": "^1.4.2",
     "webpack": "^3.8.1"
+  },
+  "dependencies": {
+    "tslib": "^1.8.0"
   },
   "files": [
     "dist",

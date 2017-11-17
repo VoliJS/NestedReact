@@ -1,4 +1,4 @@
 [submodule "submodules/React-MVx"]
 	path = submodules/React-MVx
 	url = https://github.com/Volicon/React-MVx
-	branch = develop
+	branch = master
