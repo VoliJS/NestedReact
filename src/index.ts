@@ -13,8 +13,6 @@ import subview from './view-element'
 NestedReact.subview = subview;
 export { subview }
 
-console.log("ReactDOM=", ReactDOM)
-
 import use from './component-view'
 import createClass from './createClass'
 

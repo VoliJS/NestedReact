@@ -1103,7 +1103,6 @@ function createClass(_a) {
 var NestedReact = Object.create(ReactMVx);
 // NestedReact backward compatibility layer
 NestedReact.subview = BackboneView;
-console.log("ReactDOM=", ReactDOM);
 Object.defineProperty(NestedReact, 'createClass', { value: createClass });
 Object.defineProperty(NestedReact, 'PropTypes', { value: PropTypes });
 var BaseView;
