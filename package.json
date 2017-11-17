@@ -1,6 +1,6 @@
 {
   "name": "nestedreact",
-  "version": "1.0.1-rc94",
+  "version": "2.1.0-rc00",
   "main": "dist/index.js",
   "lib": "lib/index.js",
   "description": "Advanced models, state management, and data binding solution for React",
