@@ -1,6 +1,6 @@
 import React, { define } from 'nestedreact'
 import cx from 'classnames'
-import { Input } from 'valuelink/tags.jsx'
+import { Input } from 'valuelink/tags'
 
 import { ToDo } from './model'
 
@@ -27,7 +27,7 @@ class TodoList extends React.Component {
         return (
             <section className="main">
                 <Input className="toggle-all" type="checkbox"
-                       checkedLink={ todos.getLink( 'allDone' ) }/>
+                       checkedLink={ todos.linkAt( 'allDone' ) }/>
 
                 <label htmlFor="toggle-all">Mark all as complete</label>
 

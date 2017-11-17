@@ -5,13 +5,15 @@ export default NestedReact;
 export * from './react-mvx'
 
 // NestedReact backward compatibility layer
-import ReactDOM from 'react-dom'
+import * as ReactDOM from 'react-dom'
 import Nested, { View, Record } from 'type-r'
 import * as PropTypes from 'prop-types'
 
 import subview from './view-element'
 NestedReact.subview = subview;
 export { subview }
+
+console.log("ReactDOM=", ReactDOM)
 
 import use from './component-view'
 import createClass from './createClass'

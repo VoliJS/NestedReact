@@ -1,106 +1,11 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("nestedtypes"), require("react"), require("react-dom"));
-	else if(typeof define === 'function' && define.amd)
-		define(["nestedtypes", "react", "react-dom"], factory);
-	else if(typeof exports === 'object')
-		exports["React"] = factory(require("nestedtypes"), require("react"), require("react-dom"));
-	else
-		root["React"] = factory(root["Nested"], root["React"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_9__) {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports) {
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('nestedtypes'), require('prop-types'), require('react-dom')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'react', 'nestedtypes', 'prop-types', 'react-dom'], factory) :
+	(factory((global.ReactMVx = {}),global.React,global.Nested,global.PropTypes,global.ReactDOM));
+}(this, (function (exports,React,Nested,PropTypes,ReactDOM) { 'use strict';
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_0__;
+var Nested__default = 'default' in Nested ? Nested['default'] : Nested;
 
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["c"] = __extends;
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __assign; });
-/* harmony export (immutable) */ __webpack_exports__["d"] = __rest;
-/* harmony export (immutable) */ __webpack_exports__["b"] = __decorate;
-/* unused harmony export __param */
-/* unused harmony export __metadata */
-/* unused harmony export __awaiter */
-/* unused harmony export __generator */
-/* unused harmony export __exportStar */
-/* unused harmony export __values */
-/* unused harmony export __read */
-/* unused harmony export __spread */
-/* unused harmony export __await */
-/* unused harmony export __asyncGenerator */
-/* unused harmony export __asyncDelegator */
-/* unused harmony export __asyncValues */
-/* unused harmony export __makeTemplateObject */
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -133,7 +38,7 @@ var __assign = Object.assign || function __assign(t) {
         for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
     }
     return t;
-}
+};
 
 function __rest(s, e) {
     var t = {};
@@ -152,192 +57,153 @@ function __decorate(decorators, target, key, desc) {
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 }
 
-function __param(paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-}
-
-function __metadata(metadataKey, metadataValue) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
-}
-
-function __awaiter(thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-}
-
-function __generator(thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
+/*****************
+ * State
+ */
+function process(definition, BaseComponentClass) {
+    var prototype = this.prototype;
+    var state = definition.state, State = definition.State;
+    if (typeof state === 'function') {
+        State = state;
+        state = void 0;
+    }
+    if (state) {
+        var BaseClass = State || prototype.State || Nested.Record;
+        var ComponentState = (function (_super) {
+            __extends(ComponentState, _super);
+            function ComponentState() {
+                return _super !== null && _super.apply(this, arguments) || this;
             }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+            return ComponentState;
+        }(BaseClass));
+        ComponentState.attributes = state;
+        ComponentState = __decorate([
+            Nested.define
+        ], ComponentState);
+        prototype.State = ComponentState;
+    }
+    else if (State) {
+        prototype.State = State;
+    }
+    if (state || State) {
+        this.mixins.merge([StateMixin, UpdateOnNestedChangesMixin]);
     }
 }
-
-function __exportStar(m, exports) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-
-function __values(o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-}
-
-function __read(o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+var StateMixin = {
+    //state : null,
+    _initializeState: function () {
+        // props.__keepState is used to workaround issues in Backbone intergation layer
+        var state = this.state = this.props.__keepState || new this.State();
+        // Take ownership on state...
+        state._owner = this;
+        state._ownerKey = 'state';
+    },
+    context: {
+        _nestedStore: Nested.Store
+    },
+    // reference global store to fix model's store locator
+    getStore: function () {
+        // Attempt to get the store from the context first. Then - fallback to the state's default store.
+        // TBD: Need to figure out a good way of managing local stores.
+        var context, state;
+        return ((context = this.context) && context._nestedStore) ||
+            ((state = this.state) && state._defaultStore);
+    },
+    componentWillUnmount: function () {
+        var state = this.state;
+        state._owner = state._ownerKey = void 0;
+        this._preventDispose /* hack for component-view to preserve the state */ || state.dispose();
+        this.state = void 0;
     }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
+};
+var UpdateOnNestedChangesMixin = {
+    _onChildrenChange: function () { },
+    componentDidMount: function () {
+        this._onChildrenChange = this.asyncUpdate;
     }
-    return ar;
-}
-
-function __spread() {
-    for (var ar = [], i = 0; i < arguments.length; i++)
-        ar = ar.concat(__read(arguments[i]));
-    return ar;
-}
-
-function __await(v) {
-    return this instanceof __await ? (this.v = v, this) : new __await(v);
-}
-
-function __asyncGenerator(thisArg, _arguments, generator) {
-    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
-    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);  }
-    function fulfill(value) { resume("next", value); }
-    function reject(value) { resume("throw", value); }
-    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-}
-
-function __asyncDelegator(o) {
-    var i, p;
-    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
-    function verb(n, f) { if (o[n]) i[n] = function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; }; }
-}
-
-function __asyncValues(o) {
-    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var m = o[Symbol.asyncIterator];
-    return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
-}
-
-function __makeTemplateObject(cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
 };
 
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return assignToState; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__define__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__link__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__component__ = __webpack_require__(21);
-/* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1_type_r__, "define")) __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_1_type_r__["define"]; });
-/* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1_type_r__, "mixins")) __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_1_type_r__["mixins"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_2__define__["c"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_2__define__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_3__link__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_4__component__["a"]; });
-
-
-
-
-
-// extend React namespace
-var ReactMVx = Object.create(__WEBPACK_IMPORTED_MODULE_0_react__);
-// Make it compatible with ES6 module format.
-ReactMVx.default = ReactMVx;
-// listenToProps, listenToState, model, attributes, Model
-ReactMVx.define = __WEBPACK_IMPORTED_MODULE_1_type_r__["define"];
-ReactMVx.mixins = __WEBPACK_IMPORTED_MODULE_1_type_r__["mixins"];
-ReactMVx.Node = __WEBPACK_IMPORTED_MODULE_2__define__["c" /* Node */].value(null);
-ReactMVx.Element = __WEBPACK_IMPORTED_MODULE_2__define__["a" /* Element */].value(null);
-ReactMVx.Link = __WEBPACK_IMPORTED_MODULE_3__link__["a" /* default */];
-ReactMVx.Component = __WEBPACK_IMPORTED_MODULE_4__component__["a" /* Component */];
-var assignToState = ReactMVx.assignToState = function (key) {
-    return function (prop) {
-        this.state.assignFrom((_a = {}, _a[key] = prop && prop instanceof __WEBPACK_IMPORTED_MODULE_3__link__["a" /* default */] ? prop.value : prop, _a));
-        var _a;
-    };
+function onDefine$2(definition, BaseClass) {
+    var store = definition.store, StoreClass = definition.Store;
+    if (store && store instanceof Nested.Store) {
+        // Direct reference to an existing store. Put it to the prototype.
+        this.prototype.store = store;
+        this.mixins.merge([ExternalStoreMixin, ExposeStoreMixin]);
+    }
+    else if (store || definition.Store) {
+        if (typeof store === 'function') {
+            StoreClass = store;
+            store = void 0;
+        }
+        if (store) {
+            var BaseClass_1 = StoreClass || this.prototype.Store || Nested.Store;
+            var InternalStore = (function (_super) {
+                __extends(InternalStore, _super);
+                function InternalStore() {
+                    return _super !== null && _super.apply(this, arguments) || this;
+                }
+                return InternalStore;
+            }(BaseClass_1));
+            InternalStore.attrbutes = store;
+            InternalStore = __decorate([
+                Nested.define
+            ], InternalStore);
+            
+            this.prototype.Store = InternalStore;
+        }
+        else if (StoreClass) {
+            this.prototype.Store = StoreClass;
+        }
+        this.mixins.merge([InternalStoreMixin, UpdateOnNestedChangesMixin, ExposeStoreMixin]);
+    }
+}
+/**
+ * Attached whenever the store declaration of any form is present in the component.
+ */
+var ExposeStoreMixin = {
+    childContext: {
+        _nestedStore: Nested.Store
+    },
+    getChildContext: function () {
+        return { _nestedStore: this.store };
+    },
+    getStore: function () {
+        return this.store;
+    },
+    // Will be called by the store when the lookup will fail.
+    get: function (key) {
+        // Ask upper store.
+        var store = StateMixin.getStore.call(this, key);
+        return store && store.get(key);
+    }
 };
-/* harmony default export */ __webpack_exports__["f"] = (ReactMVx);
-
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["c"] = compileSpecs;
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Node; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Element; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
-
+/**
+ * External store must just track the changes and trigger render.
+ * TBD: don't use it yet.
+ */
+var ExternalStoreMixin = {
+    componentDidMount: function () {
+        // Start UI updates on state changes.
+        this.listenTo(this.store, 'change', this.asyncUpdate);
+    }
+};
+var InternalStoreMixin = {
+    componentWillMount: function () {
+        var store = this.store = new this.Store();
+        store._owner = this;
+        store._ownerKey = 'store';
+    },
+    componentWillUnmount: function () {
+        this.store._ownerKey = this.store._owner = void 0;
+        this.store.dispose();
+        this.store = void 0;
+    }
+};
 
 function compileSpecs(props) {
     var propTypes = {}, 
     // Create NestedTypes model definition to process props spec.
-    modelProto = __WEBPACK_IMPORTED_MODULE_1_type_r__["Record"].defaults(props).prototype;
+    modelProto = Nested.Record.defaults(props).prototype;
     var defaults, watchers, changeHandlers;
     modelProto.forEachAttr(modelProto._attributes, function (spec, name) {
         // Skip auto-generated `id` attribute.
@@ -383,13 +249,11 @@ var Node = (function () {
     }
     return Node;
 }());
-
 var Element = (function () {
     function Element() {
     }
     return Element;
 }());
-
 function translateType(Type, isRequired) {
     var T = _translateType(Type);
     return isRequired ? T.isRequired : T;
@@ -398,194 +262,51 @@ function _translateType(Type) {
     switch (Type) {
         case Number:
         case Number.integer:
-            return __WEBPACK_IMPORTED_MODULE_0_prop_types__["number"];
+            return PropTypes.number;
         case String:
-            return __WEBPACK_IMPORTED_MODULE_0_prop_types__["string"];
+            return PropTypes.string;
         case Boolean:
-            return __WEBPACK_IMPORTED_MODULE_0_prop_types__["bool"];
+            return PropTypes.bool;
         case Array:
-            return __WEBPACK_IMPORTED_MODULE_0_prop_types__["array"];
+            return PropTypes.array;
         case Function:
-            return __WEBPACK_IMPORTED_MODULE_0_prop_types__["func"];
+            return PropTypes.func;
         case Object:
-            return __WEBPACK_IMPORTED_MODULE_0_prop_types__["object"];
+            return PropTypes.object;
         case Node:
-            return __WEBPACK_IMPORTED_MODULE_0_prop_types__["node"];
+            return PropTypes.node;
         case Element:
-            return __WEBPACK_IMPORTED_MODULE_0_prop_types__["element"];
+            return PropTypes.element;
         case void 0:
         case null:
-            return __WEBPACK_IMPORTED_MODULE_0_prop_types__["any"];
+            return PropTypes.any;
         default:
-            return __WEBPACK_IMPORTED_MODULE_0_prop_types__["instanceOf"](Type);
+            return PropTypes.instanceOf(Type);
     }
 }
-//# sourceMappingURL=typeSpecs.js.map
 
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["d"] = onDefine;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__context__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__props__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__typeSpecs__ = __webpack_require__(4);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_5__typeSpecs__["b"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_5__typeSpecs__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pureRender__ = __webpack_require__(8);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_6__pureRender__["a"]; });
-
-
-
-
-
-function onDefine(definition, BaseClass) {
-    // Initialize mixins placeholder...
-    __WEBPACK_IMPORTED_MODULE_1__store__["a" /* default */].call(this, definition, BaseClass);
-    __WEBPACK_IMPORTED_MODULE_2__state__["c" /* default */].call(this, definition, BaseClass);
-    __WEBPACK_IMPORTED_MODULE_3__context__["a" /* default */].call(this, definition, BaseClass);
-    __WEBPACK_IMPORTED_MODULE_4__props__["a" /* default */].call(this, definition, BaseClass);
-    __WEBPACK_IMPORTED_MODULE_0_type_r__["Messenger"].onDefine.call(this, definition, BaseClass);
-}
-;
-
-
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["c"] = process;
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return StateMixin; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return UpdateOnNestedChangesMixin; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
-
-/*****************
- * State
- */
-
-function process(definition, BaseComponentClass) {
+function onDefine$3(_a, BaseClass) {
+    var context = _a.context, childContext = _a.childContext;
     var prototype = this.prototype;
-    var state = definition.state, State = definition.State;
-    if (typeof state === 'function') {
-        State = state;
-        state = void 0;
+    if (context) {
+        // Merge in inherited members...
+        prototype._context = Nested.tools.defaults(context, BaseClass.prototype._context || {});
+        // Compile to propTypes...
+        this.contextTypes = compileSpecs(context).propTypes;
     }
-    if (state) {
-        var BaseClass = State || prototype.State || __WEBPACK_IMPORTED_MODULE_1_type_r__["Record"];
-        var ComponentState = (function (_super) {
-            __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](ComponentState, _super);
-            function ComponentState() {
-                return _super !== null && _super.apply(this, arguments) || this;
-            }
-            return ComponentState;
-        }(BaseClass));
-        ComponentState.attributes = state;
-        ComponentState = __WEBPACK_IMPORTED_MODULE_0_tslib__["b" /* __decorate */]([
-            __WEBPACK_IMPORTED_MODULE_1_type_r__["define"]
-        ], ComponentState);
-        prototype.State = ComponentState;
-    }
-    else if (State) {
-        prototype.State = State;
-    }
-    if (state || State) {
-        this.mixins.merge([StateMixin, UpdateOnNestedChangesMixin]);
+    if (childContext) {
+        prototype._childContext = Nested.tools.defaults(childContext, BaseClass.prototype._childContext);
+        this.childContextTypes = compileSpecs(childContext).propTypes;
     }
 }
-var StateMixin = {
-    //state : null,
-    _initializeState: function () {
-        // props.__keepState is used to workaround issues in Backbone intergation layer
-        var state = this.state = this.props.__keepState || new this.State();
-        // Take ownership on state...
-        state._owner = this;
-        state._ownerKey = 'state';
-    },
-    context: {
-        _nestedStore: __WEBPACK_IMPORTED_MODULE_1_type_r__["Store"]
-    },
-    // reference global store to fix model's store locator
-    getStore: function () {
-        // Attempt to get the store from the context first. Then - fallback to the state's default store.
-        // TBD: Need to figure out a good way of managing local stores.
-        var context, state;
-        return ((context = this.context) && context._nestedStore) ||
-            ((state = this.state) && state._defaultStore);
-    },
-    componentWillUnmount: function () {
-        var state = this.state;
-        state._owner = state._ownerKey = void 0;
-        this._preventDispose /* hack for component-view to preserve the state */ || state.dispose();
-        this.state = void 0;
-    }
-};
-var UpdateOnNestedChangesMixin = {
-    _onChildrenChange: function () { },
-    componentDidMount: function () {
-        this._onChildrenChange = this.asyncUpdate;
-    }
-};
-//# sourceMappingURL=state.js.map
 
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-if (false) {
-  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
-    Symbol.for &&
-    Symbol.for('react.element')) ||
-    0xeac7;
-
-  var isValidElement = function(object) {
-    return typeof object === 'object' &&
-      object !== null &&
-      object.$$typeof === REACT_ELEMENT_TYPE;
-  };
-
-  // By explicitly using `prop-types` you are opting into new development behavior.
-  // http://fb.me/prop-types-in-prod
-  var throwOnDirectAccess = true;
-  module.exports = require('./factoryWithTypeCheckers')(isValidElement, throwOnDirectAccess);
-} else {
-  // By explicitly using `prop-types` you are opting into new production behavior.
-  // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(13)();
-}
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["c"] = createChangeTokensConstructor;
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EmptyPropsChangeTokensCtor; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return PureRenderMixin; });
 function createChangeTokensConstructor(props) {
     var propNames = Object.keys(props);
     var PropsChangeTokens = new Function('p', 's', "\n        var v;\n        this._s = s && s._changeToken;\n        " + propNames.map(function (name) { return "\n            this." + name + " = ( ( v = p." + name + ") && v._changeToken ) || v;\n        "; }).join('') + "\n    ");
     PropsChangeTokens.prototype._hasChanges = new Function('p', 's', "\n        var v;\n        return ( ( s && s._changeToken ) !== this._s ) " + propNames.map(function (name) { return " ||\n            this." + name + " !== ( ( ( v = p." + name + ") && v._changeToken ) || v )\n        "; }).join('') + ";\n    ");
     return PropsChangeTokens;
 }
-;
+
 var EmptyPropsChangeTokensCtor = createChangeTokensConstructor({});
 var PureRenderMixin = {
     shouldComponentUpdate: function (nextProps) {
@@ -597,413 +318,20 @@ var PureRenderMixin = {
 function updateChangeTokens() {
     this._propsChangeTokens = new this.PropsChangeTokens(this.props, this.state);
 }
-//# sourceMappingURL=pureRender.js.map
 
-/***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_9__;
-
-/***/ }),
-/* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["useView"] = useView;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__react_mvx__ = __webpack_require__(2);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "define", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["g"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "mixins", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["h"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Node", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["d"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Element", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["b"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Link", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["c"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Component", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["a"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "assignToState", function() { return __WEBPACK_IMPORTED_MODULE_0__react_mvx__["e"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_element__ = __webpack_require__(22);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "subview", function() { return __WEBPACK_IMPORTED_MODULE_4__view_element__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__component_view__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__createClass__ = __webpack_require__(24);
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "PropTypes", function() { return __WEBPACK_IMPORTED_MODULE_3_prop_types__; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createClass", function() { return __WEBPACK_IMPORTED_MODULE_6__createClass__["a"]; });
-// Re-export react-mvx
-
-var NestedReact = Object.create(__WEBPACK_IMPORTED_MODULE_0__react_mvx__["f" /* default */]);
-/* harmony default export */ __webpack_exports__["default"] = (NestedReact);
-
-// NestedReact backward compatibility layer
-
-
-
-
-NestedReact.subview = __WEBPACK_IMPORTED_MODULE_4__view_element__["a" /* default */];
-
-
-
-Object.defineProperty(NestedReact, 'createClass', { value: __WEBPACK_IMPORTED_MODULE_6__createClass__["a" /* default */] });
-Object.defineProperty(NestedReact, 'PropTypes', { value: __WEBPACK_IMPORTED_MODULE_3_prop_types__ });
-
-var BaseView;
-// export hook to override base View class used...
-function useView(View) {
-    BaseView = Object(__WEBPACK_IMPORTED_MODULE_5__component_view__["a" /* default */])(View);
-}
-var onDefine = NestedReact.Component.onDefine;
-NestedReact.Component.onDefine = function (definitions, BaseClass) {
-    this.View = BaseView.extend({ reactClass: this });
-    return onDefine.call(this, definitions, BaseClass);
-};
-// Deprecated API for backward compatibility
-var RecordProto = __WEBPACK_IMPORTED_MODULE_2_type_r__["Record"].prototype;
-RecordProto.getLink = RecordProto.linkAt;
-RecordProto.deepLink = RecordProto.linkPath;
-var CollectionProto = __WEBPACK_IMPORTED_MODULE_2_type_r__["Record"].Collection.prototype;
-CollectionProto.hasLink = CollectionProto.linkContains;
-useView(__WEBPACK_IMPORTED_MODULE_2_type_r__["View"]);
-// Extend react components to have backbone-style jquery accessors
-var BackboneViewProps = {
-    el: { get: function () { return __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.findDOMNode(this); } },
-    $el: { get: function () { return __WEBPACK_IMPORTED_MODULE_2_type_r___default.a.$(this.el); } },
-    $: { value: function (sel) { return this.$el.find(sel); } }
-};
-Object.defineProperties(NestedReact.Component.prototype, BackboneViewProps);
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = onDefine;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(6);
-
-
-
-function onDefine(definition, BaseClass) {
-    var store = definition.store, StoreClass = definition.Store;
-    if (store && store instanceof __WEBPACK_IMPORTED_MODULE_1_type_r__["Store"]) {
-        // Direct reference to an existing store. Put it to the prototype.
-        this.prototype.store = store;
-        this.mixins.merge([ExternalStoreMixin, ExposeStoreMixin]);
-    }
-    else if (store || definition.Store) {
-        if (typeof store === 'function') {
-            StoreClass = store;
-            store = void 0;
-        }
-        if (store) {
-            var BaseClass_1 = StoreClass || this.prototype.Store || __WEBPACK_IMPORTED_MODULE_1_type_r__["Store"];
-            var InternalStore = (function (_super) {
-                __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](InternalStore, _super);
-                function InternalStore() {
-                    return _super !== null && _super.apply(this, arguments) || this;
-                }
-                return InternalStore;
-            }(BaseClass_1));
-            InternalStore.attrbutes = store;
-            InternalStore = __WEBPACK_IMPORTED_MODULE_0_tslib__["b" /* __decorate */]([
-                __WEBPACK_IMPORTED_MODULE_1_type_r__["define"]
-            ], InternalStore);
-            ;
-            this.prototype.Store = InternalStore;
-        }
-        else if (StoreClass) {
-            this.prototype.Store = StoreClass;
-        }
-        this.mixins.merge([InternalStoreMixin, __WEBPACK_IMPORTED_MODULE_2__state__["b" /* UpdateOnNestedChangesMixin */], ExposeStoreMixin]);
-    }
-}
-/**
- * Attached whenever the store declaration of any form is present in the component.
- */
-var ExposeStoreMixin = {
-    childContext: {
-        _nestedStore: __WEBPACK_IMPORTED_MODULE_1_type_r__["Store"]
-    },
-    getChildContext: function () {
-        return { _nestedStore: this.store };
-    },
-    getStore: function () {
-        return this.store;
-    },
-    // Will be called by the store when the lookup will fail.
-    get: function (key) {
-        // Ask upper store.
-        var store = __WEBPACK_IMPORTED_MODULE_2__state__["a" /* StateMixin */].getStore.call(this, key);
-        return store && store.get(key);
-    }
-};
-/**
- * External store must just track the changes and trigger render.
- * TBD: don't use it yet.
- */
-var ExternalStoreMixin = {
-    componentDidMount: function () {
-        // Start UI updates on state changes.
-        this.listenTo(this.store, 'change', this.asyncUpdate);
-    }
-};
-var InternalStoreMixin = {
-    componentWillMount: function () {
-        var store = this.store = new this.Store();
-        store._owner = this;
-        store._ownerKey = 'store';
-    },
-    componentWillUnmount: function () {
-        this.store._ownerKey = this.store._owner = void 0;
-        this.store.dispose();
-        this.store = void 0;
-    }
-};
-//# sourceMappingURL=store.js.map
-
-/***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = onDefine;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__typeSpecs__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
-
-
-function onDefine(_a, BaseClass) {
-    var context = _a.context, childContext = _a.childContext;
-    var prototype = this.prototype;
-    if (context) {
-        // Merge in inherited members...
-        prototype._context = __WEBPACK_IMPORTED_MODULE_1_type_r__["tools"].defaults(context, BaseClass.prototype._context || {});
-        // Compile to propTypes...
-        this.contextTypes = Object(__WEBPACK_IMPORTED_MODULE_0__typeSpecs__["c" /* compileSpecs */])(context).propTypes;
-    }
-    if (childContext) {
-        prototype._childContext = __WEBPACK_IMPORTED_MODULE_1_type_r__["tools"].defaults(childContext, BaseClass.prototype._childContext);
-        this.childContextTypes = Object(__WEBPACK_IMPORTED_MODULE_0__typeSpecs__["c" /* compileSpecs */])(childContext).propTypes;
-    }
-}
-//# sourceMappingURL=context.js.map
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var emptyFunction = __webpack_require__(14);
-var invariant = __webpack_require__(15);
-var ReactPropTypesSecret = __webpack_require__(16);
-
-module.exports = function() {
-  function shim(props, propName, componentName, location, propFullName, secret) {
-    if (secret === ReactPropTypesSecret) {
-      // It is still safe when called from React.
-      return;
-    }
-    invariant(
-      false,
-      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
-      'Use PropTypes.checkPropTypes() to call them. ' +
-      'Read more at http://fb.me/use-check-prop-types'
-    );
-  };
-  shim.isRequired = shim;
-  function getShim() {
-    return shim;
-  };
-  // Important!
-  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
-  var ReactPropTypes = {
-    array: shim,
-    bool: shim,
-    func: shim,
-    number: shim,
-    object: shim,
-    string: shim,
-    symbol: shim,
-
-    any: shim,
-    arrayOf: getShim,
-    element: shim,
-    instanceOf: getShim,
-    node: shim,
-    objectOf: getShim,
-    oneOf: getShim,
-    oneOfType: getShim,
-    shape: getShim,
-    exact: getShim
-  };
-
-  ReactPropTypes.checkPropTypes = emptyFunction;
-  ReactPropTypes.PropTypes = ReactPropTypes;
-
-  return ReactPropTypes;
-};
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- */
-
-function makeEmptyFunction(arg) {
-  return function () {
-    return arg;
-  };
-}
-
-/**
- * This function accepts and discards inputs; it has no side effects. This is
- * primarily useful idiomatically for overridable function endpoints which
- * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
- */
-var emptyFunction = function emptyFunction() {};
-
-emptyFunction.thatReturns = makeEmptyFunction;
-emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-emptyFunction.thatReturnsThis = function () {
-  return this;
-};
-emptyFunction.thatReturnsArgument = function (arg) {
-  return arg;
-};
-
-module.exports = emptyFunction;
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-
-
-/**
- * Use invariant() to assert state which your program assumes to be true.
- *
- * Provide sprintf-style format (only %s is supported) and arguments
- * to provide information about what broke and what you were
- * expecting.
- *
- * The invariant message will be stripped in production, but the invariant
- * will remain to ensure logic does not differ in production.
- */
-
-var validateFormat = function validateFormat(format) {};
-
-if (false) {
-  validateFormat = function validateFormat(format) {
-    if (format === undefined) {
-      throw new Error('invariant requires an error message argument');
-    }
-  };
-}
-
-function invariant(condition, format, a, b, c, d, e, f) {
-  validateFormat(format);
-
-  if (!condition) {
-    var error;
-    if (format === undefined) {
-      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-    } else {
-      var args = [a, b, c, d, e, f];
-      var argIndex = 0;
-      error = new Error(format.replace(/%s/g, function () {
-        return args[argIndex++];
-      }));
-      error.name = 'Invariant Violation';
-    }
-
-    error.framesToPop = 1; // we don't care about invariant's own frame
-    throw error;
-  }
-}
-
-module.exports = invariant;
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-
-module.exports = ReactPropTypesSecret;
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = onDefine;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__typeSpecs__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pureRender__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
 /**
  * Handle props specification and everything which is related:
  * - local listening to props changes
  * - pure render mixin
  */
-
-
-
-function onDefine(_a, BaseClass) {
+function onDefine$4(_a, BaseClass) {
     var props = _a.props, pureRender = _a.pureRender;
     var prototype = this.prototype;
     // process props spec...
     if (props) {
         // Merge with inherited members...
-        prototype._props = __WEBPACK_IMPORTED_MODULE_2_type_r__["tools"].defaults(props, BaseClass.prototype._props || {});
-        var _b = Object(__WEBPACK_IMPORTED_MODULE_0__typeSpecs__["c" /* compileSpecs */])(props), propTypes = _b.propTypes, defaults = _b.defaults, watchers = _b.watchers, changeHandlers = _b.changeHandlers;
+        prototype._props = Nested.tools.defaults(props, BaseClass.prototype._props || {});
+        var _b = compileSpecs(props), propTypes = _b.propTypes, defaults = _b.defaults, watchers = _b.watchers, changeHandlers = _b.changeHandlers;
         this.propTypes = propTypes;
         if (defaults)
             this.defaultProps = defaults;
@@ -1016,11 +344,11 @@ function onDefine(_a, BaseClass) {
             this.mixins.merge([ChangeHandlersMixin]);
         }
         if (prototype.pureRender) {
-            prototype.PropsChangeTokens = Object(__WEBPACK_IMPORTED_MODULE_1__pureRender__["c" /* createChangeTokensConstructor */])(props);
+            prototype.PropsChangeTokens = createChangeTokensConstructor(props);
         }
     }
     if (pureRender) {
-        this.mixins.merge([__WEBPACK_IMPORTED_MODULE_1__pureRender__["b" /* PureRenderMixin */]]);
+        this.mixins.merge([PureRenderMixin]);
     }
 }
 /**
@@ -1069,184 +397,86 @@ var WatchersMixin = {
         }
     }
 };
-//# sourceMappingURL=props.js.map
 
-/***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__valuelink_link__ = __webpack_require__(19);
-/**
- * Import ValueLink library
- * Define value links binding mixins to the Record and Collection
- */
-
-
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_2__valuelink_link__["a" /* Link */]);
-__WEBPACK_IMPORTED_MODULE_1_type_r__["Mixable"].mixins.populate(__WEBPACK_IMPORTED_MODULE_2__valuelink_link__["a" /* Link */]);
-/**
- * Record
- */
-__WEBPACK_IMPORTED_MODULE_1_type_r__["MixinsState"].get(__WEBPACK_IMPORTED_MODULE_1_type_r__["Record"]).merge([{
-        // Link to the record's attribute by its key.
-        linkAt: function (key) {
-            return cacheLink(getLinksCache(this), this, key);
-        },
-        // Link to the attribute of the record's tree by symbolic path.
-        linkPath: function (path, options) {
-            return new RecordDeepLink(this, path, options);
-        },
-        // Link all (or listed) attributes and return links cache.
-        linkAll: function () {
-            var links = getLinksCache(this);
-            if (arguments.length) {
-                for (var i = 0; i < arguments.length; i++) {
-                    cacheLink(links, this, arguments[i]);
-                }
-            }
-            else {
-                var attributes = this.attributes;
-                for (var key in attributes) {
-                    attributes[key] === void 0 || cacheLink(links, this, key);
-                }
-            }
-            return links;
-        }
-    }]);
-/**
- * Link to Type-R's record attribute.
- * Strict evaluation of value, lazy evaluation of validation error.
- * Links are cached in the records
- */
-var RecordLink = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](RecordLink, _super);
-    function RecordLink(record, attr, value) {
-        var _this = _super.call(this, value) || this;
-        _this.record = record;
-        _this.attr = attr;
-        return _this;
-    }
-    RecordLink.prototype.set = function (x) {
-        this.record[this.attr] = x;
-    };
-    Object.defineProperty(RecordLink.prototype, "error", {
-        get: function () {
-            return this._error === void 0 ?
-                this.record.getValidationError(this.attr) :
-                this._error;
-        },
-        set: function (x) {
-            this._error = x;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return RecordLink;
-}(__WEBPACK_IMPORTED_MODULE_2__valuelink_link__["a" /* Link */]));
-var RecordDeepLink = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](RecordDeepLink, _super);
-    function RecordDeepLink(record, path, options) {
-        var _this = _super.call(this, record.deepGet(path)) || this;
-        _this.record = record;
-        _this.path = path;
-        _this.options = options;
-        return _this;
-    }
-    Object.defineProperty(RecordDeepLink.prototype, "error", {
-        get: function () {
-            if (this._error === void 0) {
-                this._error = this.record.deepValidationError(this.path) || null;
-            }
-            return this._error;
-        },
-        set: function (x) {
-            this._error = x;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(RecordDeepLink.prototype, "_changeToken", {
-        get: function () {
-            return this.record._changeToken;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    RecordDeepLink.prototype.set = function (x) {
-        this.record.deepSet(this.path, x, this.options);
-    };
-    return RecordDeepLink;
-}(__WEBPACK_IMPORTED_MODULE_2__valuelink_link__["a" /* Link */]));
-function getLinksCache(record) {
-    return record._links || (record._links = new record.AttributesCopy({}));
+function onDefine$1(definition, BaseClass) {
+    // Initialize mixins placeholder...
+    onDefine$2.call(this, definition, BaseClass);
+    process.call(this, definition, BaseClass);
+    onDefine$3.call(this, definition, BaseClass);
+    onDefine$4.call(this, definition, BaseClass);
+    Nested.Messenger.onDefine.call(this, definition, BaseClass);
 }
-function cacheLink(links, record, key) {
-    var cached = links[key], value = record[key];
-    return cached && cached.value === value ? cached
-        : links[key] = new RecordLink(record, key, value);
-}
-/***********************************
- * Collection
- */
-__WEBPACK_IMPORTED_MODULE_1_type_r__["MixinsState"].get(__WEBPACK_IMPORTED_MODULE_1_type_r__["Record"].Collection).merge([{
-        // Boolean link to the record's presence in the collection
-        linkContains: function (record) {
-            return new CollectionLink(this, record);
-        },
-        // Link to collection's property
-        linkAt: function (prop) {
-            var _this = this;
-            return __WEBPACK_IMPORTED_MODULE_2__valuelink_link__["a" /* Link */].value(this[prop], function (x) { return _this[prop] = x; });
+
+var ArrayProto = Array.prototype;
+var ObjectProto = Object.prototype;
+function helpers(value) {
+    if (value && typeof value === 'object') {
+        switch (Object.getPrototypeOf(value)) {
+            case ArrayProto: return arrayHelpers;
+            case ObjectProto: return objectHelpers;
         }
-    }]);
-/**
- * Boolean link to presence of NestedType's record in collection.
- * Strict evaluation of value, no error.
- * Safe implementation of _changeToken.
- */
-var CollectionLink = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](CollectionLink, _super);
-    function CollectionLink(collection, record) {
-        var _this = _super.call(this, Boolean(collection._byId[record.cid])) || this;
-        _this.collection = collection;
-        _this.record = record;
-        return _this;
     }
-    CollectionLink.prototype.set = function (x) {
-        this.collection.toggle(this.record, x);
-    };
-    return CollectionLink;
-}(__WEBPACK_IMPORTED_MODULE_2__valuelink_link__["a" /* Link */]));
-//# sourceMappingURL=link.js.map
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Link; });
-/* unused harmony export CustomLink */
-/* unused harmony export CloneLink */
-/* unused harmony export EqualsLink */
-/* unused harmony export EnabledLink */
-/* unused harmony export ContainsLink */
-/* unused harmony export LinkAt */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers__ = __webpack_require__(20);
+    return dummyHelpers;
+}
+// Do nothing for types other than Array and plain Object.
+var dummyHelpers = {
+    clone: function (value) { return value; },
+    map: function (link, fun) { return []; },
+    remove: function (value) { return value; }
+};
+// `map` and `clone` for plain JS objects
+var objectHelpers = {
+    // Map through the link to object
+    map: function (link, iterator) {
+        var mapped = [];
+        for (var key in link.value) {
+            var element$$1 = iterator(link.at(key), key);
+            element$$1 === void 0 || (mapped.push(element$$1));
+        }
+        return mapped;
+    },
+    remove: function (object$$1, key) {
+        delete object$$1[key];
+        return object$$1;
+    },
+    // Shallow clone plain JS object
+    clone: function (object$$1) {
+        var cloned = {};
+        for (var key in object$$1) {
+            cloned[key] = object$$1[key];
+        }
+        return cloned;
+    }
+};
+// `map` and `clone` helpers for arrays.
+var arrayHelpers = {
+    // Shallow clone array
+    clone: function (array$$1) {
+        return array$$1.slice();
+    },
+    remove: function (array$$1, i) {
+        array$$1.splice(i, 1);
+        return array$$1;
+    },
+    // Map through the link to array
+    map: function (link, iterator) {
+        var length = link.value.length, mapped = Array(length);
+        for (var i = 0, j = 0; i < length; i++) {
+            var y = iterator(link.at(i), i);
+            y === void 0 || (mapped[j++] = y);
+        }
+        mapped.length === j || (mapped.length = j);
+        return mapped;
+    }
+};
 
 /**
  * Advanced React links for purely functional two-way data binding
  *
  * MIT License, (c) 2016 Vlad Balin, Volicon.
  */
-
 // Main Link class. All links must extend it.
-var Link = (function () {
+var Link$1 = (function () {
     // create 
     function Link(value) {
         this.value = value;
@@ -1312,29 +542,29 @@ var Link = (function () {
         return new EnabledLink(this, defaultValue || "");
     };
     // Array-only links methods
-    Link.prototype.contains = function (element) {
-        return new ContainsLink(this, element);
+    Link.prototype.contains = function (element$$1) {
+        return new ContainsLink(this, element$$1);
     };
     Link.prototype.push = function () {
-        var array = __WEBPACK_IMPORTED_MODULE_1__helpers__["a" /* arrayHelpers */].clone(this.value);
-        Array.prototype.push.apply(array, arguments);
-        this.set(array);
+        var array$$1 = arrayHelpers.clone(this.value);
+        Array.prototype.push.apply(array$$1, arguments);
+        this.set(array$$1);
     };
     Link.prototype.unshift = function () {
-        var array = __WEBPACK_IMPORTED_MODULE_1__helpers__["a" /* arrayHelpers */].clone(this.value);
-        Array.prototype.unshift.apply(array, arguments);
-        this.set(array);
+        var array$$1 = arrayHelpers.clone(this.value);
+        Array.prototype.unshift.apply(array$$1, arguments);
+        this.set(array$$1);
     };
     Link.prototype.splice = function () {
-        var array = __WEBPACK_IMPORTED_MODULE_1__helpers__["a" /* arrayHelpers */].clone(this.value);
-        Array.prototype.splice.apply(array, arguments);
-        this.set(array);
+        var array$$1 = arrayHelpers.clone(this.value);
+        Array.prototype.splice.apply(array$$1, arguments);
+        this.set(array$$1);
     };
     Link.prototype.map = function (iterator) {
-        return Object(__WEBPACK_IMPORTED_MODULE_1__helpers__["b" /* helpers */])(this.value).map(this, iterator);
+        return helpers(this.value).map(this, iterator);
     };
     Link.prototype.removeAt = function (key) {
-        var value = this.value, _ = Object(__WEBPACK_IMPORTED_MODULE_1__helpers__["b" /* helpers */])(value);
+        var value = this.value, _ = helpers(value);
         this.set(_.remove(_.clone(value), key));
     };
     Link.prototype.at = function (key) {
@@ -1342,7 +572,7 @@ var Link = (function () {
     };
     Link.prototype.clone = function () {
         var value = this.value;
-        return Object(__WEBPACK_IMPORTED_MODULE_1__helpers__["b" /* helpers */])(value).clone(value);
+        return helpers(value).clone(value);
     };
     Link.prototype.pick = function () {
         var links = {};
@@ -1363,9 +593,8 @@ var Link = (function () {
     };
     return Link;
 }());
-
 var CustomLink = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](CustomLink, _super);
+    __extends(CustomLink, _super);
     function CustomLink(value, set) {
         var _this = _super.call(this, value) || this;
         _this.set = set;
@@ -1373,10 +602,9 @@ var CustomLink = (function (_super) {
     }
     CustomLink.prototype.set = function (x) { };
     return CustomLink;
-}(Link));
-
+}(Link$1));
 var CloneLink = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](CloneLink, _super);
+    __extends(CloneLink, _super);
     function CloneLink(parent, set) {
         var _this = _super.call(this, parent.value) || this;
         _this.set = set;
@@ -1387,10 +615,9 @@ var CloneLink = (function (_super) {
     }
     CloneLink.prototype.set = function (x) { };
     return CloneLink;
-}(Link));
-
+}(Link$1));
 var EqualsLink = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](EqualsLink, _super);
+    __extends(EqualsLink, _super);
     function EqualsLink(parent, truthyValue) {
         var _this = _super.call(this, parent.value === truthyValue) || this;
         _this.parent = parent;
@@ -1401,10 +628,9 @@ var EqualsLink = (function (_super) {
         this.parent.set(x ? this.truthyValue : null);
     };
     return EqualsLink;
-}(Link));
-
+}(Link$1));
 var EnabledLink = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](EnabledLink, _super);
+    __extends(EnabledLink, _super);
     function EnabledLink(parent, defaultValue) {
         var _this = _super.call(this, parent.value != null) || this;
         _this.parent = parent;
@@ -1415,14 +641,13 @@ var EnabledLink = (function (_super) {
         this.parent.set(x ? this.defaultValue : null);
     };
     return EnabledLink;
-}(Link));
-
+}(Link$1));
 var ContainsLink = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](ContainsLink, _super);
-    function ContainsLink(parent, element) {
-        var _this = _super.call(this, parent.value.indexOf(element) >= 0) || this;
+    __extends(ContainsLink, _super);
+    function ContainsLink(parent, element$$1) {
+        var _this = _super.call(this, parent.value.indexOf(element$$1) >= 0) || this;
         _this.parent = parent;
-        _this.element = element;
+        _this.element = element$$1;
         return _this;
     }
     ContainsLink.prototype.set = function (x) {
@@ -1434,15 +659,14 @@ var ContainsLink = (function (_super) {
         }
     };
     return ContainsLink;
-}(Link));
-
+}(Link$1));
 var defaultError = 'Invalid value';
 /**
  * Link to array or object element enclosed in parent link.
  * Performs purely functional update of the parent, shallow copying its value on `set`.
  */
 var LinkAt = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](LinkAt, _super);
+    __extends(LinkAt, _super);
     function LinkAt(parent, key) {
         var _this = _super.call(this, parent.value[key]) || this;
         _this.parent = parent;
@@ -1462,136 +686,186 @@ var LinkAt = (function (_super) {
             });
         }
     };
-    ;
+    
     return LinkAt;
-}(Link));
+}(Link$1));
 
-//# sourceMappingURL=link.js.map
-
-/***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["b"] = helpers;
-/* unused harmony export objectHelpers */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return arrayHelpers; });
-var ArrayProto = Array.prototype, ObjectProto = Object.prototype;
-function helpers(value) {
-    if (value && typeof value === 'object') {
-        switch (Object.getPrototypeOf(value)) {
-            case ArrayProto: return arrayHelpers;
-            case ObjectProto: return objectHelpers;
+/**
+ * Import ValueLink library
+ * Define value links binding mixins to the Record and Collection
+ */
+Nested.Mixable.mixins.populate(Link$1);
+/**
+ * Record
+ */
+Nested.MixinsState.get(Nested.Record).merge([{
+        // Link to the record's attribute by its key.
+        linkAt: function (key) {
+            return cacheLink(getLinksCache(this), this, key);
+        },
+        // Link to the attribute of the record's tree by symbolic path.
+        linkPath: function (path, options) {
+            return new RecordDeepLink(this, path, options);
+        },
+        // Link all (or listed) attributes and return links cache.
+        linkAll: function () {
+            var links = getLinksCache(this);
+            if (arguments.length) {
+                for (var i = 0; i < arguments.length; i++) {
+                    cacheLink(links, this, arguments[i]);
+                }
+            }
+            else {
+                var attributes = this.attributes;
+                for (var key in attributes) {
+                    attributes[key] === void 0 || cacheLink(links, this, key);
+                }
+            }
+            return links;
         }
+    }]);
+/**
+ * Link to Type-R's record attribute.
+ * Strict evaluation of value, lazy evaluation of validation error.
+ * Links are cached in the records
+ */
+var RecordLink = (function (_super) {
+    __extends(RecordLink, _super);
+    function RecordLink(record, attr, value) {
+        var _this = _super.call(this, value) || this;
+        _this.record = record;
+        _this.attr = attr;
+        return _this;
     }
-    return dummyHelpers;
+    RecordLink.prototype.set = function (x) {
+        this.record[this.attr] = x;
+    };
+    Object.defineProperty(RecordLink.prototype, "error", {
+        get: function () {
+            return this._error === void 0 ?
+                this.record.getValidationError(this.attr) :
+                this._error;
+        },
+        set: function (x) {
+            this._error = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return RecordLink;
+}(Link$1));
+var RecordDeepLink = (function (_super) {
+    __extends(RecordDeepLink, _super);
+    function RecordDeepLink(record, path, options) {
+        var _this = _super.call(this, record.deepGet(path)) || this;
+        _this.record = record;
+        _this.path = path;
+        _this.options = options;
+        return _this;
+    }
+    Object.defineProperty(RecordDeepLink.prototype, "error", {
+        get: function () {
+            if (this._error === void 0) {
+                this._error = this.record.deepValidationError(this.path) || null;
+            }
+            return this._error;
+        },
+        set: function (x) {
+            this._error = x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RecordDeepLink.prototype, "_changeToken", {
+        get: function () {
+            return this.record._changeToken;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RecordDeepLink.prototype.set = function (x) {
+        this.record.deepSet(this.path, x, this.options);
+    };
+    return RecordDeepLink;
+}(Link$1));
+function getLinksCache(record) {
+    return record._links || (record._links = new record.AttributesCopy({}));
 }
-// Do nothing for types other than Array and plain Object.
-var dummyHelpers = {
-    clone: function (value) { return value; },
-    map: function (link, fun) { return []; },
-    remove: function (value) { return value; }
-};
-// `map` and `clone` for plain JS objects
-var objectHelpers = {
-    // Map through the link to object
-    map: function (link, iterator) {
-        var mapped = [];
-        for (var key in link.value) {
-            var element = iterator(link.at(key), key);
-            element === void 0 || (mapped.push(element));
+function cacheLink(links, record, key) {
+    var cached = links[key], value = record[key];
+    return cached && cached.value === value ? cached
+        : links[key] = new RecordLink(record, key, value);
+}
+/***********************************
+ * Collection
+ */
+Nested.MixinsState.get(Nested.Record.Collection).merge([{
+        // Boolean link to the record's presence in the collection
+        linkContains: function (record) {
+            return new CollectionLink(this, record);
+        },
+        // Link to collection's property
+        linkAt: function (prop) {
+            var _this = this;
+            return Link$1.value(this[prop], function (x) { return _this[prop] = x; });
         }
-        return mapped;
-    },
-    remove: function (object, key) {
-        delete object[key];
-        return object;
-    },
-    // Shallow clone plain JS object
-    clone: function (object) {
-        var cloned = {};
-        for (var key in object) {
-            cloned[key] = object[key];
-        }
-        return cloned;
+    }]);
+/**
+ * Boolean link to presence of NestedType's record in collection.
+ * Strict evaluation of value, no error.
+ * Safe implementation of _changeToken.
+ */
+var CollectionLink = (function (_super) {
+    __extends(CollectionLink, _super);
+    function CollectionLink(collection, record) {
+        var _this = _super.call(this, Boolean(collection._byId[record.cid])) || this;
+        _this.collection = collection;
+        _this.record = record;
+        return _this;
     }
-};
-// `map` and `clone` helpers for arrays.
-var arrayHelpers = {
-    // Shallow clone array
-    clone: function (array) {
-        return array.slice();
-    },
-    remove: function (array, i) {
-        array.splice(i, 1);
-        return array;
-    },
-    // Map through the link to array
-    map: function (link, iterator) {
-        var length = link.value.length, mapped = Array(length);
-        for (var i = 0, j = 0; i < length; i++) {
-            var y = iterator(link.at(i), i);
-            y === void 0 || (mapped[j++] = y);
-        }
-        mapped.length === j || (mapped.length = j);
-        return mapped;
-    }
-};
-//# sourceMappingURL=helpers.js.map
+    CollectionLink.prototype.set = function (x) {
+        this.collection.toggle(this.record, x);
+    };
+    return CollectionLink;
+}(Link$1));
 
-/***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Component; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__define__ = __webpack_require__(5);
 /**
  * React-Type-R component base class. Overrides React component.
  */
-
-
-
-
-var Component = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](Component, _super);
-    function Component(props, context) {
+exports.Component = (function (_super) {
+    __extends(Component$$1, _super);
+    function Component$$1(props, context) {
         var _this = _super.call(this, props, context) || this;
         _this._initializeState();
         return _this;
     }
-    Component.prototype.linkAt = function (key) {
+    Component$$1.prototype.linkAt = function (key) {
         // Quick and dirty hack to suppres type error - refactor later.
         return this.state.linkAt(key);
     };
-    Component.prototype.linkAll = function () {
+    Component$$1.prototype.linkAll = function () {
         // Quick and dirty hack to suppres type error - refactor later.
         var state = this.state;
         return state.linkAll.apply(state, arguments);
     };
-    Component.prototype.linkPath = function (path) {
+    Component$$1.prototype.linkPath = function (path) {
         return this.state.linkPath(path);
     };
-    Object.defineProperty(Component.prototype, "links", {
+    Object.defineProperty(Component$$1.prototype, "links", {
         get: function () {
             return this.state._links;
         },
         enumerable: true,
         configurable: true
     });
-    Component.prototype._initializeState = function () {
+    Component$$1.prototype._initializeState = function () {
         this.state = null;
     };
-    Component.prototype.assignToState = function (x, key) {
+    Component$$1.prototype.assignToState = function (x, key) {
         this.state.assignFrom((_a = {}, _a[key] = x, _a));
         var _a;
     };
-    Component.prototype.componentWillUnmount = function () {
+    Component$$1.prototype.componentWillUnmount = function () {
         this.dispose();
     };
     /**
@@ -1601,7 +875,7 @@ var Component = (function (_super) {
      * React component will be updated _after_ all the changes to the
      * both props and local state are applied.
      */
-    Component.prototype.transaction = function (fun) {
+    Component$$1.prototype.transaction = function (fun) {
         var shouldComponentUpdate = this.shouldComponentUpdate, isRoot = shouldComponentUpdate !== returnFalse;
         if (isRoot) {
             this.shouldComponentUpdate = returnFalse;
@@ -1614,73 +888,77 @@ var Component = (function (_super) {
         }
     };
     // Safe version of the forceUpdate suitable for asynchronous callbacks.
-    Component.prototype.asyncUpdate = function () {
+    Component$$1.prototype.asyncUpdate = function () {
         this.shouldComponentUpdate === returnFalse || this._disposed || this.forceUpdate();
     };
-    return Component;
-}(__WEBPACK_IMPORTED_MODULE_1_react__["Component"]));
-Component.onDefine = __WEBPACK_IMPORTED_MODULE_3__define__["d" /* default */];
-Component = __WEBPACK_IMPORTED_MODULE_0_tslib__["b" /* __decorate */]([
-    Object(__WEBPACK_IMPORTED_MODULE_2_type_r__["define"])({
-        PropsChangeTokens: __WEBPACK_IMPORTED_MODULE_3__define__["b" /* EmptyPropsChangeTokensCtor */]
+    return Component$$1;
+}(React.Component));
+exports.Component.onDefine = onDefine$1;
+exports.Component = __decorate([
+    Nested.define({
+        PropsChangeTokens: EmptyPropsChangeTokensCtor
     }),
-    Object(__WEBPACK_IMPORTED_MODULE_2_type_r__["definitions"])({
+    Nested.definitions({
         // Definitions to be extracted from mixins and statics and passed to `onDefine()`
-        state: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].merge,
-        State: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].value,
-        store: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].merge,
-        Store: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].value,
-        props: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].merge,
-        context: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].merge,
-        childContext: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].merge,
-        pureRender: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].protoValue
+        state: Nested.mixinRules.merge,
+        State: Nested.mixinRules.value,
+        store: Nested.mixinRules.merge,
+        Store: Nested.mixinRules.value,
+        props: Nested.mixinRules.merge,
+        context: Nested.mixinRules.merge,
+        childContext: Nested.mixinRules.merge,
+        pureRender: Nested.mixinRules.protoValue
     }),
-    Object(__WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"])({
+    Nested.mixinRules({
         // Apply old-school React mixin rules.
-        componentWillMount: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].classLast,
-        componentDidMount: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].classLast,
-        componentWillReceiveProps: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].classLast,
-        componentWillUpdate: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].classLast,
-        componentDidUpdate: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].classLast,
-        componentWillUnmount: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].classFirst,
+        componentWillMount: Nested.mixinRules.classLast,
+        componentDidMount: Nested.mixinRules.classLast,
+        componentWillReceiveProps: Nested.mixinRules.classLast,
+        componentWillUpdate: Nested.mixinRules.classLast,
+        componentDidUpdate: Nested.mixinRules.classLast,
+        componentWillUnmount: Nested.mixinRules.classFirst,
         // And a bit more to fix inheritance quirks.
-        shouldComponentUpdate: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].some,
-        getChildContext: __WEBPACK_IMPORTED_MODULE_2_type_r__["mixinRules"].defaults
+        shouldComponentUpdate: Nested.mixinRules.some,
+        getChildContext: Nested.mixinRules.defaults
     })
     // Component can send and receive events...
     ,
-    Object(__WEBPACK_IMPORTED_MODULE_2_type_r__["mixins"])(__WEBPACK_IMPORTED_MODULE_2_type_r__["Messenger"])
-], Component);
-
+    Nested.mixins(Nested.Messenger)
+], exports.Component);
 function returnFalse() { return false; }
 // Looks like React guys _really_ want to deprecate it. But no way.
 // We will work around their attempt.
-Object.defineProperty(Component.prototype, 'isMounted', {
+Object.defineProperty(exports.Component.prototype, 'isMounted', {
     value: function isMounted() {
         return !this._disposed;
     }
 });
-//# sourceMappingURL=component.js.map
 
-/***/ }),
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+// extend React namespace
+var ReactMVx = Object.create(React);
+// Make it compatible with ES6 module format.
+ReactMVx.default = ReactMVx;
+// listenToProps, listenToState, model, attributes, Model
+ReactMVx.define = Nested.define;
+ReactMVx.mixins = Nested.mixins;
+ReactMVx.Node = Node.value(null);
+ReactMVx.Element = Element.value(null);
+ReactMVx.Link = Link$1;
+ReactMVx.Component = exports.Component;
+var assignToState = ReactMVx.assignToState = function (key) {
+    return function (prop) {
+        this.state.assignFrom((_a = {}, _a[key] = prop && prop instanceof Link ? prop.value : prop, _a));
+        var _a;
+    };
+};
 
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__react_mvx__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
-
-
-
-var notEqual = __WEBPACK_IMPORTED_MODULE_2_type_r__["tools"].notEqual;
+var notEqual = Nested.tools.notEqual;
 var BackboneView = (function (_super) {
-    __WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __extends */](BackboneView, _super);
+    __extends(BackboneView, _super);
     function BackboneView() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.saveRef = function (element) {
-            _this.root = element;
+        _this.saveRef = function (element$$1) {
+            _this.root = element$$1;
         };
         return _this;
     }
@@ -1693,7 +971,7 @@ var BackboneView = (function (_super) {
         return view && (typeof view.hasUnsavedChanges === 'function' ? view.hasUnsavedChanges() : view.hasUnsavedChanges);
     };
     BackboneView.prototype.render = function () {
-        return __WEBPACK_IMPORTED_MODULE_1__react_mvx__["f" /* default */].createElement('div', {
+        return ReactMVx.createElement('div', {
             ref: this.saveRef,
             className: this.props.className
         });
@@ -1729,29 +1007,12 @@ var BackboneView = (function (_super) {
         }
     };
     return BackboneView;
-}(__WEBPACK_IMPORTED_MODULE_1__react_mvx__["a" /* Component */]));
-/* harmony default export */ __webpack_exports__["a"] = (BackboneView);
-//# sourceMappingURL=view-element.js.map
-
-/***/ }),
-/* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = use;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_type_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_type_r__);
-
-
+}(exports.Component));
 
 window.Page || (window.Page = { forceResize: function () { } });
-function use(View) {
-    var dispose = View.prototype.dispose || function () { }, setElement = View.prototype.setElement;
-    var ComponentView = View.extend({
+function use(View$$1) {
+    var dispose = View$$1.prototype.dispose || function () { }, setElement = View$$1.prototype.setElement;
+    var ComponentView = View$$1.extend({
         reactClass: null,
         props: {},
         element: null,
@@ -1770,7 +1031,7 @@ function use(View) {
             window.Page.forceResize();
         },
         render: function () {
-            var options = this.prevState ? __WEBPACK_IMPORTED_MODULE_2_type_r__["tools"].fastAssign({ __keepState: this.prevState }, this.options) : this.options, element = __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](this.reactClass, options), component = __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(element, this.el);
+            var options = this.prevState ? Nested.tools.fastAssign({ __keepState: this.prevState }, this.options) : this.options, element$$1 = React.createElement(this.reactClass, options), component = ReactDOM.render(element$$1, this.el);
             this.component || this.mountComponent(component);
         },
         mountComponent: function (component) {
@@ -1788,7 +1049,7 @@ function use(View) {
                     this.stopListening(component);
                 }
                 component._preventDispose = Boolean(keepModel);
-                __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.unmountComponentAtNode(this.el);
+                ReactDOM.unmountComponentAtNode(this.el);
                 this.component = null;
             }
         },
@@ -1805,17 +1066,6 @@ function use(View) {
     });
     return ComponentView;
 }
-//# sourceMappingURL=component-view.js.map
-
-/***/ }),
-/* 24 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = createClass;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__react_mvx__ = __webpack_require__(2);
-
 
 var dontAutobind = [
     'State', 'Store', 'constructor',
@@ -1827,13 +1077,13 @@ var dontAutobind = [
  * ES5 components definition factory
  */
 function createClass(_a) {
-    var statics = _a.statics, a_spec = __WEBPACK_IMPORTED_MODULE_0_tslib__["d" /* __rest */](_a, ["statics"]);
+    var statics = _a.statics, a_spec = __rest(_a, ["statics"]);
     // Gather all methods to pin them to `this` later.
     var methods = [];
-    var Subclass = __WEBPACK_IMPORTED_MODULE_1__react_mvx__["a" /* Component */].extend(__WEBPACK_IMPORTED_MODULE_0_tslib__["a" /* __assign */]({ 
+    var Subclass = exports.Component.extend(__assign({ 
         // Override constructor to autobind all the methods...
         constructor: function () {
-            __WEBPACK_IMPORTED_MODULE_1__react_mvx__["a" /* Component */].apply(this, arguments);
+            exports.Component.apply(this, arguments);
             for (var _i = 0, methods_1 = methods; _i < methods_1.length; _i++) {
                 var method = methods_1[_i];
                 this[method] = this[method].bind(this);
@@ -1848,8 +1098,52 @@ function createClass(_a) {
     }
     return Subclass;
 }
-//# sourceMappingURL=createClass.js.map
 
-/***/ })
-/******/ ]);
-});
+// Re-export react-mvx
+var NestedReact = Object.create(ReactMVx);
+// NestedReact backward compatibility layer
+NestedReact.subview = BackboneView;
+console.log("ReactDOM=", ReactDOM);
+Object.defineProperty(NestedReact, 'createClass', { value: createClass });
+Object.defineProperty(NestedReact, 'PropTypes', { value: PropTypes });
+var BaseView;
+// export hook to override base View class used...
+function useView(View$$1) {
+    BaseView = use(View$$1);
+}
+var onDefine = NestedReact.Component.onDefine;
+NestedReact.Component.onDefine = function (definitions$$1, BaseClass) {
+    this.View = BaseView.extend({ reactClass: this });
+    return onDefine.call(this, definitions$$1, BaseClass);
+};
+// Deprecated API for backward compatibility
+var RecordProto = Nested.Record.prototype;
+RecordProto.getLink = RecordProto.linkAt;
+RecordProto.deepLink = RecordProto.linkPath;
+var CollectionProto = Nested.Record.Collection.prototype;
+CollectionProto.hasLink = CollectionProto.linkContains;
+useView(Nested.View);
+// Extend react components to have backbone-style jquery accessors
+var BackboneViewProps = {
+    el: { get: function () { return ReactDOM.findDOMNode(this); } },
+    $el: { get: function () { return Nested__default.$(this.el); } },
+    $: { value: function (sel) { return this.$el.find(sel); } }
+};
+Object.defineProperties(NestedReact.Component.prototype, BackboneViewProps);
+
+exports['default'] = NestedReact;
+exports.subview = BackboneView;
+exports.PropTypes = PropTypes;
+exports.createClass = createClass;
+exports.useView = useView;
+exports.define = Nested.define;
+exports.mixins = Nested.mixins;
+exports.Node = Node;
+exports.Element = Element;
+exports.Link = Link$1;
+exports.assignToState = assignToState;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+//# sourceMappingURL=index.js.map

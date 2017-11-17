@@ -1,4 +1,4 @@
-import 'css/app.css'
+import '../css/app.css'
 import React, { define } from 'nestedreact'
 import ReactDOM from 'react-dom'
 import {ToDo} from './model.js'
@@ -41,7 +41,7 @@ class App extends React.Component {
                                             filterDone={ filterDone }/> }
 
                     { hasTodos && <Filter count={ todos.activeCount }
-                                          filterLink={ this.state.getLink( 'filterDone' ) }
+                                          filterLink={ this.state.linkAt( 'filterDone' ) }
                                           onClear={ () => todos.clearCompleted() }
                     />}
                 </section>
