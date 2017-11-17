@@ -4,7 +4,7 @@
 
 import * as React from 'react'
 import { Record, Store, CallbacksByEvents, mixinRules, define, mixins, definitions, tools, Messenger } from 'type-r'
-import Link from './Link'
+import Link from './link'
 import onDefine, { TypeSpecs, EmptyPropsChangeTokensCtor } from './define'
 
 @define({

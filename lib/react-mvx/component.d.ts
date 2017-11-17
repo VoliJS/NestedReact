@@ -4,7 +4,7 @@
  */
 import * as React from 'react';
 import { Record, Store, CallbacksByEvents, Messenger } from 'type-r';
-import Link from './Link';
+import Link from './link';
 import onDefine, { TypeSpecs } from './define';
 export declare class Component<P, S extends Record = Record> extends React.Component<P, S> {
     cid: string;
