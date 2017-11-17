@@ -1,6 +1,6 @@
 {
   "name": "nestedreact",
-  "version": "2.1.0-rc00",
+  "version": "2.1.0",
   "main": "dist/index.js",
   "lib": "lib/index.js",
   "description": "Advanced models, state management, and data binding solution for React",
@@ -38,7 +38,7 @@
     "@types/prop-types": "^15.5.2",
     "@types/react": "^16.0.25",
     "jquery": "*",
-    "nestedtypes": "^2.1.0-rc00",
+    "nestedtypes": "^2.1.0",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
