@@ -310,7 +310,7 @@ function createChangeTokensConstructor(props) {
 var EmptyPropsChangeTokensCtor = createChangeTokensConstructor({});
 var PureRenderMixin = {
     shouldComponentUpdate: function (nextProps) {
-        return this._propsChangeTokens._hasChanges(nextProps);
+        return this._propsChangeTokens._hasChanges(nextProps, this.state);
     },
     componentDidMount: updateChangeTokens,
     componentDidUpdate: updateChangeTokens
@@ -818,7 +818,7 @@ Nested.MixinsState.get(Nested.Record.Collection).merge([{
 var CollectionLink = (function (_super) {
     __extends(CollectionLink, _super);
     function CollectionLink(collection, record) {
-        var _this = _super.call(this, Boolean(collection._byId[record.cid])) || this;
+        var _this = _super.call(this, Boolean(collection.get(record))) || this;
         _this.collection = collection;
         _this.record = record;
         return _this;

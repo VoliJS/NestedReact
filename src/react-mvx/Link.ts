@@ -138,7 +138,7 @@ MixinsState.get( Record.Collection ).merge([{
  */
 class CollectionLink extends Link< boolean >{
     constructor( public collection, public record ){
-        super( Boolean( collection._byId[ record.cid ] ) );
+        super( Boolean( collection.get( record ) ) );
     }
 
     set( x ){

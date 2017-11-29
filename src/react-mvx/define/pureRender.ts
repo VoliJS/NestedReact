@@ -23,7 +23,7 @@ export const EmptyPropsChangeTokensCtor = createChangeTokensConstructor({});
 
 export const PureRenderMixin = {
     shouldComponentUpdate( nextProps ){
-        return this._propsChangeTokens._hasChanges( nextProps );
+        return this._propsChangeTokens._hasChanges( nextProps, this.state );
     },
 
     componentDidMount : updateChangeTokens,
