@@ -947,7 +947,11 @@ ReactMVx.Link = Link$1;
 ReactMVx.Component = exports.Component;
 var assignToState = ReactMVx.assignToState = function (key) {
     return function (prop) {
-        this.state.assignFrom((_a = {}, _a[key] = prop && prop instanceof Link ? prop.value : prop, _a));
+        var source = prop && prop instanceof Link$1 ? prop.value : prop;
+        this.state.assignFrom((_a = {}, _a[key] = source, _a));
+        if (source && source._changeToken) {
+            this.state[key]._changeToken = source._changeToken;
+        }
         var _a;
     };
 };
